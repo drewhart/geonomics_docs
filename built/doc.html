@@ -1,0 +1,738 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Geonomics &#8212; geonomics 0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="geonomics">
+<h1>Geonomics<a class="headerlink" href="#geonomics" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-python-package-for-easy-construction-of-individual-based-spatially-explicit">
+<h2>A Python package for easy construction of individual-based, spatially explicit,<a class="headerlink" href="#a-python-package-for-easy-construction-of-individual-based-spatially-explicit" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="forward-time-and-highly-customizable-landscape-genomics-simulations">
+<h2>forward-time, and highly customizable landscape-genomics simulations<a class="headerlink" href="#forward-time-and-highly-customizable-landscape-genomics-simulations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="intro">
+<h3>Intro<a class="headerlink" href="#intro" title="Permalink to this headline">¶</a></h3>
+<p>Backward-time (i.e. coalescent) simulators abound.
+But they are inadequate for simulation of many scenarios of
+interest, including: natural selection on traits with arbitrary genomic
+architectures; spatially variable natural selection; simulation of populations
+distributed continiously and moving realistically across
+complex landscapes; complex demographic change simultaneous with ongoing,
+often non-stationary environmental change; and coevolutionary interactions
+between multiple species or incpient species. Few existing forward-time
+simulators can model all of these phenomena, and the few that can often
+impose a high cost of entry (e.g. learning a new, non-standard programming
+language in order to write one’s desired simulations). Geonomics aims to fill
+this empty niche by combining ease of use with , all in a popular,
+general-purpose scripting language. If it succeeds at doing this, Geonomics
+should prove uniquely useful for a wide range of purposes, from intro-level
+educational use to high-quality theoretical, methogological, empirical, and
+applied research.</p>
+<p>Geonomics is written in Python. Python is a full-fledged scripting language
+that is relatively easy to learn (and fun!). So it can be pretty quick for a
+new user to get up to speed and start doing useful work. For work with
+Geonomics, this turnaround time should be even quicker. Geonomics aims to
+require minimal Python knowledge (yet maintain high extensibility for
+interested, expert users). Essentially, anyone should be able to build their
+own, arbitrarily complex Geonomics models as long as they know how to install
+the package, open a Python console, call Python functions, and edit some
+default values in a pre-packaged script.</p>
+<p>For proper acquaintance with the model, however, it will be helpful to
+understand the concept of <strong>object-oriented programming</strong>.  Python is a very
+handy language for object-oriented programming, and this is the primary
+programming paradigm in which Geonomics is written. Essentially,
+object-orientation involves:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Defining certain types of data structures, or <strong>classes</strong> (e.g. <cite>Car</cite>),
+and assigning them various behaviors, or <strong>methods</strong> (e.g. <cite>honk</cite>,
+<cite>turn</cite>, <cite>brake</cite>);</li>
+<li>Using particular data values to create individual instances, or
+<strong>objects</strong> belonging to those classes (e.g. <cite>my_1986_jeep</cite>, <cite>batmobile</cite>);</li>
+<li>Instructing those <strong>objects</strong> to carry out their behaviors by ‘calling’
+their <strong>methods</strong> (e.g. <cite>my_1986_jeep.honk()</cite> might return “Beepity
+beep!”, wheras <cite>batmobile.honk()</cite> might return “&lt;Batman theme song&gt;”).</li>
+</ol>
+</div></blockquote>
+<p>Geonomics defines a number of <strong>classes</strong>, some with a number of <strong>methods</strong>
+designed specifically for the user. The user will create <strong>objects</strong>
+belongining to these classes, using their own particular data values
+(i.e. with the values they define in the paramaters files they create). Then
+the user will call key <strong>methods</strong> on these <strong>objects</strong>, in order to get them
+to carry out their behaviors (that is to say, to get them to run a
+simulation).</p>
+<p>The subsequent documentation will present the <strong>classes</strong> definined in
+Geonomics and their key <strong>methods</strong>. It will explain exactly what those methods
+do, and how what they do fits into the overall structure and function of
+Geonomics models.</p>
+<p>In brief, Geonomics provides the following components:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><cite>Land</cite>, <cite>GenomicArchitecture</cite>, <cite>Trait</cite>, <cite>Individual</cite>, <cite>Population</cite>,
+and <cite>Community</cite> classes;</li>
+<li>A <cite>Model</cite> class that builds objects of the aforementioned classes
+according to the scenario stipulated in a parameters file,
+uses them to run numerous simulation iterations, and saves data
+and basic statistics from those iterations at all desired timesteps;</li>
+<li>Classes for planning arbitrarily complex landscape- and
+demographic-change scenarios;</li>
+<li>Numerous visualization methods, to help users design, run, explore,
+present, and explain their models’ behavior and results.</li>
+</ol>
+</div></blockquote>
+<dl class="docutils">
+<dt><strong>For the beginner</strong>, we recommend the following steps:</dt>
+<dd><ol class="first last arabic simple">
+<li>Review the following three sections (‘Model organization’, ‘Data
+structures and classes’, and ‘Operations’), to get a general
+undertsanding of the logic, components, and necessary and optional
+behaviors of a Geonomics model;</li>
+<li>Skim the subsequent section (‘Parameters’), to understand the structure
+of a Geonomics parameters file;</li>
+<li>Pip-install Geonomics (<cite>$ pip install geonomics</cite>);</li>
+<li>Open Python and run <cite>import geonomics as gnx</cite>;</li>
+<li>Use the <cite>gnx.make_parameters_file</cite> function, to begin creating template
+parameters files that they can tweak as desired;</li>
+<li>Use the <cite>gnx.make_model</cite> function and then the <cite>Model.walk</cite> or <cite>Model.run</cite>
+methods to instantiate and run the models they’ve parameterized;</li>
+<li>Use the various <cite>Model.plot</cite> methods to visualize the behavior and results
+of their models.</li>
+</ol>
+</dd>
+</dl>
+<p><strong>For the *impatient* beginner</strong>, as soon as Geonomics has been
+installed, you should be able to run the following code:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geonomics</span> <span class="kn">as</span> <span class="nn">gnx</span>
+
+<span class="n">gnx</span><span class="o">.</span><span class="n">run_default_model</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This will load the Geonomics package, create a default Geonomics
+parameters file in your current working directory,
+then use that file to instantiate and run a <cite>Model</cite> using the default
+parameter values.</p>
+<p>Lastly, please note that this documentation is designed to be read from
+from the beginning (though not necessarily all the way to the end). But
+given the interrelationships between all the components of the package,
+you will inevitably run into material in different sections that is related.
+To the extent possible, we attempt to cross-reference rather than duplicate
+information.</p>
+<p>Merry modeling!</p>
+</div>
+<div class="section" id="model-organization">
+<h3>Model organization<a class="headerlink" href="#model-organization" title="Permalink to this headline">¶</a></h3>
+<p>&lt;&lt;&lt;DIAGRAM HERE&gt;&gt;&gt;</p>
+<p>:: +——-+        +——-+
+:: | stuff | —–&gt; | stuff |
+:: +——-+        +——-+
+::     ^                |
+::     |                v
+:: +——-+        +——-+
+:: | stuff | &lt;—– | stuff |
+:: +——-+        +——-+</p>
+</div>
+<div class="section" id="data-structures-and-classes">
+<h3>Data structures and classes<a class="headerlink" href="#data-structures-and-classes" title="Permalink to this headline">¶</a></h3>
+<p>The following sections discuss the structure and function of the key
+Geonomics classes. Users will interface with these classes more or less
+directly when running Geonomics models, so a fundamental understanding of how
+they’re organized and how they work will be useful.</p>
+<div class="section" id="land-and-scape-objects">
+<h4><cite>Land</cite> and <cite>Scape</cite> objects<a class="headerlink" href="#land-and-scape-objects" title="Permalink to this headline">¶</a></h4>
+<p>One of the core components of a Geonomics model is the land. The land is
+modeled by the <cite>Land</cite> class. This class is an integer-keyed <cite>dict</cite> composed of
+numerous instances of the
+class <cite>Scape</cite>. Each <cite>Scape</cite> represents a separate environmental variable (or
+‘layer’, in GIS terminology), which is modeled a 2d Numpy array (or raster; in
+attribute ‘rast’), of identical dimensions to each other <cite>Scape</cite> in the <cite>Land</cite>
+object, and with the values of its environmental variable ‘e’ constrained to
+the interval [0 &lt;= e &lt;= 1]. Each <cite>Scape</cite> can be initialized from its own
+parameters subsection within the ‘land’ parameters section of a Geonomics
+parameters file.</p>
+<p>For each <cite>Population</cite> (see section ‘<cite>Individuals</cite> and <cite>Populations</cite>’, below),
+the different <cite>Scape</cite> layers in the <cite>Land</cite> can be used to model habitat
+viability, habitat connectivity, or variables imposing spatially varying
+natural selection. <cite>Land</cite> and <cite>Scape</cite> objects also contain some metatdata
+(as public attributes), including the resolution (attribute <cite>res</cite>), upper-left
+corner (<cite>ulc</cite>), and projection (<cite>prj</cite>), which default to 1, (0,0), and None but
+will be set otherwise if some or all of the <cite>Scape</cite> layers are read in from
+real-world GIS rasters.</p>
+</div>
+<div class="section" id="genomes-genomicarchitecture-and-trait-objects">
+<h4>Genomes, <cite>GenomicArchitecture</cite>, and <cite>Trait</cite> objects<a class="headerlink" href="#genomes-genomicarchitecture-and-trait-objects" title="Permalink to this headline">¶</a></h4>
+<p><cite>Individual</cite> objects (see section ‘<cite>Individuals</cite> and <cite>Populations</cite>’, below) can
+optionally be assigned genomes. If they are, each <cite>Individual</cite>’s genome is
+modeled as a 2-by-L Numpy array (where 2 is the ploidy, currently fixed at
+diploidy, and L is genome length) containing 0s and 1s (because
+Geonomics strictly models diallelic SNPs).</p>
+<p>The parameter L, as well as numerous other genomic parameters (including
+locus-wise starting frequencies of the 1 alleles; locus-wise dominance effects;
+locus-wise recombination rates; and genome-wide mutation rates for neutral,
+globally deleterious, and adaptive loci), are controlled by the
+<cite>GenomicArchitecture</cite> object pertaining to the <cite>Population</cite> to which an
+<cite>Individual</cite> belongs. (For the full and detailed list of attributes in a
+<cite>GenomicArchitecture</cite> object, see its class documentation, below.)
+The genomes of the initial <cite>Individual</cite>s in a simulation, as well as those of
+<cite>Individual</cite>s in subsequent generations, are either drawn or recombined, and
+are mutated, according to the values stipulated by the <cite>GenomicArchitecture</cite> of
+their <cite>Population</cite>. The user can create a population with a
+<cite>GenomicArchitecture</cite> and with corresponding genomes by including a ‘genome’
+subsection in that population’s section of the Geonomics parameters file (and
+setting the section’s various parameters to their desired values).</p>
+<p>Geonomics can model <cite>Individual</cite>s’ phenotypes. It does this by allowing the
+user to create an arbitrary number of distinct <cite>Trait</cite>s
+for each <cite>Population</cite>. Each trait is represented by a <cite>Trait</cite> object, which
+maps genomic loci onto that trait, maps effect sizes (‘alpha’) onto those loci,
+and sets the trait’s polygenic selection coefficient (‘phi’). An <cite>Individual</cite>’s
+phenotype for a given trait is calculated as the ‘null phenotype’ plus a
+weighted sum of the products of its ‘effective genotypes’ at all loci
+underlying that <cite>Trait</cite> and the effect sizes (i.e. ‘alpha’) of those loci:
+<span class="math">\(z_{i,t} = null\_genotype + \sum_{l = 0}^{n} \alpha_{t,l} g_{i,l}\)</span>,
+where <span class="math">\(z_{i,t}\)</span> is the phenotype of <cite>Individual</cite> i for trait t,
+<span class="math">\(g_{i, l}\)</span> is the genotype of the <cite>Individual</cite> at that locus, and
+<span class="math">\(\alpha_{t,l}\)</span> is the effect size of that locus for that trait.</p>
+<p>The ‘null phenotype’ refers determines what would be the phenotypic value that
+an <cite>Individual</cite> who is homozygyous for the 0 allele at all loci for a trait.
+For monogenic traits the null phenotype is 0 and the effect size is fixed at
+0.5 (such that individuals can have phenotypes of 0, 0.5, or 1);
+for polygenic traits the null phenotype is 0.5 and effect sizes can be fixed
+at or distributed around a mean value (which is controlled in the
+parameters file).</p>
+<p>The ‘effective genotype’ refers to how the genotype is calculated based on the
+dominance at a locus, as indicated by the following table of genotypes:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="32%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Biallelic genotype</th>
+<th class="head">Codominant</th>
+<th class="head">Dominant</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0 : 0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="row-odd"><td>0 : 1</td>
+<td>0.5</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>1 : 1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>(For the full and detailed list of attributes in a <cite>Trait</cite> object,
+see its class documentation, below.)</p>
+<p>Note that for maximal control over the <cite>GenomicArchitecture</cite>
+of a <cite>Population</cite>, the user can set the value of the ‘gen_arch_file’
+parameter in the parameters file to the name of a separate CSV file
+stipulating the locus numbers, starting 1-allele frequencies, dominance
+effects, traits, and inter-locus recombination rates (as columns) of
+all loci (rows) in the <cite>GenomicArchitecture</cite>;
+these values will override any other values provided in the ‘genome’
+subsection of the population’s parameters.</p>
+</div>
+<div class="section" id="individual-population-and-community-objects">
+<h4><cite>Individual</cite>, <cite>Population</cite>, and <cite>Community</cite> objects<a class="headerlink" href="#individual-population-and-community-objects" title="Permalink to this headline">¶</a></h4>
+<p>Being that Geonomics is an individual-based model, individuals serve as
+the fundamental units (or agents) of all simulations. They are represented by
+objects of the <cite>Individual</cite> class. Each <cite>Individual</cite> has an index (saved
+as attribute ‘idx’), a sex (attribute ‘sex’), an age (attribute ‘age’),
+an x,y position (in continuous space; attributes ‘x’ and ‘y’), and a
+<cite>list</cite> of environment values (attribute ‘e’), extracted from the
+<cite>Individual</cite>’s current cell on each <cite>Scape</cite> of the <cite>Land</cite> on which
+the <cite>Individual</cite> lives.</p>
+<p>The <cite>Population</cite> class is an <cite>OrderedDict</cite> (defined by the <cite>collections</cite>
+package) containing all <cite>Individaul</cite>s, (with
+their ‘idx’ attributes as keys). If a <cite>Population</cite> has a <cite>GenomicArchitecture</cite>
+then the <cite>Individual</cite>s in the <cite>Population</cite> will also each have genomes
+(attribute ‘genome’),
+and the <cite>GenomicArchitecture</cite> includes <cite>Trait</cite>s then each individual will also
+have a <cite>list</cite> of phenotype values (one per <cite>Trait</cite>; attribute ‘z’) and a
+single fitness value (attribute ‘fit’). (These attributes all otherwise
+default to <cite>None</cite>.)</p>
+<p>Each <cite>Population</cite> also has a number of other attributes of interest. Some
+of these are universal (i.e. they are created regardless of the
+parameterization of the <cite>Model</cite> to which a <cite>Population</cite> inheres). These
+include: the <cite>Population</cite>’s name (attribute ‘name’); its current density
+raster (a Numpy array attribute called ‘N’); and the number of births,
+number of deaths, and terminal population size of each timestep (which are
+<cite>list</cite> attributes called ‘n_births’, ‘n_deaths’, and ‘Nt’). If the
+<cite>Population</cite> was parameterized with a <cite>GenomicArchitecture</cite> then that will
+be created as the ‘gen_arch’ attribute (otherwise this attribute will be
+<cite>None</cite>).</p>
+<p>All of the <cite>Population</cite>s in a <cite>Model</cite> are collected in the <cite>Model</cite>’s
+<cite>Community</cite> object. The <cite>Community</cite> class is simply an integer-keyed <cite>dict</cite>
+of <cite>Population</cite>s. For the time being, the <cite>Community</cite> object allows a
+Geonomics <cite>Model</cite> to simulate multiple <cite>Population</cite>s simultaneously on
+the same <cite>Land</cite>, but otherwise affords no additional functionality
+of interest. However, its implementation will facilitate the potential
+future development of methods for interaction between <cite>Population</cite>s.
+(e.g. to simulate coevolutionary, speciation, or hybridization scenarios).</p>
+</div>
+<div class="section" id="model">
+<h4><cite>Model</cite><a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h4>
+<p>Objects of the <cite>Model</cite> class serve as the main interface between the user
+and the Geonomics program. (While it is certainly possible for a user
+to work directly with the <cite>Land</cite> and <cite>Population</cite> or <cite>Community</cite> objects to
+script their own custom models, the typical user should find that the
+<cite>Model</cite> object allows them accomplish their goals with minimal toil.)
+The main affordance of a <cite>Model</cite> object is the <cite>Model.run</cite> method,
+which, as one could guess, will run the <cite>Model</cite>. The typical workflow
+for creating and running a  <cite>Model</cite> object is as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Create a template paramters file containing the desired sections,
+by calling <cite>gnx.make_parameters_file</cite> with all revelant arguments;</li>
+<li>Define the scenario to be simulated, by opening and editing that
+parameters file (and optionally, creating/editing corresponding
+files, e.g. genomic-architecture CSV files;
+or raster or numpy-array files to be used as <cite>Scape</cite>s);</li>
+<li>Instantiate a <cite>Model</cite> object from that parameters file, by calling
+<cite>mod = gnx.make_model(‘/path/to/params_filename.py’)</cite>;</li>
+<li>Run the <cite>Model</cite>, by calling <cite>mod.run()</cite>.</li>
+</ol>
+</div></blockquote>
+<p>For detailed information on usage of these functions, see their docstrings.
+When a <cite>Model</cite> is run, it will:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Run the burn-in (until the mininmal burn-in length stipulated in the
+parameters file and the built-in stationarity statistics
+determine that the burn-in is complete);</li>
+<li>Run the main model for the stipulated number of timesteps;</li>
+<li>Repeat this for the stipulated number of iterations (retaining or
+refreshing the first run’s initial <cite>Land</cite> and <cite>Population</cite>
+objects as stipulated).</li>
+</ol>
+</div></blockquote>
+<p>The <cite>Model</cite> object offers one other method, however, <cite>Model.walk</cite>,
+which allows the user to run a model, in either ‘burn’ or ‘main’ mode,
+for an arbitrary number of timesteps within a single iteration (see its
+docstring for details). This is particularly useful for running
+Geonomics within an interactive Python session. Thus, <cite>Model.walk</cite> is
+primarily designed for passively running numerous iterations of a <cite>Model</cite>,
+to generate data for analysis, whereas <cite>Model.walk</cite> is primarily designed
+for the purposes of learning, teaching, or debugging the package, or
+developing, exploring, introspecting, or visaulizing particular <cite>Model</cite>s.</p>
+</div>
+<div class="section" id="secondary-classes">
+<h4>Secondary classes<a class="headerlink" href="#secondary-classes" title="Permalink to this headline">¶</a></h4>
+<p>The typical user will not need to access or interact with the following
+classes in any way. They will, however, parameterize them in the
+parameters file by either leaving or altering their default values. Geonomics
+sets generally sensible default parameter values wherever possible,
+but for some scenarios they may not be adequate, and for some parameters
+(e.g. the window-width used by the _DensityGridStack; see below), there is
+no “one-size-fits-most” option. Thus, it is important that the user
+have a basic acquaintance with the purpose and operation of these classes.</p>
+<div class="section" id="movementsurface">
+<h5><cite>_MovementSurface</cite><a class="headerlink" href="#movementsurface" title="Permalink to this headline">¶</a></h5>
+<p>The <cite>_MovementSurface</cite> class allows Geonomics to model a <cite>Population</cite>’s
+realistic movement across a spatially varying landscape. It does this by
+creating an array of circular probability distributions (i.e. VonMises
+distributions), one for each cell on the <cite>Land</cite>, from which
+<cite>Individual</cite>s choose their directions each time they move. To create the
+<cite>_MovementSurface</cite> for a <cite>Population</cite>, the user must indicate the <cite>Scape</cite>
+that should be used to create it (i.e. the <cite>Scape</cite> that represents
+landscape permeability for that <cite>Population</cite>). The <cite>_MovementSurface</cite>’s
+distributions can be <strong>simple (i.e. unimodal)</strong>, such that the
+maximum value of the distribution at each cell will point toward the
+maximum value in the 8-cell neighborhood; this works best for permeability
+<cite>Scape</cite>s with shallow, monotonic gradients, because the differences
+between permeability values of neighboring cells can be minor (e.g. a
+gradient representing the directionality of a prevalent current).
+Alternatively, the distributions can be <strong>mixture (i.e. multimodal)</strong>
+distributions, which are weighted sums of 8 unimodal distributions, one
+for each neighboring cell, where the weights are the relative cell
+permeabilities (i.e. the relative probabilities that an <cite>Individual</cite> would
+move into each of the 8 neighboring cells); this works best for non-monotonic,
+complex permeability <cite>Scape</cite>s (e.g. a DEM of a mountainous region that is
+used as a permeability <cite>Scape</cite>). (The <cite>Land</cite> is surrounded by a margin
+of 0-permeability cells before the <cite>_MovementSurface</cite> is calculated, such
+that <cite>Land</cite> edges are treated as barriers to movement.) The class consists
+principally of a 3d Numpy array (x by y by z, where x and y are the
+dimensions of the <cite>Land</cite> and z is the length of the vector of values
+used to approximate the distributions in each cell.</p>
+</div>
+<div class="section" id="densitygridstack">
+<h5><cite>_DensityGridStack</cite><a class="headerlink" href="#densitygridstack" title="Permalink to this headline">¶</a></h5>
+<p>The <cite>_DensityGridStack</cite> class implements an algorithm for rapid estimating
+an array of the local density of a <cite>Population</cite>. The density is estimated
+using a sliding window approach, with the window-width determining the
+neighborhood size of the estimate. The resulting array has a spatial
+resolution equivalent to that of the <cite>Land</cite>, and is used in all
+density-dependent operations.</p>
+</div>
+<div class="section" id="kdtree">
+<h5><cite>_KDTree</cite><a class="headerlink" href="#kdtree" title="Permalink to this headline">¶</a></h5>
+<p>The <cite>_KDTree</cite> class is just a wrapper around <cite>scipy.spatial.cKDTree</cite>.
+It provides an optimized algorithm (the kd-tree) for finding
+neighboring points within a given search radius.
+This class is used for all neighbor-searching operations (e.g. mate-search).</p>
+</div>
+<div class="section" id="recombinationpaths">
+<h5><cite>_RecombinationPaths</cite><a class="headerlink" href="#recombinationpaths" title="Permalink to this headline">¶</a></h5>
+<p>The <cite>_RecombinationPaths</cite> class contains a large (and customizable)
+number of <cite>bitarray</cite>s, each of which indicates the genome-length
+diploid chromatid numbers (0 or 1) for a
+recombinant gamete produced by an <cite>Individual</cite> of a given <cite>Population</cite>
+(henceforth referred to as ‘recombination paths’). These recombination
+paths are generated using the genome-wide recombination rates specified by
+the <cite>Population</cite>’s <cite>GeonomicArchitecture</cite>. They are generated during
+construction of the <cite>Model</cite>, then drawn randomly as needed (i.e.
+each time an <cite>Individual</cite> produces a gamete). This provides a
+reasonable trade-off between realistic modelling of recombination and runtime.</p>
+</div>
+<div class="section" id="landchanger-and-populationchanger">
+<h5><cite>_LandChanger</cite> and <cite>_PopulationChanger</cite><a class="headerlink" href="#landchanger-and-populationchanger" title="Permalink to this headline">¶</a></h5>
+<p>These classes manage all of the landscape changes and demographic changes
+that were parameterized for the <cite>Land</cite> and <cite>Population</cite> objects to which
+they inhere. The functions creating these changes are defined at the outset,
+then queued and called at their scheduled timesteps.</p>
+</div>
+<div class="section" id="datacollector-and-statscollector">
+<h5><cite>_DataCollector</cite> and <cite>_StatsCollector</cite><a class="headerlink" href="#datacollector-and-statscollector" title="Permalink to this headline">¶</a></h5>
+<p>These classes manage all of the data and statistics that should be collected
+and written to file for the <cite>Model</cite> object to which they inhere
+(as determined by the parameters file used the create the <cite>Model</cite>).
+The types of data to be collected, or statistics to be calculated, as
+well as the timesteps at which and methods by which they’re
+collected/calculated and determined at the outset, then the
+appropriate functions called at the appropriate timesteps.</p>
+</div>
+</div>
+</div>
+<div class="section" id="operations">
+<h3>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h3>
+<p>The following sections discuss the mechanics of core Geonomics operations.
+The material here is inevitably intertwined with some of the material in
+the “Data structures and classes” section. To the extent possible, we
+attempt to cross-reference rather than duplicate information (with
+the exception of this sentence).</p>
+<div class="section" id="movement-and-dispersal">
+<h4>Movement and Dispersal<a class="headerlink" href="#movement-and-dispersal" title="Permalink to this headline">¶</a></h4>
+<p>Movement is optional, such that turning off movement will allow the user
+to simulate sessile organisms (which will reproduce and disperse,
+but not move after dispersal; this distinction is of course irrelevant
+for a <cite>Population</cite> with a maximum age of 1). For <cite>Population</cite>s
+with movement, <cite>Individual</cite>s can move by two distinct mechanisms. <strong>Spatially
+random movement</strong> is the default behavior; in this case, <cite>Individual</cite>s
+move to next locations that are determined by a random distance drawn
+from a Wald distribution and a random direction drawn from a uniform
+circular (i.e. Von Mises) distribution.  As with most distributions used
+in Geonomics, the parameters of these distributions have sensible
+default values but can be customized in a <cite>Model</cite>’s parameters file
+(see section ‘Parameters’, below).</p>
+<p>The alternative movement mechanism that is available is
+<strong>movement across a permeability surface</strong>, using a <cite>_MovementSurface</cite> object.
+To parameterize a <cite>_MovemementSurface</cite> for a <cite>Population</cite>, the user
+must create a template parameters file that includes the
+necessary parameters section for the population (i.e.
+the user must set ‘movement’ to <cite>True</cite> and ‘movement_surface’ to <cite>True</cite>
+in the population’s arguments to the <cite>gnx.make_parameters_file</cite>
+function (see the docstring for that function for details and an example).
+<cite>Individual</cite>s move to next locations determined by a random distance drawn
+from a Wald distribution and a random direction drawn from the distribution
+at the  <cite>_MovementSurface</cite> cell in which which the <cite>Individual</cite>s
+are currently located. For details about <cite>_MovementSurface</cite> creation, see
+section ‘<cite>_MovementSurface</cite>’ above, or the class’ docstring.</p>
+<p>Dispersal is currently implemeneted identically to spatially random movement
+(with the caveat that the an offspring’s new location is determined
+relative its parents’ centroid). But the option to use a
+<cite>_MovementSurface</cite> for dispersal will be offered soon.</p>
+</div>
+<div class="section" id="reproduction">
+<h4>Reproduction<a class="headerlink" href="#reproduction" title="Permalink to this headline">¶</a></h4>
+<p>Each timestep, for each <cite>Population</cite>, all pairs of individuals within
+a certain distance of each other (i.e. the mating radius,
+which is set in the parameters file) are identified.
+These pairs are subsetted if necessary (i.e. if the <cite>Population</cite>
+requires that <cite>Individual</cite>s be above a certain reproductive age,
+or that they be of opposite sexes, in order to mate; these values
+can also be changed from their defaults in the parameters file).
+Remaining pairs mate probabilistically (according to a Bernoulli
+random draw with probability equal to the <cite>Population</cite>’s birth
+rate, which is also set in the parameters file).</p>
+<p>Pairs that are chosen to mate will produce a number of new
+offspring drawn from a Poisson distribution (with lambda set in the
+parameters file). For each offspring, sex is chosen probablistically
+(a Bernoulli random draw with probability equal to the <cite>Population</cite>’s
+sex ratio), age set to 0, and location chosen by dispersal from
+the parents’ centroid (see section ‘Movement and Dispersal’). For
+<cite>Population</cite>s that have genomes, offspring genomes will be a
+fusion of two recombinant genomes from each of the two parents (where
+each recombinant is indexed out a parent’s genome using a recombination
+path; see section ‘<cite>_RecombinationPaths</cite>’). For <cite>Population</cite>s
+with <cite>Trait</cite>s in their <cite>GenomicArchitecture</cite>s, offspring phenotypes are
+determined at birth. Mutations are also drawn and introduced at this
+point (see section ‘Mutation for details).</p>
+</div>
+<div class="section" id="mortality">
+<h4>Mortality<a class="headerlink" href="#mortality" title="Permalink to this headline">¶</a></h4>
+<p>Mortality can occur as a combination of two factors: <strong>density dependence</strong>
+and <strong>natural selection</strong>. Each <cite>Individual</cite> has a death decision drawn
+as a Bernoulli random variable with
+<span class="math">\(P(d_{i}) = 1 - P(s_{i_{dens}})P(s_{i_{fit}})\)</span>, where <span class="math">\(P(d_{i})\)</span>
+is the probability of death of <cite>Individual</cite> <span class="math">\(i\)</span>, and
+<span class="math">\(P(s_{i_{dens}})\)</span> and <span class="math">\(P(s_{i_{fit}})\)</span> are the probabilities of
+survival of <cite>Individual</cite> <span class="math">\(i\)</span> given density-dependence and
+fitness. The probability of density-dependent death is contingent on an
+<cite>Individual</cite>’s x,y location (i.e. the cell in which they’re currently located.
+And an <cite>Individual</cite>’s probability of survival due to fitness
+is just equal to the product of their absolute fitness (<span class="math">\(\omega\)</span>)
+for each of the <cite>Individual</cite>’s <span class="math">\(m\)</span> <cite>Trait</cite>s.
+Thus the equation for an <cite>Individual</cite>’s probability of death becomes:</p>
+<div class="math">
+\[P(d_{i}) = 1 - (1 - P(d_{x,y})) \prod_{p = 1}^{m}\omega_{i,p}\]</div>
+<p>The following two sections explain in detail the implementation and
+calculation of the two halves of the right side of this equation.</p>
+<div class="section" id="density-dependence">
+<h5>Density dependence<a class="headerlink" href="#density-dependence" title="Permalink to this headline">¶</a></h5>
+<p>Density dependence is implemented using a spatialized form of the class
+logistic growth equation
+(<span class="math">\(\frac{\mathrm{d}N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})\)</span>,
+where the x,y subscripts refer to values for a given cell on the <cite>Land</cite>).
+Each <cite>Population</cite> has a carrying-capacity raster (a 2d Numpy array;
+attribute ‘K’), which is defined in the parameters file to be
+one of the <cite>Scape</cite>s in the <cite>Land</cite>. The comparison between this raster and
+the population-density raster calculated at each timestep serves as the
+basis for the spatialized logistic growth equation, because both
+equations can be calculated cell-wise for the entire extent of the
+<cite>Land</cite> (using the <cite>Population</cite>’s intrinsic growth rate, the attribute
+‘R’, which is set in the parameters file).</p>
+<p>The logistic equation returns an array of instantaneous population growth
+rates within each cell. We can derive from this the density-dependent
+probability of death at each cell by subtracting an array of the expected
+number of births at each cell, then dividing by the array of
+population density:</p>
+<div class="math">
+\[P(d_{x,y}) = E[N_{d;x,y}]/N_{x,y} = \frac{E[N_{b;x,y}]
+ - \frac{\mathrm{d}N_{x,y}}{\mathrm{d}t}}{N_{x,y}}\]</div>
+<p>The expected number of births at each cell is calculated as a density
+raster of the number of succesful mating pairs, multiplied by the expected
+number of births per pair (i.e. the expectation of the Poisson
+distribution of the number of offspring per mating pair, which
+is just the distribution’s paramater lambda).</p>
+</div>
+<div class="section" id="selection">
+<h5>Selection<a class="headerlink" href="#selection" title="Permalink to this headline">¶</a></h5>
+<p>Selection on a <cite>Trait</cite> can exhibit three modes: <strong>spatially divergent</strong>,
+<strong>universal</strong>, and <strong>spatially contingent</strong>. <strong>Spatially divergent</strong> selection
+is the default behavior, and the most commonly used; in this form of
+selection, an <cite>Individual</cite>’s fitness depends on the absolute difference
+between the <cite>Individual</cite>’s phenotypic value and the environmental
+value of the relevant <cite>Scape</cite> (i.e. the <cite>Scape</cite> that represents the
+environmental variable acting as the selective force) in the cell where
+the <cite>Individual</cite> is located.</p>
+<p><strong>Universal</strong> selection (which can be toggled using the ‘univ_adv’
+parameter with a <cite>Trait</cite>’s section in the parameters file) occurs
+when a phenotype of 1 is optimal everywhere on the <cite>Land</cite>. In other
+words, it represents directional selection on an entire <cite>Population</cite>,
+regardless of <cite>Individual</cite>s’ spatial contexts.</p>
+<p>Under <strong>spatially contingent</strong> selection, the selection coefficient of a
+<cite>Trait</cite> varies across space, such that the strength of selection
+is environmentally determined in some way. Importantly, this mode
+is <em>not mutually exclusive</em> with the other two; in other words,
+selection on a certain <cite>Trait</cite> be both spatially contingent
+and either spatially divergent or universal. Spatially contingent selection
+can be implemented by providing an array of values (equal in dimensions
+to the <cite>Land</cite>) to the ‘phi’ value of a <cite>Trait</cite>, rather than a scalar
+value (which could be done within the parameters file itself, but may be
+more easily accomplished as a step between reading in a parameters file and
+instantiating a <cite>Model</cite> object from it).</p>
+<p>All possible combinations of the three modes of selection can all
+be thought of as special cases of the following equation for the fitness of
+<cite>Individual</cite> <span class="math">\(i\)</span> for <cite>Trait</cite> <span class="math">\(p\)</span> (<span class="math">\(\\omega_{i,p}\)</span>):</p>
+<div class="math">
+\[\omega_{i,p}= 1 - \phi_{p} (\mid e_{p;x,y} - z_{i;p} \mid)^{\gamma_{p}}\]</div>
+<p>Where <span class="math">\(\\phi_{p}\)</span> is the selection coefficient of trait
+<span class="math">\(p\)</span>, <span class="math">\(e_{p;x,y}\)</span> is the environmental variable of the
+relevant <cite>Scape</cite> at <cite>Individual</cite> <span class="math">\(i\)</span>‘s x,y location
+(which can also be thought of as the <cite>Individual</cite>’s optimal
+phenotype), <span class="math">\(z_{i;p}\)</span> is <cite>Individual</cite> <span class="math">\(i\)</span>‘s (actual)
+phenotype for <cite>Trait</cite> <span class="math">\(p\)</span>, and <span class="math">\(gamma_{p}\)</span> controls
+how fitness decreases as the absolute difference between an <cite>Individual</cite>’s
+optimal and actual phenotypes increases (it defaults to 1, which causes
+fitness to decrease linearly around the optimal
+phenotypic value).</p>
+</div>
+</div>
+<div class="section" id="mutation">
+<h4>Mutation<a class="headerlink" href="#mutation" title="Permalink to this headline">¶</a></h4>
+<p>Geonomics can model mutations of three different types: <strong>neutral</strong>,
+<strong>deleterious</strong>, and <strong>trait</strong> mutations. These terms don’t map
+precisely onto the traditional population-genetic
+lingo of “neutral”, “deleterious”, and “beneficial”, but they
+are more or less analogous:</p>
+<ul class="simple">
+<li><strong>Neutral</strong> mutations are the same conceptually in Geonomics as
+they are in the field of population genetics in general:
+They are mutations that have no effect on the fitness of
+the individuals in which they occur.</li>
+<li><strong>Deleterious</strong> mutations in Geonomics are also conceptually the
+same in Geonomics and in population genetics: They negatively impact
+the fitness of the individuals in which they occur.</li>
+<li><strong>Trait</strong> mutations are the place where the Geonomics concept and
+the population-genetic concept diverge: In Geonomics, natural selection
+acts on the phenotype, not the genotype (although these concepts are
+identical if a <cite>Trait</cite> in monogenic), and it is (by default,
+but not always; see section ‘Selection’, above) divergent. For this reason
+it would be a misnomer to call mutations that influence a given
+<cite>Trait</cite>’s phenotypes ‘beneficial’ – even though that term is the closest
+population-genetic concept to this concept as it is employed in Geonomics –
+because the same mutant genotype in the same <cite>Individual</cite> could have opposite
+effects on that <cite>Individual</cite>’s fitness in different environmental
+contexts (i.e. it could behave as a beneficial mutation is one region of
+the <cite>Land</cite> but as a deleterious mutation in another).</li>
+</ul>
+</div>
+<div class="section" id="population-interaction">
+<h4>Population interaction<a class="headerlink" href="#population-interaction" title="Permalink to this headline">¶</a></h4>
+<p>This functionality is not yet included available. But the Community class was
+created in advance recognition that this functionality could be desirable
+for future versions (e.g. to simulate coevolutionary, speciation, or
+hybridization scenarios).</p>
+</div>
+<div class="section" id="land-and-population-change">
+<h4>Land and population change<a class="headerlink" href="#land-and-population-change" title="Permalink to this headline">¶</a></h4>
+<p>For a given <cite>Scape</cite>, any number of landsacpe change events can be planned.
+In the parameters file, for each event, the user stipulates the initial
+timestep; the final timestep; the resulting landscape (i.e. the array
+of the <cite>Scape</cite> that will exist after the event is complete); and the
+interval at which intermediate changes will occur.  When the <cite>Model</cite> is
+created, the stepped series of intermediate landscapes (and
+<cite>_MovementSurface</cite> objects, if the <cite>Scape</cite> that is changing serves
+as the basis of a <cite>_MovementSurface</cite> for any <cite>Population</cite>) will be
+created and queued, so that they will swap out accordingly at the appropriate
+timesteps.</p>
+<p>For a given <cite>Population</cite>, any number of demographic change events can
+also be planned. In the parameters file, for each event, the user
+stipulates the type of the event (‘monotonic’, ‘cyclical’, ‘random’, or
+‘custom’) as well as the values of a number of associated
+parameters (precisely which parameters depdends on the type of event chosen).
+As with landscape change events, all necessary stepwise changes will be
+planned and queued when the <cite>Model</cite> is created, and will be
+executed at the appropriate timesteps.</p>
+<p>It is also possible to schedule any number of instantaneous changes
+to some of the life-history parameters of a <cite>Population</cite> (e.g. birth rate;
+the lambda parameter of the Poisson distribution determining the number of
+offspring of mating events). This functionality is currently minimalistic,
+but will be more facilitated in future versions.</p>
+</div>
+</div>
+<div class="section" id="visualization">
+<h3>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h3>
+<p>Each <cite>Population</cite> has a wide variety of visualization methods
+(<cite>Population.plot</cite>, <cite>Population.plot_fitness</cite>, etc.), which aim to help users
+design, run, explore, present, and explain their models’ behavior and results.
+These methods can be called on a <cite>Population</cite> at any time (e.g. as
+soon as the <cite>Population</cite> has been created, or after the model has
+run for any number of timesteps); but it is worth mentioning that some
+methods may be invalid depending on the point in model-time at
+which they’re called (e.g.  <cite>Population.plot_genotype</cite>,
+<cite>Population.plot_phenotype</cite>, and <cite>Population.plot_fitness</cite> cannot be run
+for Populations that have not yet been burned in, as they will not yet have
+genomes assigned) or the <cite>Population</cite> on which they’re called
+(e.g. the aforementioned methods cannot create plots for a <cite>Population</cite>
+that has no <cite>GenomicArchitecture</cite>; and likewise, the
+<cite>Population.plot_demographic_changes</cite> method cannot be called for a
+<cite>Population</cite> for which demographic changes were not parameterized).</p>
+<p>The <cite>Land</cite> object and its <cite>Scape</cite>s also both have a <cite>plot</cite> method.</p>
+</div>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<p>&lt;&lt;&lt;copy of the potential full parameters file, with each parameter
+cross-referenced to a subsequent section explaining its meaning/use&gt;&gt;&gt;</p>
+</div>
+<div class="section" id="class-and-function-docstrings">
+<h3>Class and function docstrings<a class="headerlink" href="#class-and-function-docstrings" title="Permalink to this headline">¶</a></h3>
+<p>&lt;&lt;&lt;COPIES OF ALL DOCSTRINGS HERE&gt;&gt;&gt;</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Drew Hart.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
