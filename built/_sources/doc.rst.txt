@@ -1,15 +1,38 @@
+.. role:: py(code)
+      :language: python
+
+.. role:: bash(code)
+      :language: bash
+
+
+.. code-block:: python
+
+                ## :: ::    :::            ##
+          ##:::   :::::    :::   ::    :: :: :::##
+       ## ::::     ::           ::   ::::::::::::::##
+     ##::::::                       ::::::::: :::::: :##
+   ## :    :::                    :::    ::    :::::::::##
+  ##ggggg eeee ooo   n   n   ooo   m   m iiiii  cccc ssss##
+ ##g     e    o   o  nn  n  o   o  m   m   i   c     s    ##
+ ##g     eee o     o n n n o     o mm mm   i   c     sssss##
+ ##g ggg eee o     o n  nn o     o m m m   i   c         s##
+ ##g   g e    o   o  n   n  o   o  m   m   i   c        ss##
+  ##gggg  eeee ooo   n   n   ooo   m   m iiiii  cccc ssss##
+   ##  ::::::::        ::::::::::::  :       ::  ::   : ##
+     ##  ::::              :::::::  ::     ::::::::  :##
+       ## :::               :::::: ::       ::::::  ##
+          ##:                ::::                ##
+                ##                         ##
+  
+ 
 #########
 Geonomics
 #########
 
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-A Python package for easy construction of individual-based, spatially explicit,
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-forward-time, and highly customizable landscape-genomics simulations
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+A Python package for easy construction of individual-based, spatially explicit, forward-time, and highly customizable landscape-genomics simulations
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 *****
 Intro
@@ -48,14 +71,16 @@ handy language for object-oriented programming, and this is the primary
 programming paradigm in which Geonomics is written. Essentially, 
 object-orientation involves: 
 
-  1. Defining certain types of data structures, or **classes** (e.g. `Car`),
-     and assigning them various behaviors, or **methods** (e.g. `honk`, 
-     `turn`, `brake`);
+  1. Defining certain types of data structures, or **classes** (e.g.
+     :code:`Car`), and assigning them various behaviors, or **methods**
+     (e.g. :code:`honk`, :code:`turn`, :code:`brake`);
   2. Using particular data values to create individual instances, or 
-     **objects** belonging to those classes (e.g. `my_1986_jeep`, `batmobile`);
+     **objects** belonging to those classes (e.g. :code:`my_1986_jeep`, or
+     :code:`batmobile`);
   3. Instructing those **objects** to carry out their behaviors by 'calling' 
-     their **methods** (e.g. `my_1986_jeep.honk()` might return "Beepity
-     beep!", wheras `batmobile.honk()` might return "<Batman theme song>"). 
+     their **methods** (e.g. :code:`my_1986_jeep.honk()` might return "Beepity
+     beep!", wheras :code:`batmobile.honk()` might
+     return "<Batman theme song>"). 
      
 Geonomics defines a number of **classes**, some with a number of **methods**
 designed specifically for the user. The user will create **objects**
@@ -73,9 +98,9 @@ Geonomics models.
 
 In brief, Geonomics provides the following components:
 
-  1. `Land`, `GenomicArchitecture`, `Trait`, `Individual`, `Population`,
-     and `Community` classes;
-  2. A `Model` class that builds objects of the aforementioned classes 
+  1. :code:`Land`, :code:`GenomicArchitecture`, :code:`Trait`,
+     :code:`Individual`, :code:`Population`, and :code:`Community` classes;
+  2. A :code:`Model` class that builds objects of the aforementioned classes 
      according to the scenario stipulated in a parameters file,
      uses them to run numerous simulation iterations, and saves data 
      and basic statistics from those iterations at all desired timesteps;
@@ -91,16 +116,17 @@ In brief, Geonomics provides the following components:
      behaviors of a Geonomics model;
   2. Skim the subsequent section ('Parameters'), to understand the structure
      of a Geonomics parameters file;
-  3. Pip-install Geonomics (`$ pip install geonomics`);
-  4. Open Python and run `import geonomics as gnx`;
-  5. Use the `gnx.make_parameters_file` function, to begin creating template
-     parameters files that they can tweak as desired;
-  6. Use the `gnx.make_model` function and then the `Model.walk` or `Model.run`
-     methods to instantiate and run the models they've parameterized;
-  7. Use the various `Model.plot` methods to visualize the behavior and results
-     of their models.
+  3. Pip-install Geonomics (:bash:`$ pip install geonomics`);
+  4. Open Python and run :py:`import geonomics as gnx`;
+  5. Use the :py:`gnx.make_parameters_file` function, to begin
+     creating template parameters files that they can tweak as desired;
+  6. Use the :py:`gnx.make_model` function and then the
+     :py:`Model.walk` or :py:`Model.run` methods to instantiate and run
+     the models they've parameterized;
+  7. Use the various :py:`Model.plot` methods to visualize
+     the behavior and results of their models.
 
-**For the *impatient* beginner**, as soon as Geonomics has been
+**For the `impatient` beginner**, as soon as Geonomics has been
 installed, you should be able to run the following code:
 
 
@@ -112,7 +138,7 @@ installed, you should be able to run the following code:
 
 This will load the Geonomics package, create a default Geonomics
 parameters file in your current working directory, 
-then use that file to instantiate and run a `Model` using the default
+then use that file to instantiate and run a :code:`Model` using the default
 parameter values.
 
 Lastly, please note that this documentation is designed to be read from
@@ -124,6 +150,8 @@ information.
 
 Merry modeling!
 
+
+-------------------------------------------------------------------------------
 
 ******************
 Model organization 
@@ -140,7 +168,10 @@ Model organization
 :: +-------+        +-------+ 
 :: | stuff | <----- | stuff | 
 :: +-------+        +-------+ 
-         
+
+
+-------------------------------------------------------------------------------
+
 ***************************
 Data structures and classes
 ***************************
@@ -150,37 +181,42 @@ Geonomics classes. Users will interface with these classes more or less
 directly when running Geonomics models, so a fundamental understanding of how 
 they're organized and how they work will be useful.
 
-==========================
-`Land` and `Scape` objects
-==========================
+==================================
+:py:`Land` and :py:`Scape` objects
+==================================
 
 One of the core components of a Geonomics model is the land. The land is
-modeled by the `Land` class. This class is an integer-keyed `dict` composed of
-numerous instances of the
-class `Scape`. Each `Scape` represents a separate environmental variable (or
-'layer', in GIS terminology), which is modeled a 2d Numpy array (or raster; in
-attribute 'rast'), of identical dimensions to each other `Scape` in the `Land`
+modeled by the :py:`Land` class. This class is an 
+integer-keyed :py:`dict` composed of numerous instances of the
+class :py:`Scape`. Each :py:`Scape` represents a separate 
+environmental variable (or 'layer', in GIS terminology),
+which is modeled a 2d Numpy array (or raster; in
+attribute 'rast'), of identical dimensions to each 
+other :py:`Scape` in the :py:`Land`
 object, and with the values of its environmental variable 'e' constrained to
-the interval [0 <= e <= 1]. Each `Scape` can be initialized from its own
+the interval [0 <= e <= 1]. Each :py:`Scape` can be initialized from its own
 parameters subsection within the 'land' parameters section of a Geonomics
 parameters file. 
 
-For each `Population` (see section '`Individuals` and `Populations`', below),
-the different `Scape` layers in the `Land` can be used to model habitat 
+For each :py:`Population` (see section ':py:`Individuals`
+and :py:`Populations`', below), the different :py:`Scape`
+layers in the :py:`Land` can be used to model habitat 
 viability, habitat connectivity, or variables imposing spatially varying
-natural selection. `Land` and `Scape` objects also contain some metatdata 
-(as public attributes), including the resolution (attribute `res`), upper-left
-corner (`ulc`), and projection (`prj`), which default to 1, (0,0), and None but
-will be set otherwise if some or all of the `Scape` layers are read in from
+natural selection. :py:`Land` and :py:`Scape` objects
+also contain some metatdata (as public attributes), including
+the resolution (attribute 'res'), upper-left corner ('ulc'),
+and projection ('prj'), which default to 1, (0,0), and None but
+will be set otherwise if some or all of the :py:`Scape` layers are read in from
 real-world GIS rasters.
 
-===================================================
-Genomes, `GenomicArchitecture`, and `Trait` objects
-===================================================
+===========================================================
+Genomes, :py:`GenomicArchitecture`, and :py:`Trait` objects
+===========================================================
 
-`Individual` objects (see section '`Individuals` and `Populations`', below) can
-optionally be assigned genomes. If they are, each `Individual`'s genome is 
-modeled as a 2-by-L Numpy array (where 2 is the ploidy, currently fixed at
+:py:`Individual` objects (see section ':py:`Individuals`
+and :py:`Populations`', below) can optionally be assigned genomes.
+If they are, each :py:`Individual`'s genome is modeled as a 
+2-by-L Numpy array (where 2 is the ploidy, currently fixed at
 diploidy, and L is genome length) containing 0s and 1s (because
 Geonomics strictly models diallelic SNPs). 
 
@@ -188,32 +224,43 @@ The parameter L, as well as numerous other genomic parameters (including
 locus-wise starting frequencies of the 1 alleles; locus-wise dominance effects;
 locus-wise recombination rates; and genome-wide mutation rates for neutral, 
 globally deleterious, and adaptive loci), are controlled by the 
-`GenomicArchitecture` object pertaining to the `Population` to which an 
-`Individual` belongs. (For the full and detailed list of attributes in a 
-`GenomicArchitecture` object, see its class documentation, below.)
-The genomes of the initial `Individual`\s in a simulation, as well as those of 
-`Individual`\s in subsequent generations, are either drawn or recombined, and
-are mutated, according to the values stipulated by the `GenomicArchitecture` of
-their `Population`. The user can create a population with a 
-`GenomicArchitecture` and with corresponding genomes by including a 'genome' 
-subsection in that population's section of the Geonomics parameters file (and 
+:py:`GenomicArchitecture` object pertaining to the :py:`Population` to which an 
+:py:`Individual` belongs. (For the full and detailed list of attributes in a 
+:py:`GenomicArchitecture` object, see its class documentation, below.)
+The genomes of the initial :py:`Individual`\s 
+in a simulation, as well as those of 
+:py:`Individual`\s in subsequent generations, are either drawn
+or recombined, and are mutated, according to the values stipulated 
+by the :py:`GenomicArchitecture` of
+their :py:`Population`. The user can create a population with a 
+:py:`GenomicArchitecture` and with corresponding
+genomes by including a 'genome' subsection in that
+population's section of the Geonomics parameters file (and 
 setting the section's various parameters to their desired values). 
 
-Geonomics can model `Individual`\s' phenotypes. It does this by allowing the 
-user to create an arbitrary number of distinct `Trait`\s
-for each `Population`. Each trait is represented by a `Trait` object, which 
+Geonomics can model :py:`Individual`\s' phenotypes.
+It does this by allowing the 
+user to create an arbitrary number of distinct :py:`Trait`\s
+for each :py:`Population`. Each trait is
+represented by a :py:`Trait` object, which 
 maps genomic loci onto that trait, maps effect sizes ('alpha') onto those loci,
-and sets the trait's polygenic selection coefficient ('phi'). An `Individual`'s
+and sets the trait's polygenic selection
+coefficient ('phi'). An :py:`Individual`'s
 phenotype for a given trait is calculated as the 'null phenotype' plus a 
 weighted sum of the products of its 'effective genotypes' at all loci 
-underlying that `Trait` and the effect sizes (i.e. 'alpha') of those loci: 
-:math:`z_{i,t} = null\_genotype + \sum_{l = 0}^{n} \alpha_{t,l} g_{i,l}`, 
-where :math:`z_{i,t}` is the phenotype of `Individual` i for trait t, 
-:math:`g_{i, l}` is the genotype of the `Individual` at that locus, and 
+underlying that :py:`Trait` and the effect sizes (i.e. 'alpha') of those loci:
+
+.. math::
+
+   z_{i,t} = null\_genotype + \sum_{l = 0}^{n} \alpha_{t,l} g_{i,l}
+
+where :math:`z_{i,t}` is the phenotype of :py:`Individual` i for trait t, 
+:math:`g_{i, l}` is the genotype of the :py:`Individual` at that locus, and 
 :math:`\alpha_{t,l}` is the effect size of that locus for that trait.
 
 The 'null phenotype' refers determines what would be the phenotypic value that
-an `Individual` who is homozygyous for the 0 allele at all loci for a trait.
+an :py:`Individual` who is homozygyous for
+the 0 allele at all loci for a trait.
 For monogenic traits the null phenotype is 0 and the effect size is fixed at 
 0.5 (such that individuals can have phenotypes of 0, 0.5, or 1); 
 for polygenic traits the null phenotype is 0.5 and effect sizes can be fixed 
@@ -233,105 +280,112 @@ dominance at a locus, as indicated by the following table of genotypes:
 |      1 : 1         |        1         |        1         |
 +--------------------+------------------+------------------+
 
-(For the full and detailed list of attributes in a `Trait` object, 
+(For the full and detailed list of attributes in a :py:`Trait` object, 
 see its class documentation, below.)
 
-Note that for maximal control over the `GenomicArchitecture`
-of a `Population`, the user can set the value of the 'gen_arch_file' 
+Note that for maximal control over the :py:`GenomicArchitecture`
+of a :py:`Population`, the user can set the value of the 'gen_arch_file' 
 parameter in the parameters file to the name of a separate CSV file 
 stipulating the locus numbers, starting 1-allele frequencies, dominance 
 effects, traits, and inter-locus recombination rates (as columns) of 
-all loci (rows) in the `GenomicArchitecture`;
+all loci (rows) in the :py:`GenomicArchitecture`;
 these values will override any other values provided in the 'genome' 
 subsection of the population's parameters.
 
-===================================================
-`Individual`, `Population`, and `Community` objects
-===================================================
+===============================================================
+:py:`Individual`, :py:`Population`, and :py:`Community` objects
+===============================================================
 
 Being that Geonomics is an individual-based model, individuals serve as 
 the fundamental units (or agents) of all simulations. They are represented by
-objects of the `Individual` class. Each `Individual` has an index (saved 
+objects of the :py:`Individual` class.
+Each :py:`Individual` has an index (saved 
 as attribute 'idx'), a sex (attribute 'sex'), an age (attribute 'age'), 
 an x,y position (in continuous space; attributes 'x' and 'y'), and a 
-`list` of environment values (attribute 'e'), extracted from the 
-`Individual`'s current cell on each `Scape` of the `Land` on which 
-the `Individual` lives.
+:py:`list` of environment values (attribute 'e'), extracted from the 
+:py:`Individual`'s current cell on each :py:`Scape` of the :py:`Land` on which 
+the :py:`Individual` lives.
 
-The `Population` class is an `OrderedDict` (defined by the `collections` 
-package) containing all `Individaul`\s, (with 
-their 'idx' attributes as keys). If a `Population` has a `GenomicArchitecture`
-then the `Individual`\s in the `Population` will also each have genomes 
-(attribute 'genome'),
-and the `GenomicArchitecture` includes `Trait`\s then each individual will also
-have a `list` of phenotype values (one per `Trait`; attribute 'z') and a 
+The :py:`Population` class is an :py:`OrderedDict`
+(defined by the :py:`collections` 
+package) containing all :py:`Individaul`\s, (with 
+their 'idx' attributes as keys). If a :py:`Population`
+has a :py:`GenomicArchitecture` then the :py:`Individual`\s
+in the :py:`Population` will also each have genomes (attribute 'genome'),
+and the :py:`GenomicArchitecture` includes :py:`Trait`\s
+then each individual will also have a :py:`list` of 
+phenotype values (one per :py:`Trait`; attribute 'z') and a 
 single fitness value (attribute 'fit'). (These attributes all otherwise 
-default to `None`.)
+default to :py:`None`.)
 
-Each `Population` also has a number of other attributes of interest. Some 
+Each :py:`Population` also has a number of other attributes of interest. Some 
 of these are universal (i.e. they are created regardless of the 
-parameterization of the `Model` to which a `Population` inheres). These 
-include: the `Population`'s name (attribute 'name'); its current density 
+parameterization of the :py:`Model` to which a :py:`Population` inheres). These 
+include: the :py:`Population`'s name (attribute 'name'); its current density 
 raster (a Numpy array attribute called 'N'); and the number of births,
 number of deaths, and terminal population size of each timestep (which are 
-`list` attributes called 'n_births', 'n_deaths', and 'Nt'). If the 
-`Population` was parameterized with a `GenomicArchitecture` then that will 
+:py:`list` attributes called 'n_births', 'n_deaths', and 'Nt'). If the 
+:py:`Population` was parameterized with a
+:py:`GenomicArchitecture` then that will 
 be created as the 'gen_arch' attribute (otherwise this attribute will be 
-`None`).
+:py:`None`).
 
-All of the `Population`\s in a `Model` are collected in the `Model`'s 
-`Community` object. The `Community` class is simply an integer-keyed `dict` 
-of `Population`\s. For the time being, the `Community` object allows a 
-Geonomics `Model` to simulate multiple `Population`\s simultaneously on 
-the same `Land`, but otherwise affords no additional functionality
+All of the :py:`Population`\s in a :py:`Model`
+are collected in the :py:`Model`'s 
+:py:`Community` object. The :py:`Community` class
+is simply an integer-keyed :py:`dict` 
+of :py:`Population`\s. For the time being, the :py:`Community` object allows a 
+Geonomics :py:`Model` to simulate multiple :py:`Population`\s simultaneously on 
+the same :py:`Land`, but otherwise affords no additional functionality
 of interest. However, its implementation will facilitate the potential 
-future development of methods for interaction between `Population`\s. 
+future development of methods for interaction between :py:`Population`\s. 
 (e.g. to simulate coevolutionary, speciation, or hybridization scenarios).
 
 
-=======
-`Model`
-=======
+===================
+:py:`Model` Objects
+===================
 
-Objects of the `Model` class serve as the main interface between the user 
+Objects of the :py:`Model` class serve as the main interface between the user 
 and the Geonomics program. (While it is certainly possible for a user 
-to work directly with the `Land` and `Population` or `Community` objects to 
+to work directly with the :py:`Land`
+and :py:`Population` or :py:`Community` objects to 
 script their own custom models, the typical user should find that the 
-`Model` object allows them accomplish their goals with minimal toil.)
-The main affordance of a `Model` object is the `Model.run` method, 
-which, as one could guess, will run the `Model`. The typical workflow 
-for creating and running a  `Model` object is as follows:
+:py:`Model` object allows them accomplish their goals with minimal toil.)
+The main affordance of a :py:`Model` object is the :py:`Model.run` method, 
+which, as one could guess, will run the :py:`Model`. The typical workflow 
+for creating and running a  :py:`Model` object is as follows:
 
   1. Create a template paramters file containing the desired sections, 
-     by calling `gnx.make_parameters_file` with all revelant arguments;
+     by calling :py:`gnx.make_parameters_file` with all revelant arguments;
   2. Define the scenario to be simulated, by opening and editing that 
      parameters file (and optionally, creating/editing corresponding 
      files, e.g. genomic-architecture CSV files;
-     or raster or numpy-array files to be used as `Scape`\s);
-  3. Instantiate a `Model` object from that parameters file, by calling 
-     `mod = gnx.make_model('/path/to/params_filename.py')`;
-  4. Run the `Model`, by calling `mod.run()`.
+     or raster or numpy-array files to be used as :py:`Scape`\s);
+  3. Instantiate a :py:`Model` object from that parameters file, by calling 
+     :py:`mod = gnx.make_model('/path/to/params_filename.py')`;
+  4. Run the :py:`Model`, by calling :py:`mod.run()`.
 
 For detailed information on usage of these functions, see their docstrings.
-When a `Model` is run, it will:
+When a :py:`Model` is run, it will:
 
   1. Run the burn-in (until the mininmal burn-in length stipulated in the 
      parameters file and the built-in stationarity statistics 
      determine that the burn-in is complete);
   2. Run the main model for the stipulated number of timesteps;
   3. Repeat this for the stipulated number of iterations (retaining or 
-     refreshing the first run's initial `Land` and `Population` 
+     refreshing the first run's initial :py:`Land` and :py:`Population` 
      objects as stipulated).
 
-The `Model` object offers one other method, however, `Model.walk`, 
+The :py:`Model` object offers one other method, however, :py:`Model.walk`, 
 which allows the user to run a model, in either 'burn' or 'main' mode, 
 for an arbitrary number of timesteps within a single iteration (see its 
 docstring for details). This is particularly useful for running 
-Geonomics within an interactive Python session. Thus, `Model.walk` is 
-primarily designed for passively running numerous iterations of a `Model`, 
-to generate data for analysis, whereas `Model.walk` is primarily designed
+Geonomics within an interactive Python session. Thus, :py:`Model.walk` is 
+primarily designed for passively running numerous iterations of a :py:`Model`, 
+to generate data for analysis, whereas :py:`Model.walk` is primarily designed
 for the purposes of learning, teaching, or debugging the package, or 
-developing, exploring, introspecting, or visaulizing particular `Model`\s. 
+developing, exploring, introspecting, or visaulizing particular :py:`Model`\s. 
 
 =================
 Secondary classes
@@ -346,92 +400,98 @@ but for some scenarios they may not be adequate, and for some parameters
 no "one-size-fits-most" option. Thus, it is important that the user
 have a basic acquaintance with the purpose and operation of these classes.
 
-------------------
-`_MovementSurface`
-------------------
+----------------------
+:py:`_MovementSurface`
+----------------------
 
-The `_MovementSurface` class allows Geonomics to model a `Population`'s 
+The :py:`_MovementSurface` class allows Geonomics
+to model a :py:`Population`'s 
 realistic movement across a spatially varying landscape. It does this by 
 creating an array of circular probability distributions (i.e. VonMises 
-distributions), one for each cell on the `Land`, from which 
-`Individual`\s choose their directions each time they move. To create the
-`_MovementSurface` for a `Population`, the user must indicate the `Scape` 
-that should be used to create it (i.e. the `Scape` that represents 
-landscape permeability for that `Population`). The `_MovementSurface`'s 
+distributions), one for each cell on the :py:`Land`, from which 
+:py:`Individual`\s choose their directions each time they move. To create the
+:py:`_MovementSurface` for a :py:`Population`,
+the user must indicate the :py:`Scape` 
+that should be used to create it (i.e. the :py:`Scape` that represents 
+landscape permeability for that :py:`Population`). The :py:`_MovementSurface`'s 
 distributions can be **simple (i.e. unimodal)**, such that the 
 maximum value of the distribution at each cell will point toward the
 maximum value in the 8-cell neighborhood; this works best for permeability 
-`Scape`\s with shallow, monotonic gradients, because the differences 
+:py:`Scape`\s with shallow, monotonic gradients, because the differences 
 between permeability values of neighboring cells can be minor (e.g. a 
 gradient representing the directionality of a prevalent current). 
 Alternatively, the distributions can be **mixture (i.e. multimodal)**
 distributions, which are weighted sums of 8 unimodal distributions, one 
 for each neighboring cell, where the weights are the relative cell 
-permeabilities (i.e. the relative probabilities that an `Individual` would 
+permeabilities (i.e. the relative probabilities that an :py:`Individual` would 
 move into each of the 8 neighboring cells); this works best for non-monotonic, 
-complex permeability `Scape`\s (e.g. a DEM of a mountainous region that is 
-used as a permeability `Scape`). (The `Land` is surrounded by a margin 
-of 0-permeability cells before the `_MovementSurface` is calculated, such 
-that `Land` edges are treated as barriers to movement.) The class consists 
+complex permeability :py:`Scape`\s (e.g. a DEM of a mountainous region that is 
+used as a permeability :py:`Scape`). (The :py:`Land` is surrounded by a margin 
+of 0-permeability cells before the :py:`_MovementSurface` is calculated, such 
+that :py:`Land` edges are treated as barriers to movement.) The class consists 
 principally of a 3d Numpy array (x by y by z, where x and y are the 
-dimensions of the `Land` and z is the length of the vector of values 
+dimensions of the :py:`Land` and z is the length of the vector of values 
 used to approximate the distributions in each cell.
 
--------------------
-`_DensityGridStack`
--------------------
+-----------------------
+:py:`_DensityGridStack`
+-----------------------
 
-The `_DensityGridStack` class implements an algorithm for rapid estimating 
-an array of the local density of a `Population`. The density is estimated 
+The :py:`_DensityGridStack` class implements an algorithm for rapid estimating 
+an array of the local density of a :py:`Population`. The density is estimated 
 using a sliding window approach, with the window-width determining the 
 neighborhood size of the estimate. The resulting array has a spatial 
-resolution equivalent to that of the `Land`, and is used in all
+resolution equivalent to that of the :py:`Land`, and is used in all
 density-dependent operations.
 
----------
-`_KDTree`
----------
+-------------
+:py:`_KDTree`
+-------------
 
-The `_KDTree` class is just a wrapper around `scipy.spatial.cKDTree`. 
+The :py:`_KDTree` class is just a wrapper around :py:`scipy.spatial.cKDTree`. 
 It provides an optimized algorithm (the kd-tree) for finding 
 neighboring points within a given search radius.
 This class is used for all neighbor-searching operations (e.g. mate-search).
 
----------------------
-`_RecombinationPaths`
----------------------
+-------------------------
+:py:`_RecombinationPaths`
+-------------------------
 
-The `_RecombinationPaths` class contains a large (and customizable) 
-number of `bitarray`\s, each of which indicates the genome-length 
+The :py:`_RecombinationPaths` class contains a large (and customizable) 
+number of :py:`bitarray`\s, each of which indicates the genome-length 
 diploid chromatid numbers (0 or 1) for a
-recombinant gamete produced by an `Individual` of a given `Population` 
+recombinant gamete produced by an :py:`Individual` of a given :py:`Population` 
 (henceforth referred to as 'recombination paths'). These recombination 
 paths are generated using the genome-wide recombination rates specified by 
-the `Population`'s `GeonomicArchitecture`. They are generated during 
-construction of the `Model`, then drawn randomly as needed (i.e.
-each time an `Individual` produces a gamete). This provides a 
+the :py:`Population`'s :py:`GeonomicArchitecture`. They are generated during 
+construction of the :py:`Model`, then drawn randomly as needed (i.e.
+each time an :py:`Individual` produces a gamete). This provides a 
 reasonable trade-off between realistic modelling of recombination and runtime.
 
----------------------------------------
-`_LandChanger` and `_PopulationChanger`
----------------------------------------
+-----------------------------------------------
+:py:`_LandChanger` and :py:`_PopulationChanger`
+-----------------------------------------------
 
 These classes manage all of the landscape changes and demographic changes 
-that were parameterized for the `Land` and `Population` objects to which 
-they inhere. The functions creating these changes are defined at the outset, 
+that were parameterized for the :py:`Land` and
+:py:`Population` objects to which they inhere. 
+The functions creating these changes are defined at the outset, 
 then queued and called at their scheduled timesteps.
 
---------------------------------------
-`_DataCollector` and `_StatsCollector`
---------------------------------------
+----------------------------------------------
+:py:`_DataCollector` and :py:`_StatsCollector`
+----------------------------------------------
 
 These classes manage all of the data and statistics that should be collected 
-and written to file for the `Model` object to which they inhere 
-(as determined by the parameters file used the create the `Model`). 
+and written to file for the :py:`Model` object to which they inhere 
+(as determined by the parameters file used the create the :py:`Model`). 
 The types of data to be collected, or statistics to be calculated, as 
 well as the timesteps at which and methods by which they're 
 collected/calculated and determined at the outset, then the 
 appropriate functions called at the appropriate timesteps.
+
+
+-------------------------------------------------------------------------------
 
 **********
 Operations
@@ -450,61 +510,64 @@ Movement and Dispersal
 Movement is optional, such that turning off movement will allow the user 
 to simulate sessile organisms (which will reproduce and disperse, 
 but not move after dispersal; this distinction is of course irrelevant 
-for a `Population` with a maximum age of 1). For `Population`\s 
-with movement, `Individual`\s can move by two distinct mechanisms. **Spatially
-random movement** is the default behavior; in this case, `Individual`\s 
+for a :py:`Population` with a maximum age of 1). For :py:`Population`\s 
+with movement, :py:`Individual`\s can
+move by two distinct mechanisms. **Spatially random movement**
+is the default behavior; in this case, :py:`Individual`\s 
 move to next locations that are determined by a random distance drawn 
 from a Wald distribution and a random direction drawn from a uniform 
 circular (i.e. Von Mises) distribution.  As with most distributions used 
 in Geonomics, the parameters of these distributions have sensible 
-default values but can be customized in a `Model`'s parameters file 
+default values but can be customized in a :py:`Model`'s parameters file 
 (see section 'Parameters', below). 
 
 The alternative movement mechanism that is available is 
-**movement across a permeability surface**, using a `_MovementSurface` object.
-To parameterize a `_MovemementSurface` for a `Population`, the user 
+**movement across a permeability surface**,
+using a :py:`_MovementSurface` object.
+To parameterize a :py:`_MovemementSurface` for a :py:`Population`, the user 
 must create a template parameters file that includes the 
 necessary parameters section for the population (i.e. 
-the user must set 'movement' to `True` and 'movement_surface' to `True` 
-in the population's arguments to the `gnx.make_parameters_file` 
+the user must set 'movement' to :py:`True` and 'movement_surface' to :py:`True` 
+in the population's arguments to the :py:`gnx.make_parameters_file` 
 function (see the docstring for that function for details and an example). 
-`Individual`\s move to next locations determined by a random distance drawn 
+:py:`Individual`\s move to next locations determined by a random distance drawn 
 from a Wald distribution and a random direction drawn from the distribution 
-at the  `_MovementSurface` cell in which which the `Individual`\s 
-are currently located. For details about `_MovementSurface` creation, see 
-section '`_MovementSurface`' above, or the class' docstring.
+at the  :py:`_MovementSurface` cell in which which the :py:`Individual`\s 
+are currently located. For details about :py:`_MovementSurface` creation, see 
+section ':py:`_MovementSurface`' above, or the class' docstring.
 
 Dispersal is currently implemeneted identically to spatially random movement 
 (with the caveat that the an offspring's new location is determined 
 relative its parents' centroid). But the option to use a 
-`_MovementSurface` for dispersal will be offered soon.
+:py:`_MovementSurface` for dispersal will be offered soon.
 
 ============
 Reproduction
 ============
 
-Each timestep, for each `Population`, all pairs of individuals within 
+Each timestep, for each :py:`Population`, all pairs of individuals within 
 a certain distance of each other (i.e. the mating radius, 
 which is set in the parameters file) are identified.
-These pairs are subsetted if necessary (i.e. if the `Population` 
-requires that `Individual`\s be above a certain reproductive age, 
+These pairs are subsetted if necessary (i.e. if the :py:`Population` 
+requires that :py:`Individual`\s be above a certain reproductive age, 
 or that they be of opposite sexes, in order to mate; these values 
 can also be changed from their defaults in the parameters file). 
 Remaining pairs mate probabilistically (according to a Bernoulli 
-random draw with probability equal to the `Population`'s birth 
+random draw with probability equal to the :py:`Population`'s birth 
 rate, which is also set in the parameters file).
 
 Pairs that are chosen to mate will produce a number of new 
 offspring drawn from a Poisson distribution (with lambda set in the 
 parameters file). For each offspring, sex is chosen probablistically 
-(a Bernoulli random draw with probability equal to the `Population`'s 
+(a Bernoulli random draw with probability equal to the :py:`Population`'s 
 sex ratio), age set to 0, and location chosen by dispersal from 
 the parents' centroid (see section 'Movement and Dispersal'). For 
-`Population`\s that have genomes, offspring genomes will be a 
+:py:`Population`\s that have genomes, offspring genomes will be a 
 fusion of two recombinant genomes from each of the two parents (where 
 each recombinant is indexed out a parent's genome using a recombination 
-path; see section '`_RecombinationPaths`'). For `Population`\s 
-with `Trait`\s in their `GenomicArchitecture`\s, offspring phenotypes are 
+path; see section ':py:`_RecombinationPaths`'). For :py:`Population`\s 
+with :py:`Trait`\s in their
+:py:`GenomicArchitecture`\s, offspring phenotypes are 
 determined at birth. Mutations are also drawn and introduced at this 
 point (see section 'Mutation for details).
 
@@ -513,18 +576,19 @@ Mortality
 =========
 
 Mortality can occur as a combination of two factors: **density dependence** 
-and **natural selection**. Each `Individual` has a death decision drawn 
+and **natural selection**. Each :py:`Individual` has a death decision drawn 
 as a Bernoulli random variable with 
 :math:`P(d_{i}) = 1 - P(s_{i_{dens}})P(s_{i_{fit}})`, where :math:`P(d_{i})` 
-is the probability of death of `Individual` :math:`i`, and 
+is the probability of death of :py:`Individual` :math:`i`, and 
 :math:`P(s_{i_{dens}})` and :math:`P(s_{i_{fit}})` are the probabilities of 
-survival of `Individual` :math:`i` given density-dependence and 
+survival of :py:`Individual` :math:`i` given density-dependence and 
 fitness. The probability of density-dependent death is contingent on an 
-`Individual`'s x,y location (i.e. the cell in which they're currently located. 
-And an `Individual`'s probability of survival due to fitness 
+:py:`Individual`'s x,y location
+(i.e. the cell in which they're currently located. 
+And an :py:`Individual`'s probability of survival due to fitness 
 is just equal to the product of their absolute fitness (:math:`\omega`) 
-for each of the `Individual`'s :math:`m` `Trait`\s. 
-Thus the equation for an `Individual`'s probability of death becomes:
+for each of the :py:`Individual`'s :math:`m` :py:`Trait`\s. 
+Thus the equation for an :py:`Individual`'s probability of death becomes:
 
 .. math::
    P(d_{i}) = 1 - (1 - P(d_{x,y})) \prod_{p = 1}^{m}\omega_{i,p}
@@ -539,14 +603,15 @@ Density dependence
 Density dependence is implemented using a spatialized form of the class 
 logistic growth equation 
 (:math:`\frac{\mathrm{d}N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})`, 
-where the x,y subscripts refer to values for a given cell on the `Land`).
-Each `Population` has a carrying-capacity raster (a 2d Numpy array; 
+where the x,y subscripts refer to values for a given cell on the :py:`Land`).
+Each :py:`Population` has a carrying-capacity raster (a 2d Numpy array; 
 attribute 'K'), which is defined in the parameters file to be 
-one of the `Scape`\s in the `Land`. The comparison between this raster and 
+one of the :py:`Scape`\s in the :py:`Land`.
+The comparison between this raster and 
 the population-density raster calculated at each timestep serves as the 
 basis for the spatialized logistic growth equation, because both 
 equations can be calculated cell-wise for the entire extent of the 
-`Land` (using the `Population`'s intrinsic growth rate, the attribute 
+:py:`Land` (using the :py:`Population`'s intrinsic growth rate, the attribute 
 'R', which is set in the parameters file).
 
 The logistic equation returns an array of instantaneous population growth 
@@ -569,47 +634,53 @@ is just the distribution's paramater lambda).
 Selection
 ---------
 
-Selection on a `Trait` can exhibit three modes: **spatially divergent**, 
+Selection on a :py:`Trait` can exhibit three regimes: **spatially divergent**, 
 **universal**, and **spatially contingent**. **Spatially divergent** selection 
 is the default behavior, and the most commonly used; in this form of 
-selection, an `Individual`'s fitness depends on the absolute difference 
-between the `Individual`'s phenotypic value and the environmental
-value of the relevant `Scape` (i.e. the `Scape` that represents the 
+selection, an :py:`Individual`'s fitness depends on the absolute difference 
+between the :py:`Individual`'s phenotypic value and the environmental
+value of the relevant :py:`Scape` (i.e. the :py:`Scape` that represents the 
 environmental variable acting as the selective force) in the cell where 
-the `Individual` is located.
+the :py:`Individual` is located.
 
 **Universal** selection (which can be toggled using the 'univ_adv' 
-parameter with a `Trait`'s section in the parameters file) occurs 
-when a phenotype of 1 is optimal everywhere on the `Land`. In other 
-words, it represents directional selection on an entire `Population`,
-regardless of `Individual`\s' spatial contexts. 
+parameter with a :py:`Trait`'s section in the parameters file) occurs 
+when a phenotype of 1 is optimal everywhere on the :py:`Land`. In other 
+words, it represents directional selection on an entire :py:`Population`,
+regardless of :py:`Individual`\s' spatial contexts. (Note that this can
+be thought of as operating the same as spatially divergent selection,
+but with the environmental variable driving natural selection being
+represented by an array in which all cells are equal to 1.)
 
 Under **spatially contingent** selection, the selection coefficient of a 
-`Trait` varies across space, such that the strength of selection 
-is environmentally determined in some way. Importantly, this mode 
+:py:`Trait` varies across space, such that the strength of selection 
+is environmentally determined in some way. Importantly, this selection regime
 is *not mutually exclusive* with the other two; in other words, 
-selection on a certain `Trait` be both spatially contingent 
+selection on a certain :py:`Trait` be both spatially contingent 
 and either spatially divergent or universal. Spatially contingent selection 
 can be implemented by providing an array of values (equal in dimensions 
-to the `Land`) to the 'phi' value of a `Trait`, rather than a scalar 
+to the :py:`Land`) to the 'phi' value of a :py:`Trait`, rather than a scalar 
 value (which could be done within the parameters file itself, but may be 
 more easily accomplished as a step between reading in a parameters file and 
-instantiating a `Model` object from it). 
+instantiating a :py:`Model` object from it). (Note that non-spatailly
+cotingent selection could in fact be thought of as a special case of
+spatially contingent selection, but where the array of selection-coefficients
+has the same value at each cell.)
 
-All possible combinations of the three modes of selection can all 
+All possible combinations of the three selection regimes of selection can all 
 be thought of as special cases of the following equation for the fitness of 
-`Individual` :math:`i` for `Trait` :math:`p` (:math:`\\omega_{i,p}`):
+:py:`Individual` :math:`i` for :py:`Trait` :math:`p` (:math:`\\omega_{i,p}`):
 
 .. math::
-   \omega_{i,p}= 1 - \phi_{p} (\mid e_{p;x,y} - z_{i;p} \mid)^{\gamma_{p}}
+   \omega_{i,p}= 1 - \phi_{p;x,y} (\mid e_{p;x,y} - z_{i;p} \mid)^{\gamma_{p}}
 
-Where :math:`\\phi_{p}` is the selection coefficient of trait 
+Where :math:`\\phi_{p;x,y}` is the selection coefficient of trait 
 :math:`p`, :math:`e_{p;x,y}` is the environmental variable of the 
-relevant `Scape` at `Individual` :math:`i`'s x,y location
-(which can also be thought of as the `Individual`'s optimal 
-phenotype), :math:`z_{i;p}` is `Individual` :math:`i`'s (actual) 
-phenotype for `Trait` :math:`p`, and :math:`gamma_{p}` controls 
-how fitness decreases as the absolute difference between an `Individual`'s 
+relevant :py:`Scape` at :py:`Individual` :math:`i`'s x,y location
+(which can also be thought of as the :py:`Individual`'s optimal 
+phenotype), :math:`z_{i;p}` is :py:`Individual` :math:`i`'s (actual) 
+phenotype for :py:`Trait` :math:`p`, and :math:`gamma_{p}` controls 
+how fitness decreases as the absolute difference between an :py:`Individual`'s 
 optimal and actual phenotypes increases (it defaults to 1, which causes 
 fitness to decrease linearly around the optimal 
 phenotypic value). 
@@ -634,15 +705,15 @@ are more or less analogous:
 - **Trait** mutations are the place where the Geonomics concept and 
   the population-genetic concept diverge: In Geonomics, natural selection
   acts on the phenotype, not the genotype (although these concepts are 
-  identical if a `Trait` in monogenic), and it is (by default, 
+  identical if a :py:`Trait` in monogenic), and it is (by default, 
   but not always; see section 'Selection', above) divergent. For this reason
   it would be a misnomer to call mutations that influence a given 
-  `Trait`'s phenotypes 'beneficial' -- even though that term is the closest
+  :py:`Trait`'s phenotypes 'beneficial' -- even though that term is the closest
   population-genetic concept to this concept as it is employed in Geonomics -- 
-  because the same mutant genotype in the same `Individual` could have opposite
-  effects on that `Individual`'s fitness in different environmental 
+  because the same mutant genotype in the same :py:`Individual` could have opposite
+  effects on that :py:`Individual`'s fitness in different environmental 
   contexts (i.e. it could behave as a beneficial mutation is one region of
-  the `Land` but as a deleterious mutation in another). 
+  the :py:`Land` but as a deleterious mutation in another). 
 
 
 ======================
@@ -659,68 +730,1221 @@ hybridization scenarios).
 Land and population change
 ==========================
 
-For a given `Scape`, any number of landsacpe change events can be planned. 
+For a given :py:`Scape`, any number of landsacpe change events can be planned. 
 In the parameters file, for each event, the user stipulates the initial
 timestep; the final timestep; the resulting landscape (i.e. the array 
-of the `Scape` that will exist after the event is complete); and the 
-interval at which intermediate changes will occur.  When the `Model` is 
+of the :py:`Scape` that will exist after the event is complete); and the 
+interval at which intermediate changes will occur.  When the :py:`Model` is 
 created, the stepped series of intermediate landscapes (and 
-`_MovementSurface` objects, if the `Scape` that is changing serves 
-as the basis of a `_MovementSurface` for any `Population`) will be 
+:py:`_MovementSurface` objects, if the :py:`Scape` that is changing serves 
+as the basis of a :py:`_MovementSurface` for any :py:`Population`) will be 
 created and queued, so that they will swap out accordingly at the appropriate 
 timesteps.
 
-For a given `Population`, any number of demographic change events can 
+For a given :py:`Population`, any number of demographic change events can 
 also be planned. In the parameters file, for each event, the user 
 stipulates the type of the event ('monotonic', 'cyclical', 'random', or 
 'custom') as well as the values of a number of associated 
 parameters (precisely which parameters depdends on the type of event chosen).
 As with landscape change events, all necessary stepwise changes will be 
-planned and queued when the `Model` is created, and will be 
+planned and queued when the :py:`Model` is created, and will be 
 executed at the appropriate timesteps.
 
 It is also possible to schedule any number of instantaneous changes 
-to some of the life-history parameters of a `Population` (e.g. birth rate; 
+to some of the life-history parameters of a :py:`Population` (e.g. birth rate; 
 the lambda parameter of the Poisson distribution determining the number of 
 offspring of mating events). This functionality is currently minimalistic, 
 but will be more facilitated in future versions.
 
 
+-------------------------------------------------------------------------------
 
 *************
 Visualization
 *************
 
-Each `Population` has a wide variety of visualization methods 
-(`Population.plot`, `Population.plot_fitness`, etc.), which aim to help users 
-design, run, explore, present, and explain their models' behavior and results.
-These methods can be called on a `Population` at any time (e.g. as 
-soon as the `Population` has been created, or after the model has
+Each :py:`Population` has a wide variety of visualization methods 
+(:py:`Population.plot`, :py:`Population.plot_fitness`, etc.),
+which aim to help users design, run, explore, present,
+and explain their models' behavior and results.
+These methods can be called on a :py:`Population` at any time (e.g. as 
+soon as the :py:`Population` has been created, or after the model has
 run for any number of timesteps); but it is worth mentioning that some 
 methods may be invalid depending on the point in model-time at 
-which they're called (e.g.  `Population.plot_genotype`, 
-`Population.plot_phenotype`, and `Population.plot_fitness` cannot be run 
-for Populations that have not yet been burned in, as they will not yet have
-genomes assigned) or the `Population` on which they're called 
-(e.g. the aforementioned methods cannot create plots for a `Population` 
-that has no `GenomicArchitecture`; and likewise, the 
-`Population.plot_demographic_changes` method cannot be called for a 
-`Population` for which demographic changes were not parameterized).
+which they're called (e.g.  :py:`Population.plot_genotype`, 
+:py:`Population.plot_phenotype`, and :py:`Population.plot_fitness`
+cannot be run for Populations that have not yet been burned in,
+as they will not yet have genomes assigned) or 
+the :py:`Population` on which they're called 
+(e.g. the aforementioned methods cannot create plots for a :py:`Population` 
+that has no :py:`GenomicArchitecture`; and likewise, the 
+:py:`Population.plot_demographic_changes` method cannot be called for a 
+:py:`Population` for which demographic changes were not parameterized).
 
-The `Land` object and its `Scape`\s also both have a `plot` method.
+The :py:`Land` object and its :py:`Scape`\s also both have a :py:`plot` method.
+
+
+-------------------------------------------------------------------------------
 
 **********
 Parameters
 **********
 
-<<<copy of the potential full parameters file, with each parameter 
-cross-referenced to a subsequent section explaining its meaning/use>>>
+In order to create and run a Geonomics :py:`Model`, you will need a valid
+Geonomics parameters file. No worry though -- this is very easy to create!
+To generate a new, template parameters file, you will simply call the
+:py:`gnx.make_parameters_file` function, feeding it the appropriate
+arguments (to indicate how many :py:`Population`\s and :py:`Scape`\s you
+want to include in your :py:`Model`; which parameters sections you want
+included in the file, both for those
+:py:`Scape`\s and :py:`Population`\s and for
+other components of the :py:`Model`; and the path and filename for your new
+parameters file). Geonomics will then automatically create the file for you, 
+arranged as you requested and saved where you requested.
+
+When you then open that file, you will see the following:
+
+.. code-block:: python
+
+  #<your_filename>.py
+
+  #This is a default parameters file generated by Geonomics
+  #(by the gnx.params.make_parameters_file() function).
+  
+  
+                        ## :: ::    :::            ##
+                  ##:::   :::::    :::   ::    :: :: :::##
+               ## ::::     ::           ::   ::::::::::::::##
+             ##::::::                       ::::::::: :::::: :##
+           ## :    :::                    :::    ::    :::::::::##
+          ##ggggg eeee ooo   n   n   ooo   m   m iiiii  cccc ssss##
+         ##g     e    o   o  nn  n  o   o  m   m   i   c     s    ##
+         ##g     eee o     o n n n o     o mm mm   i   c     sssss##
+         ##g ggg eee o     o n  nn o     o m m m   i   c         s##
+         ##g   g e    o   o  n   n  o   o  m   m   i   c        ss##
+          ##gggg  eeee ooo   n   n   ooo   m   m iiiii  cccc ssss##
+           ##  ::::::::        ::::::::::::  :       ::  ::   : ##
+             ##  ::::              :::::::  ::     ::::::::  :##
+               ## :::               :::::: ::       ::::::  ##
+                  ##:                ::::                ##
+                        ##                         ##
+  
+  
+  params = {
+  
+  ##############
+  #### LAND ####
+  ##############
+      'land': {
+  
+      ##############
+      #### main ####
+      ##############
+          'main': {
+              # dimensions of the Land
+              'dim':                      (20,20),
+
+     #.
+     #.
+     #.
+
+This is the beginning of a file that is really just a long but simple Python
+script (hence the '.py' extension); this whole file just defines a single,
+long, nested :py:`dict` (i.e. a Python 'dictionary') containing all of your
+parameter values. It may look like a lot, but don't be concerned! For two
+reasons:
+
+  1. All the hard work is already done for you. You'll just need to change
+     the default values where and how you want to, to set up your particular
+     simulation scenario.
+  2. You will probably leave a good number of the parameters defined in this
+     file untouched. Geonomics does its best to set sensible default values
+     for all its parameters. Though of course, you'll want to think clearly 
+     nonetheless about whether the default value for each parameter 
+     is satisfactory for your purposes.
+
+Each parameter in the parameters value is preceded by a terse comment, to
+remind you what the parameter does. But for detailed information about each
+parameter, you'll want to refer to the following information.
+What follows is a list of all of the Geonomics parameters (in the sections and
+the top-to-bottom order in which they'll appear in your parameters files).
+For each parameter, you will see a snippet of the context (i.e. lines of
+Python code) in which it appears in a parameters filewith; that will be
+followed by detailed information about the parameter (the valid Python data
+types it can take; its default values; then an explanation of what it
+defines, how its value is used, and any other relevant information). This
+will look like:
 
 
+**<param_name>**
+
+.. code-block:: python
+
+              #brief comment about the parameter
+              '<param_name>':               <default_param_value>,
+
+<valid Python data type>
+
+<default value>
+
+  <Explanation of what the parameter defines, how its value is used,
+  and any other relevant information.>
+
+
+This section should serve as your primary point of reference
+if you confront any uncertainty while creating your own parameters files.
+We'll start with the section of parameters that
+pertains to the :py:`Land` object.
+
+===============
+Land parameters
+===============
+
+**dim**
+
+.. code-block:: python
+
+              # dimensions of the Land
+              'dim':                      (20,20),
+
+tuple; 
+
+default: (20,20)
+  
+  This defines the x and y dimensions of the :py:`Land`, in units of cells. As
+  you might imagine, these values are used for a wide variety of basic
+  operations throughout Geonomics. You will want to change the
+  default value to the dimensions of the landscape you wish to simulate on.
+
+
+**res**
+
+.. code-block:: python
+
+              # resolution of the Land
+              'res':                      (1,1),
+
+tuple
+  
+default: (1,1)
+
+  This defines the :py:`Land` resolution (or cell-size) in the x and y
+  dimensions. These sizes are usually not used when a :py:`Model` is run, but
+  can be used for crosswalking :py:`Model` content with 
+  real-world data. Defaults to the meaningless value (1,1), and this value
+  generally needn't be changed in your parameters file, but it will 
+  be automatically updated to the resolution of any GIS rasters that 
+  are read in for use as :py:`Scapes`. 
+
+
+**ulc**
+
+.. code-block:: python
+
+              # upper-left corner of the Land 
+              'ulc':                      (0,0),
+
+tuple
+
+default: (0,0)
+
+  This defines the upper-left corner (ULC) of the landscape (in the units of
+  some real-world coordinate reference system, e.g. decimal degrees, or
+  meters). This information is not used when a :py:`Model` is run, but can be
+  used for crosswalking :py:`Model` content with real-world data. 
+  Defaults to the meaningless value (0,0), and this value usually needn't
+  be changed in your parameters file, but it will be automatically
+  updated to match the ULC value of any GIS rasters
+  that are read in for use as :py:`Scapes`.
+
+.. code-block:: python
+
+
+
+
+
+
+
+
+              'prj':                      None,
+                  #projection of the landscape; only applicable if layers are to
+                  #be read in from a raster file; defaults to None
+  
+      ################
+      #### scapes ####
+      ################
+          'scapes': {
+  
+              0: {
+                  #scape name; each scape must be give a unique string or numeric
+                  #(e.g. 0, 0.1, 'scape0', '1994', 'mean_T'); default to serial
+                  #integers from 0
+  
+          ############################
+          #### scape num. 0: init ####
+          ############################
+  
+                  'init': {
+                      #initiating parameters for this scape
+  
+                      'rand': {
+                          #parameters for making a random scape (interpolated
+                          #from randomly located random values)
+                          'n_pts':                        500,
+                              #number of random coordinates to be used in generating random landscapes
+                                  #(only needed if rand == True)
+                          'interp_method':                'cubic'
+                              # interpolation method (valid: 'linear', 'cubic', 'nearest')
+                          },
+  
+                      } # <END> 'init'
+  
+          ##############################
+          #### scape num. 0: change ####
+          ##############################
+  
+                  'change': {
+                      #land-change events for this scape
+                      'end_rast':         np.zeros((20,20)),
+                          #scape to be set as the endpoint of the land-change event
+                      'start_t':          1500,
+                          #timestep on which to start the land-change event
+                      'end_t':            2000,
+                          #timestep on which to end the land-change event
+                      'n_steps':          10
+                          #number of stepwise changes to make between t_start and t_end
+                          },
+  
+                  }, # <END> scape num. 0
+  
+  
+              1: {
+                  #scape name; each scape must be give a unique string or numeric
+                  #(e.g. 0, 0.1, 'scape0', '1994', 'mean_T'); default to serial
+                  #integers from 0
+  
+          ############################
+          #### scape num. 1: init ####
+          ############################
+  
+                  'init': {
+                      #initiating parameters for this scape
+  
+                      'nlmpy': {
+                          #parameters for making an nlmpy scape (using any nlmpy
+                          #function for which valid arguments are provided)
+                          #NOTE: all other parameters in this dictionary will be
+                          #unpacked as arguments to the nlmpy function chosen;
+                          #thus, all necessary and only valid arguments must be
+                          #provided or a general error will be thrown
+                          'function':                 'mpd',
+                              #filepath to read into this scape
+                          'nRow':                     20,
+                              #number of rows (must agree with land dimensions)
+                          'nCol':                     20,
+                              #number of columns (must agree with land
+                              #dimensions)
+                          'h':                        1,
+                              #"controls the level of spatial autocorrelation
+                              #in element values"
+                          },
+  
+                      } # <END> 'init'
+  
+                  }, # <END> scape num. 1
+  
+  
+              2: {
+                  #scape name; each scape must be give a unique string or numeric
+                  #(e.g. 0, 0.1, 'scape0', '1994', 'mean_T'); default to serial
+                  #integers from 0
+  
+          ############################
+          #### scape num. 2: init ####
+          ############################
+  
+                  'init': {
+                      #initiating parameters for this scape
+  
+                      'defined': {
+                          #parameters for making a defined scape (interpolated
+                          #from a provided set of valued points)
+                          'pts':                    None,
+                              #coords of points to use to interpolate defined scape (provided as
+                              #a nx2 Numpy array, where n matches the number of points in
+                              #the scape_pt_vals array, to be used as the points
+                              #to be interpolated; only needed if rand == False)
+                          'vals':                      None,
+                              #point values to use to interpolate defined landscape layers (a 1xn Numpy array,
+                                  #where n matches the number of points in scape_pt_coords arrays;
+                                  #only needed if rand == False)
+                          'interp_method':                None
+                              # interpolation method (valid: 'linear', 'cubic', 'nearest')
+                          },
+  
+                      } # <END> 'init'
+  
+                  }, # <END> scape num. 2
+  
+  
+              3: {
+                  #scape name; each scape must be give a unique string or numeric
+                  #(e.g. 0, 0.1, 'scape0', '1994', 'mean_T'); default to serial
+                  #integers from 0
+  
+          ############################
+          #### scape num. 3: init ####
+          ############################
+  
+                  'init': {
+                      #initiating parameters for this scape
+  
+                      'file': {
+                          #parameters for making a scape from a file (read in
+                          #from a GIS raster file or a numpy txt array file)
+                          'filepath':                     '/PATH/TO/FILE.EXT',
+                              #filepath to read into this scape
+                          'scale_min_val':                -1.37,
+                              #minimum values to use for rescaling the raster (will be
+                                  #rescaled to 0<=x<=1); NOTE: this may be different than the actual minimum
+                                  #value in the raster, especially if raster will be changing to a future raster
+                                  #with values outside the range of this one
+                          'scale_max_val':                19.11
+                              #maxmimum input value against to which to rescale the raster (will be rescaled to 0<=x<=1)
+                          },
+  
+                      } # <END> 'init'
+  
+                  }, # <END> scape num. 3
+  
+  
+  
+      #### NOTE: Individual Scapes' sections can be copy-and-pasted (and
+      #### assigned distinct keys and names), to create additional Scapes.
+  
+  
+              } # <END> 'scapes'
+  
+          }, # <END> 'land'
+  
+  ###################
+  #### COMMUNITY ####
+  ###################
+      'comm': {
+  
+          'pops': {
+  
+              0  :   {
+                  #pop name; each pop must get a unique numeric or string name
+                  #(e.g. 0, 0.1, 'pop0', 'south', 'C_fasciata'); default to
+                  #serial integers from 0
+  
+              ##########################
+              #### pop num. 0: init ####
+              ##########################
+  
+                  'init': {
+                      'N':                200,
+                          #starting population size
+                      'K_scape_num':      0,
+                          #the scape_num of the raster to use as the carrying-capacity raster (K)
+                      'K_fact':           2
+                          #the factor to multiply the K raster by in order to generate pop.K
+                      }, # <END> 'init'
+  
+              ############################
+              #### pop num. 0: mating ####
+              ############################
+  
+                  'mating'    : {
+                      'repro_age':            0,
+                          #age at sexual maturity (int or float for non-sexual species, tuple or list
+                              #of two ints/floats for sexual species; set to 'None' to not make this
+                              #an age-structured species
+                      'max_age':              5,
+                          #age beyond which all individuals will automatically die; default to None
+                      'sex':                  False,
+                          #is this a sexual species?
+                      'sex_ratio':            1/1,
+                          #ratio of males to females
+                      #NOTE: I CAN PROBABLY GET RID OF THIS PARAMETER...
+                      'distweighted_birth':  False,
+                          #should the probability of birth be weighted by the distance between
+                              #individuals in a pair?
+                      'R':                    0.5,
+                          #pop intrinsic growth rate
+                      'b':                    0.2,
+                          #population intrinsic birth rate (implemented as the probability
+                              #that an identified potential mating pair successfully mates);
+                              #NOTE: this may later need to be re-implemented to allow for spatial
+                              #variation in intrinsic rate (e.g. expression as a raster) and/or for
+                              #density-dependent births as well as deaths
+                      'n_births_distr_lambda':      4,
+                          #expected value of offspring for a successful mating pair (used as the lambda value in a Poisson distribution)
+                      'mating_radius':        1
+                          #radius of mate-searching area
+                      }, # <END> 'mating'
+  
+              ###############################
+              #### pop num. 0: mortality ####
+              ###############################
+  
+                  'mortality'     : {
+                      'n_deaths_distr_sigma':           0.2,
+                          #std for the normal distribution used to choose the r.v. of deaths
+                              #per timestep (mean of this distribution is the overshoot,
+                              #as calculated from pop.size and pop.census())
+                      'dens_dependent_fitness':   True,
+                          #should fitness be density dependent? (note: helps to avoid subpopulation 'clumping')
+                      'dens_grid_window_width':   None,
+                          #with window-width used for the Density_Grid_Stack that calculates pop density
+                              #(if set to None, defaults to the closest factor of the larger landscape
+                              #dimension to 1/10th of that dimension)
+                              #NOTE: will eventually default to an approximation of Wright's genetic neighborhood
+                              #distance, based on the population's movement/dispersal parameters
+                      'd_min':                     0.01,
+                          #minimum neutral (i.e. non-selection driven) probability of death
+                      'd_max':                    0.90,
+                          #maximum neutral probability of death
+                      }, # <END> 'mortality'
+  
+              ##############################
+              #### pop num. 0: movement ####
+              ##############################
+  
+                  'movement': {
+                     'move':          True,
+                          #is this a mobile species?
+                      'direction_distr_mu':     0,
+                          #mu for von mises distribution defining movement directions
+                      'direction_distr_kappa':  0,
+                          #kappa for von mises distribution
+                      'distance_distr_mu':      0.5,
+                          #mean movement-distance (lognormal distribution)
+                      'distance_distr_sigma':   0.5,
+                          #sd of movement distance
+                      'dispersal_distr_mu':     0.5,
+                          #mean dispersal distance (lognormal distribution)
+                      'dispersal_distr_sigma':  0.5,
+                          #sd of dispersal distance
+  
+                      'move_surf'     : {
+                          'scape_num':                    0,
+                              #scape number to use as the movement surface
+                          'mixture':                      True,
+                              #should this MovementSurface be composed of
+                              #VonMises mixture distribution approximations (i.e.
+                              #True) or of unimodal VonMises distribution
+                              #approximations (i.e. False); the latter is better
+                              #for landscapes characterized by gradual gradients
+                              #(i.e. where many cells' neighborhoods have very
+                              #little variation between the highest- and lowest
+                              #permeability values, so that mixture distributions
+                              #would be largely uniform in all directions);
+                              #defaults to True
+                          'approximation_len':            7500,
+                              #length of the lookup vectors (numpy arrays) used to approximate
+                                  #the VonMises mixture distributions at each cell
+                          'vm_distr_kappa':                     None,
+                              #kappa value to use in the von Mises mixture distributions (KDEs)
+                                  #underlying resistance surface movement
+                          'gauss_KDE_bw':                 None
+                              #bandwidth value to use in the Gaussian KDEs that are created to
+                                  #approximate the von Mises mixture distributions (KDEs)
+                                  #underlying resistance surface movement
+                          } # <END> 'move_surf'
+  
+                      },    # <END> 'movement'
+  
+  
+              ##############################
+              #### pop num. 0: gen_arch ####
+              ##############################
+  
+                  'gen_arch': {
+                      'L':                        10,
+                          #total number of loci
+                      'l_c':                      [10],
+                          #chromosome lengths [sum(l_c) == L is enforced]
+                      'gen_arch_file':            None,
+                          #if not None, should point to a file stipulating a
+                              #custom genomic architecture (i.e. a CSV with loci
+                              #as rows and 'locus_num', 'p', 'dom', 'r', 'trait',
+                              #and 'alpha' as columns, such as is created by
+                              #main.make_parameters_file, when the custom_gen_arch
+                              #arugment is True)
+                      'mu_neut':                  1e-9,
+                          #genome-wide neutral mutation rate, per base per generation
+                              #(set to 0 to disable neutral mutation)
+                      'mu_delet':                 0,
+                          #genome-wide deleterious mutation rate, per base per generation
+                              #(set to 0 to disable deleterious mutation)
+                              #NOTE: these mutations will fall outside the loci involved in any traits
+                              #being simulated, and are simply treated as universally deleterious, with the same
+                              #negative influence on fitness regardless of spatial context
+                      'mut_log':                  False,
+                          #whether or not to store a mutation log; if true, will be saved as mut_log.txt
+                          #within each iteration's subdirectory
+                      'delet_s_distr_shape':      0.2,
+                      'delet_s_distr_scale':      0.2,
+                          #mean and standard deviation of the gamma distribution
+                          #parameterizig the per-allele effect size of 
+                          #deleterious mutations (std = 0 will fix all mutations
+                          #for the mean value)
+                      'r_distr_alpha':            0.5,
+                          #alpha for beta distribution of linkage values
+                              #NOTE: alpha = 14.999e9, beta = 15e9 has a VERY sharp peak on D = 0.4998333,
+                              #with no values exceeding equalling or exceeding 0.5 in 10e6 draws in R
+                      'r_distr_beta':             15e9,
+                          #beta for beta distribution of linkage values
+                      'dom':                      False,
+                          #whether or not loci should be dominant 
+                          #(if True, the 1 allele will be dominant at each locus;
+                          #if False, all loci will be codominant; defaults to False)
+                      'pleiotropy':               True,
+                          #allow pleiotropy? (i.e. allow same locus to affect value of more than one trait?) false
+                      'recomb_rate_custom_fn':    None,
+                          #if provided, must be a function that returns a single recombination rate value (r) when called
+                      'recomb_lookup_array_size': int(1e3),
+                          #the size of the recombination-path lookup array to have
+                              #read in at one time (needs to be comfortably larger than the anticipated totaly number of
+                              #recombination paths to be drawn at once, i.e. than 2 times the anticipated most number of births at once)
+                      'n_recomb_paths':           int(1e4),
+                          #the total number of distinct recombination paths to
+                              #generate at the outset, to approximate truly free recombination at the recombination rates specified
+                              #by the genomic architecture (hence the larger the value the less the likelihood of mis-approximation artifacts)
+  
+                      'traits': {
+        #########
+                          #trait 0#
+                          #########
+                          0: {
+                          #trait name; each trait must get a unique numeric or
+                          #string name (e.g. 0, 'trt0', 'bill_length'); trait
+                          #names default to serial integers from 0
+                              'scape_num':        2,
+                                  #the landscape numbers to be used for selection on this trait
+                              'phi':              0.1,
+                                  #phenotypic selection coefficient for this trait; can either be a
+                                      #numeric value, or can be an array of spatialized selection
+                                      #values (with dimensions equal to land.dims)
+                              'n_loci':           1,
+                                  #number of loci to be assigned to this trait
+                              'mu':      1e-9,
+                                  #mutation rate for this trait (if set to 0, or if genome['mutation'] == False, no mutation will occur)
+                                      #(set to 0 to disable mutation for this trait)
+                              'alpha_distr_mu' : 0,
+                              'alpha_distr_sigma' : 0.5,
+                                  #the mean and standard deviation of the normal distribution used to choose effect size
+                                      #(alpha) for this trait's loci
+                                      #NOTE: for mean = 0, std = 0.5, one average locus is enough to generate both optimum
+                                      #genotypes; for mean = 0, std = 0.025, 10 loci should generate both (on average, but depends of course on
+                                      #the random sample of alphas drawn); and so on linearly
+                              'gamma':            1,
+                                  #gamma exponent for the trait's fitness function (determines the shape of the
+                                  #curve of fitness as a function of absolute difference between an individual's
+                                  #phenotype and its environment; <1 = concave up, 1 = linear, >1 = convex up)
+                              'univ_adv':      False
+                                  #is the trait universally advantageous? if so, phenotypes closer to 1 will
+                                      #have higher fitness at all locations on the land
+                              }, # <END> trait 0
+        #########
+                          #trait 1#
+                          #########
+                          1: {
+                          #trait name; each trait must get a unique numeric or
+                          #string name (e.g. 0, 'trt0', 'bill_length'); trait
+                          #names default to serial integers from 0
+                              'scape_num':        2,
+                                  #the landscape numbers to be used for selection on this trait
+                              'phi':              0.1,
+                                  #phenotypic selection coefficient for this trait; can either be a
+                                      #numeric value, or can be an array of spatialized selection
+                                      #values (with dimensions equal to land.dims)
+                              'n_loci':           1,
+                                  #number of loci to be assigned to this trait
+                              'mu':      1e-9,
+                                  #mutation rate for this trait (if set to 0, or if genome['mutation'] == False, no mutation will occur)
+                                      #(set to 0 to disable mutation for this trait)
+                              'alpha_distr_mu' : 0,
+                              'alpha_distr_sigma' : 0.5,
+                                  #the mean and standard deviation of the normal distribution used to choose effect size
+                                      #(alpha) for this trait's loci
+                                      #NOTE: for mean = 0, std = 0.5, one average locus is enough to generate both optimum
+                                      #genotypes; for mean = 0, std = 0.025, 10 loci should generate both (on average, but depends of course on
+                                      #the random sample of alphas drawn); and so on linearly
+                              'gamma':            1,
+                                  #gamma exponent for the trait's fitness function (determines the shape of the
+                                  #curve of fitness as a function of absolute difference between an individual's
+                                  #phenotype and its environment; <1 = concave up, 1 = linear, >1 = convex up)
+                              'univ_adv':      False
+                                  #is the trait universally advantageous? if so, phenotypes closer to 1 will
+                                      #have higher fitness at all locations on the land
+                              }, # <END> trait 1
+  
+  
+      #### NOTE: Individual Traits' sections can be copy-and-pasted (and
+      #### assigned distinct keys and names), to create additional Traits.
+  
+  
+                          }, # <END> 'traits'
+  
+                      }, # <END> 'gen_arch'
+  
+  
+              ############################
+              #### pop num. 0: change ####
+              ############################
+  
+                  'change': {
+  
+                      'dem': {
+                          #(all population sizes are expressed relative to the carrying-capacity
+                              #raster at the time that the demographic change event begins (i.e. as
+                              #factors by which pop.K will be multiplied; thus they can also be thought
+                              #of as multipliers of the expected total population size (i.e. pop.K.sum())
+                              #and they will generally change the average population size by that multiple,
+                              #but of course not precisely, because population size is stochastic. If you
+                              #seek exact control of total population size, please seek a simpler simulation
+                              #model, perhaps a coalescent one.
+  
+                          0: {
+                              #can add an arbitrary number of demographic change events for
+                                  #each population, each event identified by a distinct integer
+                              'kind':             'custom',
+                                  #what kind of change event? ('monotonic', 'stochastic', 'cyclical', 'custom')
+                              'start':            200,
+                                  #at which timestep should the event start?
+                              'end':              1200,
+                                  #at which timestep should the event end?
+                              'rate':             .98,
+                                  #at what rate should the population change each timestep
+                                      #(positive for growth, negative for reduction)
+                              'interval':         11,
+                                  #at what interval should stochastic change take place (None defaults to every timestep)
+                              'dist':             'uniform',
+                                  #what distribution to draw stochastic population sizes from (valid values: 'uniform', 'normal')
+                              'size_target':      None,
+                                  #what is the target size of the demographic change event (defaults to None)
+                              'n_cycles':         20,
+                                  #how many cycles of cyclical change should occur during the event?
+                              'size_range':       (0.5, 1.5), 
+                                  #an iterable of the min and max population sizes to be used in stochastic or cyclical changes
+                              'timesteps':        [6,8],
+                                  #at which timesteps should custom changes take place?
+                              'sizes':            [2,0.25],
+                                  #what custom size-changes should occur at the above-stipulated timesteps?
+                              } # <END> event 0
+   
+  
+  
+  
+      #### NOTE: Individual demographic change events' sections can be
+      #### copy-and-pasted (and assigned distinct keys and names), to create
+      #### additional events.
+  
+  
+                          }, # <END> 'dem'
+  
+                      'parameters': {
+                          #other (i.e. non-demographic) population change events
+                          'b': {
+                              #the life-history parameters to be changed should be the keys in this dict,
+                                  #and values are dictionaries containing a list of timesteps
+                                  #at which to changed those parameters and a list of values
+                                  #to which to change them
+                              'timesteps':        None,
+                              'vals':           None
+                                  }
+  
+  
+      #### NOTE: Individual life-history paramter change events' sections can be
+      #### copy-and-pasted (and assigned distinct keys and names), to create
+      #### additional events.
+  
+  
+                              }, # <END> 'parameters'
+  
+                          } # <END> 'change'
+  
+                  }, # <END> pop num. 0
+  
+  
+  
+      #### NOTE: Individual Populations' sections can be copy-and-pasted (and
+      #### assigned distinct keys and names), to create additional Populations.
+  
+  
+              }, # <END> 'pops'
+  
+          }, # <END> 'comm'
+  
+  ###############
+  #### MODEL ####
+  ###############
+      'model': {
+          'time': {
+              #parameters to control the number of burn-in and main timesteps to
+              #run for each iterations
+              'T':            100,
+                  #total model runtime (in timesteps)
+              'burn_T':       30
+                  #minimum burn-in runtime (in timesteps; this is a mininimum because
+                      #burn-in will run for at least this long but until
+                      #stationarity detected, which will likely be longer)
+              }, # <END> 'timesteps'
+  
+          'its': {
+              #parameters to control how many iterations of the model to run,
+              #and whether or not to randomize the land and/or community
+              #objects in each model iteration
+              'n_its': 1,
+                  #how many iterations of the model should be run?
+              'rand_land':    False,
+                  #randomize the land for each new iteration?
+              'rand_comm':    False,
+                  #randomize the community for each new iteration?
+              'rand_burn':  False,
+                  #randomize the burn-in for each new iteration? (i.e. burn in
+                  #each time, or burn in once at creation and then use the same
+                  #burnt-in population for each iteration?)
+              }, # <END> 'iterations'
+  
+  
+          'data': {
+              #dictionary defining the data to be collected, the sampling
+              #strategy to use, the timesteps for collection, and other parameters
+              'sampling': {
+                  #args to be unpacked into sampling function (see docstring
+                      #of sample_data function in data module for details)
+                  'scheme':               'random',
+                      #valid: 'all', 'random', 'point', or 'transect'
+                  'n':                    50,
+                      #size of samples to be collected (in number of individuals)
+                  'points':               None,
+                      #the x,y points at which data should be sampled (expressed
+                          #as a list or tuple of length-2 lists or 2-tuples)
+                  'transect_endpoints':   None,
+                      #endpoints of the transect to be sampled (only needed if
+                          #scheme is 'transect), expressed as a pair of
+                          #ordered x,y pairs (in tuples or lists)
+                  'n_transect_points':    None,
+                      #the number of evenly spaced points along the transect
+                      #at which to sample (only needed if scheme is 'transect')
+                  'radius':               None,
+                      #radius around sampling points within which to sample
+                      #individuals (only needed is scheme is 'point' or
+                      #'transect')
+                  'when':                 None,
+                      #can be an integer (in which case data will be collected every
+                      #that many timesteps, plus at the end) or a list of specific
+                      #timesteps; a value of 0 or None will default to a single
+                      #data-collection step after the model has run
+                  'include_land':         False,
+                      #if True, will save the Land object each time other data is saved
+                      #(probably only useful if land is changing in some way not manually coded by the user)
+                  'include_fixed_sites':  False,
+                      #if True, and if genetic data is to be formatted as VCFs,
+                          #the VCFs will contain fixed sites, not just variants
+                          #(defaults to False)
+                  },
+              'format': {
+                  'gen_format':           ['vcf', 'fasta'],
+                      #format to use for saving genetic data;
+                          #currently valid values: 'vcf', 'fasta',
+                          #or a list containing both, if both
+                          #should be written
+                  'geo_vect_format':      'csv',
+                      #format to use for saving geographic points;
+                          #currently valid values: 'csv', 'shapefile', 'geojson'
+                  'geo_rast_format':      'geotiff',
+                      #format to use for saving landscape rasters (which will
+                          #only be saved if the 'include_land' parameter in the
+                          #sampling subdict is True);
+                          #currently valid values: 'geotiff', 'txt'
+                  },
+              }, #<END> 'data'
+  
+  
+          'stats': {
+              #dictionary defining which stats to be calculated, and parameters for
+                  #their calculation (including frequency, in timesteps, of collection)
+                  #valid stats include:
+                      # 'Nt'  : population census size
+                      # 'het' : heterozygosity
+                      # 'maf' : minor allele frequency
+                      # 'ld'  : linkage disequilibrium
+                      # 'mean_fit' : mean fitness
+              'Nt':       {'calc': True,
+                           'freq': 2,
+                          },
+              'het':      {'calc': True,
+                           'freq': 1,
+                           'mean': False,
+                          },
+              'maf':      {'calc': True,
+                           'freq': 5,
+                          },
+              'ld':       {'calc': True,
+                           'freq': 10,
+                          },
+              'mean_fit': {'calc': True,
+                           'freq': 3,
+                          },
+              }, # <END> 'stats'
+  
+  
+          'seed': {
+              #parameters to control whether and how to set the seed
+              'set':          True,
+                  #set the seed? (for reproducibility)
+              'num':          94618
+                  #value used to seed random number generators
+              }, # <END> 'seed'
+  
+          } # <END> 'model'
+  
+      } # <END> params
+  
+ 
+
+-------------------------------------------------------------------------------
+ 
 *****************************
 Class and function docstrings
 *****************************
 
-<<<COPIES OF ALL DOCSTRINGS HERE>>>
+==============================
+:py:`gnx.make_parameters_file`
+==============================
 
+Create a new parameters file.
+
+Write to disk a new, template parameters file. The file will contain the
+numbers and types of sections indicated by the parameters fed to this
+function. It can often be used 'out of the box' to make a new Model
+object, but typically it will be edited by the user to stipulate
+the scenario being simulated, then used to instantiate a Model.
+
+----------
+Parameters
+----------
+filepath : str, optional
+    Where to write the resulting parameters file, in /path/to/filename.py
+    format. Defaults to None. If None, a file named
+    "GEONOMICS_params_<datetime>.py" will be written to the working
+    directory.
+scapes : {int, list of dicts}, optional
+    Number (and optionally, types) of Scape-parameter sections to include
+    in the parameters file that is generated. Defaults to 1. Valid values
+    and their associated behaviors are:
+
+    int:
+        Add sections for the stipulated number of Scapes, each with default
+        settings:
+        
+          - parameters for creating Scapes of type 'random' (i.e.
+            Scapes that will be generated by interpolation from
+            randomly valued random points)
+          - no ScapeChanger parameters
+
+    [dict, ..., dict]:
+        Each dict in this list should be of the form:
+        {'type':    'random', 'defined', 'file', or 'nlmpy',
+        'change':   bool
+        }
+        This will add one section of Scape parameters, with the
+        contents indicated, for each dict in this list.
+populations : {int, list of dicts}, optional
+    Number (and optionally, types) of Population-parameter sections to
+    include in the parameters file that is generated. Defaults to 1. Valid
+    values and their associated behaviors are:
+
+    int:
+        Add sections for the stipulated number of Populations, each with
+        default settings:
+
+          - parameters for movement without a MovementSurface
+          - parameters for a GenomicArchitecture with 0 Traits (i.e. with
+            only neutral loci)
+          - no PopulationChanger parameters
+
+    [dict, ..., dict]:
+        Each dict should contain at least one argument from among the
+        following:
+        {'movement':                       bool,
+        'movement_surface':                bool,
+        'genomes':                         bool,
+        'n_traits':                        int,
+        'custom_genomic_architecture':     bool,
+        'demographic_change':              int,
+        'parameter_change':                bool
+        }
+        This will add one section of Population parameters, customized
+        as indicated, for each dict in the list.
+
+data : bool, optional
+    Whether to include a Data-parameter section in the parameters file that
+    is generated. Defaults to None. Valid values and their associated
+    behaviors are:
+
+    None, False:
+        Will not add a section for parameterizing data to be collected.
+        No DataCollector will be created for the Model object made from
+        the resulting parameters file, and no data will be collected
+        during the model runs.
+    True:
+        Will add a section that can be used to parameterize which
+        data will be collected during the model runs, when, and what
+        file formats will be used to write it to disk.
+        (This which will be managed by the model's DataCollector
+        object.)
+
+stats : bool, optional
+    Whether to include a Stats-parameter section in the parameters file that
+    is generated. Defaults to None. Valid values and their associated
+    behaviors are:
+
+    None, False:
+        Will not add a section for parameterizing the statistics to be
+        calculated. No StatsCollector will be created for the Model
+        object made from the resulting parameters file, and no
+        statistics will be calculated during the model runs.
+    True:
+        Will add a section that can be used to parameterize which
+        statistics will be calculated during the model runs, and when.
+        (This will be managed by the model's StatsCollector object.)
+
+seed : bool, optional
+    Whether to include a seed-parameter section in the parameters file that
+    is generated. Defaults to None. Valid values and their associated
+    behaviors are:
+
+    None, False:
+        Will not add a section for parameterizing how the random number
+        generators are seeded, hence generators will be seeded at
+        random and results will be unreproducible.
+    True:
+        Will add a section for parameterizing how the random number
+        generators are seeded, so that results will be reproducible.
+
+Returns
+-------
+out : None
+    Returns no output. Resulting parameters file will be written to the
+    location and filename indicated (or by default, will be written to a
+    file named "GEONOMICS_params_<datetime>.py" in the working directory).
+
+See Also
+--------
+sim.params.make_parameters_file
+
+Notes
+-----
+All parameters of this function are optional. Calling the function without
+providing any parameters will always produce the parameters file for the
+default model scenario. This file can be instantiated as a Model object and
+run without being edited. Those three steps (create default parameters file;
+create model from that parameters file; run the model) serve as a base case
+to test successful package installation, and are wrapped around by the
+convenience function `gnx.run_default_model`.
+
+Examples
+--------
+In the simplest example, we can create a parameters file for the default
+model. Then (assuming it is the only Geonomics parameters file in the
+current working directory, so that it can be unambiguously identified) we
+can call the gnx.make_model function to create a Model object from that
+file, and then call the Model.run method to run the model (setting the
+'verbose' parameter to True, so that we can observe model output).
+
+>>> gnx.make_parameters_file()
+>>> mod = gnx.make_model()
+>>> mod.run(verbose = True)
+TODO: PUT TYPICAL MODEL OUTPUT HERE, EVEN THOUGH IT'S ONLY PRINTED?
+
+We can use some of the function's arguments, to create a parameters
+file for a model with 3 Scapes and 1 Population (all with the default
+components for their sections of the parameters file) and with a section
+for parameterizing data collection.
+
+>>> gnx.make_parameters_file(scapes = 3, data = True)
+
+As a more complex example that is likely to be similar to most use cases,
+we can create a parameters file for a model scenario with:
+
+    - 2 Scapes (one being an nlmpy Scape that will not change over model
+      time, the other being a raster read in from a GIS file and being
+      subject to change over model time);
+    - 2 Populations (the first having genomes, 2 Traits, and movement
+      that is dictated by a MovementSurface; the second not having
+      genomes but having a MovementSurface as well, and undergoing
+      demographic change)
+    - data-collection;
+    - stats-collection;
+    - a section for setting the seed for the random-number generators.
+
+We can save this to a file named "2-pop_2-trait_model.py" in our current
+working directory.
+
+>>> gnx.make_parameters_file(
+>>>     #list of 2 dicts, each containing the values for each Scape's
+>>>     #parameters section
+>>>     scapes = [
+>>>         {'type': 'nlmpy'},                              #scape 1 
+>>>         {'type': 'gis',                                 #scape 2 
+>>>          'change': True}
+>>>         ],
+>>>     #list of 2 dicts, each containing the values for each Population's
+>>>     #parameters section
+>>>     populations = [
+>>>         {'genomes': True,                               #pop 1
+>>>          'n_traits': 2,
+>>>          'movement': True,
+>>>          'movement_surface': True},
+>>>         {'genomes': False,                              #pop 2
+>>>          'movement': True,
+>>>          'movement_surface': True,
+>>>          'demographic_change': True}
+>>>         ],
+>>>     #arguments to the data, stats,and seed parameters
+>>>     data = True, stats = True, seed = True,
+>>>     #destination to which to write the resulting parameter file
+>>>     filepath = '2-pop_2-trait_model.py')
+
+
+
+
+
+==========================
+:py:`read_parameters_file`
+==========================
+
+Create a new ParametersDict object.
+
+Read the Geonomics parameters file saved at the location indicated by
+'filepath', check its validity (i.e. that all the Scapes and Populations
+parameterized in that file have been given distinct names), then use the
+file to instantiate a ParametersDict object.
+
+----------
+Parameters
+----------
+filepath : str
+    String indicating the location of the Geonomics parameters file that
+    should be made into a ParametersDict object.
+
+Returns
+-------
+
+An object of the ParametersDict class (a dict of nested dicts, all
+of which have key-value pairs whose values can be accessed using typical
+dict notation or using dot notation with the keys).
+
+Raises
+------
+AssertionError
+    If either the Scapes or the Populations parameterized in the parameters
+    file have not all been given distinct names
+
+See Also
+--------
+sim.params.read
+sim.params.ParametersDict
+
+Examples
+--------
+Read a parameters file called "null_model.py" (located in the current
+working directory).
+
+>>> gnx.read_parameters_file('null_model.py')
+<class 'sim.params.ParametersDict'>
+Model name:                                     GEONOMICS_params_13-10-2018_15:54:03
+
+
+
+================
+:py:`make_model`
+================
+
+Create a new Model object.
+
+Use either a ParametersDict object or the path to a valid Geonomics
+parameters file (whichever is provided to the 'parameters' argument) to
+create a new Model object.
+
+----------
+Parameters
+----------
+parameters : {ParametersDict, str}, optional
+    The parameters to be used to make the Model object.
+    If `parameters` is a ParametersDict object, the object will be used to
+    make the Model.
+    If `parameters` is a string, Geonomics will call
+    `gnx.read_parameters_file` to make a ParametersDict object, then use
+    that object to make the Model.
+    If `parameters` is None, or is not provided, then Geonomics will
+    attempt to find a single parameters file in the current working
+    directory with the filename "GEONOMICS_params_<...>.py", will use that
+    file to make a ParametersDict object, then will use that object to
+    make the Model.
+
+Returns
+-------
+out : Model
+    An object of the Model class
+
+Raises
+------
+ValueError
+    If the `parameters` argument was not provided and a single, valid
+    Geonomics parameters file could not be identified in the current
+    working directory
+ValueError
+    If the `parameters` arugment was given a string that does not point
+    to a valid parameters file
+ValueError
+    If the ParametersDict provided to the `parameters` argument, or created
+    from the parameters file being used, cannot be successfully made into a
+    Model
+
+See Also
+--------
+gnx.read_parameters_file
+sim.model.Model
+
+Examples
+--------
+Make a Model from a single, valid "GEONOMICS_params_<...>.py" file that can
+be found in the current working directory (such as a file that would be
+produced by calling gnx.make_parameters_file without any arguments).
+
+>>> gnx.make_model()
+<class 'sim.model.Model'>
+Model name:                                     GEONOMICS_params_13-10-2018_15:54:03
+Scapes:                                         0: '0'
+Populations:                                    0: '0'
+Number of iterations:                           1
+Number of burn-in timesteps (minimum):          30
+Number of main timesteps:                       100
+Geo-data collected:                             {}
+Gen-data collected:                             {}
+Stats collected:                                {}
+
+
+Make a Model from a file called 'null_model.py', in the current working
+directory.
+
+>>> gnx.make_model('null_model.py')
+<class 'sim.model.Model'>
+Model name:                                     null_model
+Scapes:                                         0: 'tmp'
+                                                1: 'ppt'
+Populations:                                    0: 'C. fasciata'
+Number of iterations:                           2500
+Number of burn-in timesteps (mininum):          100
+Number of main timesteps:                       1000
+Geo-data collected:                             {csv, geotiff}
+Gen-data collected:                             {vcf, fasta}
+Stats collected:                                {maf, ld, mean_fit, het, Nt}
 
