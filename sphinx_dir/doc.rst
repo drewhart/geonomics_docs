@@ -90,7 +90,6 @@ the user will call key **methods** on these **objects**, in order to get them
 to carry out their behaviors (that is to say, to get them to run a
 simulation).
 
-
 The subsequent documentation will present the **classes** definined in
 Geonomics and their key **methods**. It will explain exactly what those methods
 do, and how what they do fits into the overall structure and function of 
@@ -141,12 +140,20 @@ parameters file in your current working directory,
 then use that file to instantiate and run a :code:`Model` using the default
 parameter values.
 
-Lastly, please note that this documentation is designed to be read from
-from the beginning (though not necessarily all the way to the end). But
-given the interrelationships between all the components of the package,
-you will inevitably run into material in different sections that is related.
-To the extent possible, we attempt to cross-reference rather than duplicate
-information.
+Finally, some brief notes about the structure and style of this documentation: 
+
+  It is designed to be read from from the beginning (though not
+  necessarily all the way to the end, as the information generally
+  becomes increasingly detailed). However, given the 
+  interrelationships between all the components of a Geonomics 
+  :py:`Model`, there are inevitably places where you'll run
+  into material that relates to material from another section.
+  To the extent possible, we attempt to cross-reference rather than duplicate
+  information.
+
+  We assume, throughout, that Genomics has been imported :py:`as gnx` and
+  that Numpy has been imported :py:`as np`.
+
 
 Merry modeling!
 
@@ -157,17 +164,18 @@ Merry modeling!
 Model organization 
 ******************
 
-<<<DIAGRAM HERE>>>
+  ::
 
+       <<DIAGRAM HERE>>
 
-:: +-------+        +-------+ 
-:: | stuff | -----> | stuff | 
-:: +-------+        +-------+ 
-::     ^                |     
-::     |                v     
-:: +-------+        +-------+ 
-:: | stuff | <----- | stuff | 
-:: +-------+        +-------+ 
+   +-------+        +-------+ 
+   | stuff | -----> | stuff | 
+   +-------+        +-------+ 
+       ^                |     
+       |                v     
+   +-------+        +-------+ 
+   | stuff | <----- | stuff | 
+   +-------+        +-------+ 
 
 
 -------------------------------------------------------------------------------
@@ -601,8 +609,8 @@ Density dependence
 ------------------
 
 Density dependence is implemented using a spatialized form of the class 
-logistic growth equation 
-(:math:`\frac{\mathrm{d}N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})`, 
+logistic growth equation (:math:`\frac{\mathrm{d}
+N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})`, 
 where the x,y subscripts refer to values for a given cell on the :py:`Land`).
 Each :py:`Population` has a carrying-capacity raster (a 2d Numpy array; 
 attribute 'K'), which is defined in the parameters file to be 
@@ -674,16 +682,16 @@ be thought of as special cases of the following equation for the fitness of
 .. math::
    \omega_{i,p}= 1 - \phi_{p;x,y} (\mid e_{p;x,y} - z_{i;p} \mid)^{\gamma_{p}}
 
-Where :math:`\\phi_{p;x,y}` is the selection coefficient of trait 
-:math:`p`, :math:`e_{p;x,y}` is the environmental variable of the 
+where :math:`\\phi_{p;x,y}` is the selection coefficient of trait 
+:math:`p`; :math:`e_{p;x,y}` is the environmental variable of the 
 relevant :py:`Scape` at :py:`Individual` :math:`i`'s x,y location
 (which can also be thought of as the :py:`Individual`'s optimal 
-phenotype), :math:`z_{i;p}` is :py:`Individual` :math:`i`'s (actual) 
-phenotype for :py:`Trait` :math:`p`, and :math:`gamma_{p}` controls 
-how fitness decreases as the absolute difference between an :py:`Individual`'s 
-optimal and actual phenotypes increases (it defaults to 1, which causes 
-fitness to decrease linearly around the optimal 
-phenotypic value). 
+phenotype); :math:`z_{i;p}` is :py:`Individual` :math:`i`'s (actual) 
+phenotype for :py:`Trait` :math:`p`; and :math:`gamma_{p}` controls 
+the curvature of the fitness function (i.e. how fitness decreases as
+the absolute difference between an :py:`Individual`'s 
+optimal and actual phenotypes increases; the default value of 1 causes 
+fitness to decrease linearly around the optimal phenotypic value). 
 
 ========
 Mutation
@@ -710,10 +718,11 @@ are more or less analogous:
   it would be a misnomer to call mutations that influence a given 
   :py:`Trait`'s phenotypes 'beneficial' -- even though that term is the closest
   population-genetic concept to this concept as it is employed in Geonomics -- 
-  because the same mutant genotype in the same :py:`Individual` could have opposite
-  effects on that :py:`Individual`'s fitness in different environmental 
-  contexts (i.e. it could behave as a beneficial mutation is one region of
-  the :py:`Land` but as a deleterious mutation in another). 
+  because the same mutant genotype in the same :py:`Individual`
+  could have opposite effects on that :py:`Individual`'s fitness 
+  in different environmental contexts (i.e. it could behave as
+  a beneficial mutation is one region of the :py:`Land` 
+  but as a deleterious mutation in another). 
 
 
 ======================
@@ -732,8 +741,9 @@ Land and population change
 
 For a given :py:`Scape`, any number of landsacpe change events can be planned. 
 In the parameters file, for each event, the user stipulates the initial
-timestep; the final timestep; the resulting landscape (i.e. the array 
-of the :py:`Scape` that will exist after the event is complete); and the 
+timestep; the final timestep; the end raster (i.e. the array 
+of the :py:`Scape` that will exist after the event is complete, defined using
+the **end_rast** parameter); and the 
 interval at which intermediate changes will occur.  When the :py:`Model` is 
 created, the stepped series of intermediate landscapes (and 
 :py:`_MovementSurface` objects, if the :py:`Scape` that is changing serves 
@@ -868,12 +878,31 @@ remind you what the parameter does. But for detailed information about each
 parameter, you'll want to refer to the following information.
 What follows is a list of all of the Geonomics parameters (in the sections and
 the top-to-bottom order in which they'll appear in your parameters files).
-For each parameter, you will see a snippet of the context (i.e. lines of
-Python code) in which it appears in a parameters filewith; that will be
-followed by detailed information about the parameter (the valid Python data
-types it can take; its default values; then an explanation of what it
-defines, how its value is used, and any other relevant information). This
-will look like:
+For each parameter, you will see a section with the following information:
+
+  - a snippet of the context (i.e. lines of
+    Python code) in which it appears in a parameters file; 
+  - the valid Python data type(s) the parameter can take
+  - the default value of the parameter
+  - a ranking score, indicating how likely it is that you will want to reset
+    this parameter (i.e. change it from its default value), and
+    encoded as follows:
+
+    - 'Y': almost certainly, *or* must be reset for your :py:`Model` to run
+    - 'P': it is possible/probable that you will want to reset this
+      parameter, but this will depend on your use and scenario
+    - 'N': almost certainly not, *or* no need to reset because it should be
+      set intelligently anyhow (Note: this does *not* mean that you cannot
+      reset the parameter! if that is the case for any value then it does not
+      appear in the parameters file)
+
+  - other relevant, detailed information about the parameter, including
+    an explanation of what it defines, how its value is used, where to look
+    for additioanl information about parameters related to other Python 
+    packages, etcetera
+   
+
+These section will be formatted as follows:
 
 
 **<param_name>**
@@ -883,9 +912,11 @@ will look like:
               #brief comment about the parameter
               '<param_name>':               <default_param_value>,
 
-<valid Python data type>
+<valid Python data type(s)>
 
-<default value>
+default: <default value>
+
+reset? <ranking>
 
   <Explanation of what the parameter defines, how its value is used,
   and any other relevant information.>
@@ -896,327 +927,990 @@ if you confront any uncertainty while creating your own parameters files.
 We'll start with the section of parameters that
 pertains to the :py:`Land` object.
 
+
+
 ===============
 Land parameters
 ===============
+
+----
+Main
+----
+
+------------------------------------------------------------------------------
 
 **dim**
 
 .. code-block:: python
 
-              # dimensions of the Land
+              # dimensions of the Landscape
               'dim':                      (20,20),
 
-tuple; 
+:py:`tuple`
 
-default: (20,20)
+default: :py:`(20,20)`
+
+reset: P
   
   This defines the x and y dimensions of the :py:`Land`, in units of cells. As
   you might imagine, these values are used for a wide variety of basic
-  operations throughout Geonomics. You will want to change the
+  operations throughout Geonomics. Change the
   default value to the dimensions of the landscape you wish to simulate on.
 
+
+------------------------------------------------------------------------------
 
 **res**
 
 .. code-block:: python
 
-              # resolution of the Land
+              # resolution of the Landscape
               'res':                      (1,1),
 
-tuple
+:py:`tuple`
   
-default: (1,1)
+default: :py:`(1,1)`
+
+reset: N
 
   This defines the :py:`Land` resolution (or cell-size) in the x and y
-  dimensions. These sizes are usually not used when a :py:`Model` is run, but
-  can be used for crosswalking :py:`Model` content with 
-  real-world data. Defaults to the meaningless value (1,1), and this value
-  generally needn't be changed in your parameters file, but it will 
+  dimensions. This information is only used if GIS rasters of :py:`Land` 
+  layers are to be written out as GIS raster files (as parameterized in the
+  'Data' parameters). Defaults to the meaningless value (1,1), and this value
+  generally needn't be changed in your parameters file, because it will 
   be automatically updated to the resolution of any GIS rasters that 
-  are read in for use as :py:`Scapes`. 
+  are read in for use as :py:`Scapes` (assuming they all share the same
+  resolution; otherwise, an Error is thrown). 
 
+
+------------------------------------------------------------------------------
 
 **ulc**
 
 .. code-block:: python
 
-              # upper-left corner of the Land 
+              # upper-left corner of the Landscape
               'ulc':                      (0,0),
 
-tuple
+:py:`tuple`
 
-default: (0,0)
+default: :py:`(0,0)`
 
-  This defines the upper-left corner (ULC) of the landscape (in the units of
+reset: N
+
+  This defines the upper-left corner (ULC) of the :py:`Land` (in the units of
   some real-world coordinate reference system, e.g. decimal degrees, or
-  meters). This information is not used when a :py:`Model` is run, but can be
-  used for crosswalking :py:`Model` content with real-world data. 
-  Defaults to the meaningless value (0,0), and this value usually needn't
-  be changed in your parameters file, but it will be automatically
-  updated to match the ULC value of any GIS rasters
-  that are read in for use as :py:`Scapes`.
+  meters). This information is only used if GIS rasters of :py:`Land` layers are
+  to be written out as GIS raster files. Defaults to the meaningless value
+  (0,0), and this value usually needn't be changed in your parameters file,
+  because it will be automatically updated to match the ULC value 
+  of any GIS rasters that are read in for use as :py:`Scapes` (assuming 
+  they all share the same ULC; otherwise, an Error is thrown).
+
+        
+------------------------------------------------------------------------------
+
+**prj**
 
 .. code-block:: python
-
-
-
-
-
-
-
-
+              
+              #projection of the Landscape
               'prj':                      None,
-                  #projection of the landscape; only applicable if layers are to
-                  #be read in from a raster file; defaults to None
-  
+
+:py:`str`; (WKT projection string)
+
+default: :py:`None`
+
+reset: N
+
+  This defines the projection of the :py:`Land`, as a string of Well Known Text
+  (WKT). This information is only used if GIS rasters of :py:`Land` layers are
+  to be written out as GIS raster files. Defaults to :py:`None`, which is fine,
+  because this value will be automatically updated to match the projection
+  of any GIS rasters that are read in for us as :py:`Scapes` (assuming they
+  all share the same projection; otherwise, an Error is thrown)
+
+
+
+------
+Scapes
+------
+
+------------------------------------------------------------------------------
+
+**scape_<n>**
+
+.. code-block:: python
+     
       ################
       #### scapes ####
       ################
           'scapes': {
-  
-              0: {
-                  #scape name; each scape must be give a unique string or numeric
-                  #(e.g. 0, 0.1, 'scape0', '1994', 'mean_T'); default to serial
-                  #integers from 0
-  
-          ############################
-          #### scape num. 0: init ####
-          ############################
-  
-                  'init': {
-                      #initiating parameters for this scape
-  
+              #scape name (SCAPE NAMES MUST BE UNIQUE!) 
+              'scape_0': {
+
+{:py:`str`, :py:`int`}
+
+default: :py:`scape_<n>` 
+
+reset? P
+
+This parameter defines the name for each :py:`Scape`. (Note that unlike most
+parameters, it is a :py:`dict` key, the value for which is a :py:`dict`
+of parameters defining the :py:`Scape` being named.) As the capitalized
+reminder in the parameters states, each :py:`Scape` must have a unique name
+(so that a parameterized :py:`Scape` isn't overwritten in the
+:py:`ParametersDict` by a second, identically-named :py:`Scape`; Geonomics
+checks for unique names and throws an Error if this condition is not met.
+:py:`Scape` names can, but needn't be, descriptive of what each 
+:py:`Scape` represents. Example valid values include: 0, 0.1, 'scape0', 1994,
+'1994', 'mean_ann_tmp'. Names default to :py:`scape_<n>`, where n is a series of
+integers starting from 0.
+
+
+
+^^^^
+Init
+^^^^
+
+There are four different types of :py:`Scapes` that can be created. The
+parameters for each are explained in the next four subsections.
+
+""""""
+random
+""""""
+
+------------------------------------------------------------------------------
+
+**n_pts**
+
+.. code-block:: python
+    
+                      #parameters for a 'random'-type Scape
                       'rand': {
-                          #parameters for making a random scape (interpolated
-                          #from randomly located random values)
+                          #number of random points
                           'n_pts':                        500,
-                              #number of random coordinates to be used in generating random landscapes
-                                  #(only needed if rand == True)
-                          'interp_method':                'cubic'
-                              # interpolation method (valid: 'linear', 'cubic', 'nearest')
+
+:py:`int`
+
+default: 500
+
+reset? P
+
+This defines the number of randomly located, randomly valued points
+from which the random :py:`Scape` will be interpolated. (Locations drawn
+from uniform distributions between 0 and the :py:`Land` dimensions on
+each axis. Values drawn from a uniform distribution between 0 and 1.)
+
+
+------------------------------------------------------------------------------
+
+**interp_method**
+
+.. code-block:: python
+
+                          #interpolation method ('linear', 'cubic', or 'nearest')
+                          'interp_method':                'cubic',
                           },
-  
-                      } # <END> 'init'
-  
-          ##############################
-          #### scape num. 0: change ####
-          ##############################
-  
-                  'change': {
-                      #land-change events for this scape
-                      'end_rast':         np.zeros((20,20)),
-                          #scape to be set as the endpoint of the land-change event
-                      'start_t':          1500,
-                          #timestep on which to start the land-change event
-                      'end_t':            2000,
-                          #timestep on which to end the land-change event
-                      'n_steps':          10
-                          #number of stepwise changes to make between t_start and t_end
-                          },
-  
-                  }, # <END> scape num. 0
-  
-  
-              1: {
-                  #scape name; each scape must be give a unique string or numeric
-                  #(e.g. 0, 0.1, 'scape0', '1994', 'mean_T'); default to serial
-                  #integers from 0
-  
-          ############################
-          #### scape num. 1: init ####
-          ############################
-  
-                  'init': {
-                      #initiating parameters for this scape
-  
-                      'nlmpy': {
-                          #parameters for making an nlmpy scape (using any nlmpy
-                          #function for which valid arguments are provided)
-                          #NOTE: all other parameters in this dictionary will be
-                          #unpacked as arguments to the nlmpy function chosen;
-                          #thus, all necessary and only valid arguments must be
-                          #provided or a general error will be thrown
-                          'function':                 'mpd',
-                              #filepath to read into this scape
-                          'nRow':                     20,
-                              #number of rows (must agree with land dimensions)
-                          'nCol':                     20,
-                              #number of columns (must agree with land
-                              #dimensions)
-                          'h':                        1,
-                              #"controls the level of spatial autocorrelation
-                              #in element values"
-                          },
-  
-                      } # <END> 'init'
-  
-                  }, # <END> scape num. 1
-  
-  
-              2: {
-                  #scape name; each scape must be give a unique string or numeric
-                  #(e.g. 0, 0.1, 'scape0', '1994', 'mean_T'); default to serial
-                  #integers from 0
-  
-          ############################
-          #### scape num. 2: init ####
-          ############################
-  
-                  'init': {
-                      #initiating parameters for this scape
-  
+
+{:py:`'linear'`, :py:`'cubic'`, :py:`'nearest'`}
+
+default: :py:`'cubic'`
+
+reset? N
+
+This defines the method to use to interpolate random points to the array that
+will serve as the :py:`Scape`'s raster. Whichever of the three valid values
+is chosen (:py:`'linear'`, :py:`'cubic'`, or :py:`'nearest'`) will be passed
+on as an argument to :py:`scipy.interpolate.griddata`. Note that the
+:py:`'nearest'` method will generate a random categorical array, such as
+might be used for modeling habitat types.
+
+
+"""""""
+defined
+"""""""
+
+------------------------------------------------------------------------------
+
+**pts**
+
+.. code-block:: python
+   
+                      #parameters for a 'defined'-type Scape 
                       'defined': {
-                          #parameters for making a defined scape (interpolated
-                          #from a provided set of valued points)
+                          #point coordinates
                           'pts':                    None,
-                              #coords of points to use to interpolate defined scape (provided as
-                              #a nx2 Numpy array, where n matches the number of points in
-                              #the scape_pt_vals array, to be used as the points
-                              #to be interpolated; only needed if rand == False)
-                          'vals':                      None,
-                              #point values to use to interpolate defined landscape layers (a 1xn Numpy array,
-                                  #where n matches the number of points in scape_pt_coords arrays;
-                                  #only needed if rand == False)
-                          'interp_method':                None
-                              # interpolation method (valid: 'linear', 'cubic', 'nearest')
+
+nx2 :py:`np.ndarray`
+
+default: :py:`None`
+
+reset? Y
+
+This defines the coordinates of the points that will be used to 
+interpolate this :py:`Scape`. 
+
+
+------------------------------------------------------------------------------
+
+**vals**
+
+.. code-block:: python
+
+                           #point values
+                           'vals':                  None,
+
+{:py:`list`, 1xn :py:`np.ndarray`}
+
+default: :py:`None`
+
+reset? Y
+
+This defines the values of the points that will be used to 
+interpolate this :py:`Scape`. 
+
+
+------------------------------------------------------------------------------
+
+**interp_method**
+
+.. code-block:: python
+
+                          #interpolation method ('linear', 'cubic', or 'nearest')
+                          'interp_method':                'cubic',
                           },
+
+{:py:`'linear'`, :py:`'cubic'`, :py:`'nearest'`}
+
+default: :py:`'cubic'`
+
+reset? N
+
+This defines the method to use to interpolate random points to the array that
+will serve as the :py:`Scape`'s raster. Whichever of the three valid values
+is chosen (:py:`'linear'`, :py:`'cubic'`, or :py:`'nearest'`) will be passed
+on as an argument to :py:`scipy.interpolate.griddata`. Note that the
+:py:`'nearest'` method will generate a random categorical array, such as
+might be used for modeling habitat types.
+
+
+""""
+file
+""""
+
+------------------------------------------------------------------------------
+
+**filepath**
+
+.. code-block:: python
   
-                      } # <END> 'init'
-  
-                  }, # <END> scape num. 2
-  
-  
-              3: {
-                  #scape name; each scape must be give a unique string or numeric
-                  #(e.g. 0, 0.1, 'scape0', '1994', 'mean_T'); default to serial
-                  #integers from 0
-  
-          ############################
-          #### scape num. 3: init ####
-          ############################
-  
-                  'init': {
-                      #initiating parameters for this scape
-  
+                      #parameters for a 'file'-type Scape 
                       'file': {
-                          #parameters for making a scape from a file (read in
-                          #from a GIS raster file or a numpy txt array file)
+                          #</path/to/file>.<ext>
                           'filepath':                     '/PATH/TO/FILE.EXT',
-                              #filepath to read into this scape
-                          'scale_min_val':                -1.37,
-                              #minimum values to use for rescaling the raster (will be
-                                  #rescaled to 0<=x<=1); NOTE: this may be different than the actual minimum
-                                  #value in the raster, especially if raster will be changing to a future raster
-                                  #with values outside the range of this one
-                          'scale_max_val':                19.11
-                              #maxmimum input value against to which to rescale the raster (will be rescaled to 0<=x<=1)
-                          },
-  
-                      } # <END> 'init'
-  
-                  }, # <END> scape num. 3
-  
-  
-  
-      #### NOTE: Individual Scapes' sections can be copy-and-pasted (and
-      #### assigned distinct keys and names), to create additional Scapes.
-  
-  
-              } # <END> 'scapes'
-  
-          }, # <END> 'land'
-  
-  ###################
-  #### COMMUNITY ####
-  ###################
-      'comm': {
-  
-          'pops': {
-  
-              0  :   {
-                  #pop name; each pop must get a unique numeric or string name
-                  #(e.g. 0, 0.1, 'pop0', 'south', 'C_fasciata'); default to
-                  #serial integers from 0
-  
-              ##########################
-              #### pop num. 0: init ####
-              ##########################
+
+:py:`str`
+
+default: :py:`'/PATH/TO/FILE.EXT'`
+
+reset? Y
+
+This defines the location and name of the file that should be read in as the
+raster-array for this :py:`Scape`. Valid file types include a '.txt' file
+containing a 2d :py:`np.ndarray`, or any GIS raster file that can be read
+by :py:`osgeo.gdal.Open`. In all cases, the raster-array read in from the
+file must have dimensions equal to the stipulated dimensions of the
+:py:`Land` (as defined in the **dims** parameter, above); otherwise,
+Geonomics will throw an Error.
+
+
+------------------------------------------------------------------------------
+
+**scale_min_val**
+
+.. code-block:: python
+
+                          #minimum value to use to rescale the Scape to [0,1]
+                          'scale_min_val':                None,
+
+{:py:`float`, :py:`int`}
+
+default: :py:`None`
+
+reset? P
+
+This defines the minimum value (in the units of the variable represented by
+the file you are reading in) to use when rescaling the file's array to
+values between 0 and 1. (This is done to satisfy the requirement that all
+Geonomics :py:`Scape`\s have arrays in that interval). Defaults to :py:`None`
+(in which case Geonomics will set it to the minimum value observed in this
+file's array). But note that you should put good thought into
+this parameter, because it *won't* necessarily be the minimum value
+observed in the file; for example, if this file is being used
+to create a :py:`Scape` that will undergo environmental change
+in your `Model`, causing its real-world values to drop
+below this file's minimum value, then you will probably want to set
+this value to the minimum real-world value that will occur for this :py:`Scape`
+during your :py:`Model` scenario, so that low values
+that later arise on this `Scape` don't get truncated at 0.
+
+
+------------------------------------------------------------------------------
+
+**scale_max_val**
+
+.. code-block:: python
+
+                          #maximum value to use to rescale the Scape to [0,1]
+                          'scale_max_val':                None,
+
+{:py:`float`, :py:`int`}
+
+default: :py:`None`
+
+reset? P
+
+This defines the maximum value (in the units of the variable represented by
+the file you are reading in) to use when rescaling the file's array to
+values between 0 and 1. (This is done to satisfy the requirement that all
+Geonomics :py:`Scape`\s have arrays in that interval). Defaults to :py:`None`
+(in which case Geonomics will set it to the maximum value observed in this
+file's array). But note that you should put good thought into
+this parameter, because it *won't* necessarily be the maximum value
+observed in the file; for example, if this file is being used
+to create a :py:`Scape` that will undergo environmental change
+in your `Model`, causing its real-world values to increase
+above this file's maximum value, then you will probably want to set
+this value to the maximum real-world value that will occur for this 
+:py:`Scape` during your :py:`Model` scenario, so that high values that 
+later arise on this `Scape` don't get truncated at 1.
+
+"""""
+nlmpy
+"""""
+
+------------------------------------------------------------------------------
+
+**function**
+
+.. code-block:: python
+
+                      #parameters for an 'nlmpy'-type Scape
+                      'nlmpy': {
+                          #nlmpy function to use the create this Scape
+                          'function':                 'mpd',
+
+:py:`str` that is the name of an :py:`nlmpy` function
+
+default: :py:`'mpd'`
+
+reset? P
+
+This indicates the :py:`nlmpy` function that should be used to generate
+this :py:`Scape`'s array. (:py:`nlmpy` is a Python package for
+generating neutral landscape models; NLMs.) Defaults to :py:`'mpd'` (the
+function for creating a midpoint-displacement NLM). Can be set to any other
+:py:`str` that identifies a valid :py:`nlmpy` function, but then the
+remaining parameters in this section must be changed to the parameters
+that that function needs, and *only* those parameters 
+(because they will be unpacked into this function,
+i.e. passed on to it, at the time it is called.
+(Visit the `Cheese Shop <https://pypi.org/project/nlmpy/>`_ for more 
+information about the :py:`nlmpy` package and available functions).
+
+
+------------------------------------------------------------------------------
+
+**nRow**
+
+.. code-block:: python
+
+                          #number of rows (MUST EQUAL LAND DIMENSION y!)
+                          'nRow':                     20,
+
+
+:py:`int`
+
+default: 20
+
+reset? P
+
+This defines the number of rows in the :py:`nlmpy` array that is created.
+As the capitalized reminder in the parameters file mentions, this must be
+equal to the y-dimension of the :py:`Land`; otherwise, an error
+will be thrown. Note that this parameter (as for the remaining parameters in
+this section, other than the **function** parameter) is valid for the
+default :py:`nlmpy.mpd` function that is set by the
+**function** parameter); if you are using a different :py:`nlmpy`
+function to create this :py:`Scape` then this and the remaining parameters
+must be changed to the parameters that that function needs, 
+and *only* those parameters (because they will be unpacked into that function,
+i.e. passed on to it, at the time it is called).
+
+
+------------------------------------------------------------------------------
+
+**nCol**
+
+.. code-block:: python
+
+                          #number of cols (MUST EQUAL LAND DIMENSION x!)
+                          'nCol':                     20,
+
+
+:py:`int`
+
+default: 20
+
+reset? P
+
+This defines the number of columns in the :py:`nlmpy` array that is created.
+As the capitalized reminder in the parameters file mentions, this must be
+equal to the x-dimension of the :py:`Land`; otherwise, an error
+will be thrown. Note that this parameter (as for the remaining parameters in
+this section, other than the **function** parameter) is valid for the
+default :py:`nlmpy.mpd` function that is set by the
+**function** parameter); if you are using a different :py:`nlmpy`
+function to create this :py:`Scape` then this and the remaining parameters
+must be changed to the parameters that that function needs, 
+and *only* those parameters (because they will be unpacked into that function,
+i.e. passed on to it, at the time it is called).
+
+
+------------------------------------------------------------------------------
+
+**h**
+
+.. code-block:: python
+
+                          #level of spatial autocorrelation in element values
+                          'h':                     1,
+
+
+:py:`float`
+
+default: 1
+
+reset? P
+
+This defines the level of spatial autocorrelation in the element values
+of the :py:`nlmpy` array that is created.
+Note that this parameter (and the remaining parameters in
+this section, other than the **function** parameter) is valid for the
+default :py:`nlmpy` function (:py:`nlmpy.mpd`, which is set by the
+**function** parameter); but if you are using a different :py:`nlmpy`
+function to create this :py:`Scape` then this and the remaining parameters
+must be changed to the parameters that that function needs, 
+and *only* those parameters (because they will be unpacked into that function,
+i.e. passed on to it, at the time it is called).
+
+
+^^^^^^
+Change
+^^^^^^
+
+------------------------------------------------------------------------------
+
+**end_rast**
+
+.. code-block:: python
+
+                  #land-change event for this Scape
+                  'change': {
+                      #end raster for event (DIM MUST EQUAL DIM OF LAND!)
+                      'end_rast':         np.zeros((20,20)),
+
+{2d :py:`np.ndarray`, :py:`str`}
+
+default: :py:`np.zeros((20,20))`
+
+reset? Y
+
+This defines the end raster for a landscape-change event (i.e. the array 
+this :py:`Scape` will change into over the course of the event). As the
+capitalized reminder in the parameters file mentions, this raster must of
+course have the same dimensions as the `Land` to which the `Scape` belongs;
+otherwise, Genomics will throw an Error. Defaults a placeholder array
+of zeros, so should be parameterized to meet your needs. Valid values are
+a 2-d :py:`np.ndarray` object (stipulating the raster itself), or a :py:`str`
+pointing to a file containing the raster (where valid files can be a '.txt'
+file holding a 2-d :py:`np.ndarray` or any GIS raster files that can be
+read by :py:`osgeo.gdal.Open`).
+
+
+------------------------------------------------------------------------------
+
+**start_t**
+
+.. code-block:: python
+
+                   #starting timestep of event
+                   'start_t':          49,
+
+:py:`int`
+
+default: 49
+
+reset? P
+
+This indicates the timestep on which the landscape-change event
+will begin. Defaults to 49, but should be set to suit your
+specific scenario.
+
+
+------------------------------------------------------------------------------
+
+**end_t**
+
+.. code-block:: python
+
+                   #ending timestep of event
+                   'end_t':          99,
+
+:py:`int`
+
+default: 99
+
+reset? P
+
+This indicates the timestep on which the landscape-change event
+will finish. Defaults to 99, but should be set to suit your
+specific scenario.
+
+
+------------------------------------------------------------------------------
+
+**n_steps**
+
+.. code-block:: python
+
+                   #number of stepwise changes in event
+                   'n_steps':          5,
+
+:py:`int`
+
+default: 5
+
+reset? P
+
+This indicates the number of stepwise changes to use to model a
+landscape-change event. The changes during a landscape-chagne event
+are linearly interpolated (cellwise for the whole :py:`Scape`) to this
+number of discrete, instantaneous landscape changes between
+the starting and ending rasters. Thus, the fewer the number of 
+steps, the larger, magnitudinally, each change will be. So generally, more
+steps is 'better', as it will better approximate change that is continuous
+in time. However, there is a potenitally significant memory trade-off here:
+The whole series of stepwise-changed arrays is computed when the
+:py:`Model` is created, then saved and used at the appropriate timestep
+during each :py:`Model` run (and if the :py:`Scape` that is changing is used
+by any :py:`Population` as a :py:`_MovementSurface` then each intermediate
+:py:`_MovementSurface` is also calculated when the :py:`Model` is first
+built. These objects take up memory, which may be limiting for larger
+:py:`Model`\s and/or :py:`Land` objects. This will probably not be a
+major issue, but is worth considering.
+
+
+====================
+Community parameters
+====================
+
+-----------
+Populations
+-----------
+
+
+------------------------------------------------------------------------------
+
+**pop_<n>**
+
+.. code-block:: python
+ 
+              #pop name (POPULATION NAMES MUST BE UNIQUE!) 
+              'pop_0' :   {
+
+{:py:`str`, :py:`int`}
+
+default: :py:`pop_<n>` 
+
+reset? P
+
+This parameter defines the name for each :py:`Population`.
+(Note that unlike most
+parameters, it is a :py:`dict` key, the value for which is a :py:`dict`
+of parameters defining the :py:`Scape` being named.) As the capitalized
+reminder in the parameters states, each :py:`Population`
+must have a unique name (so that a parameterized 
+:py:`Population` isn't overwritten in the :py:`ParametersDict` by a
+second, identically-named :py:`Population`; Geonomics
+checks for unique names and throws an Error if this condition is not met.
+:py:`Population` names can, but needn't be, descriptive of what each 
+:py:`Population` represents. Example valid values include: 0, 'pop0',
+'high-dispersal', 'C. fasciata'. Names default to 
+:py:`pop_<n>`, where n is a series of
+integers starting from 0.
+
+^^^^
+Init
+^^^^
+
+------------------------------------------------------------------------------
+
+**N**
+
+.. code-block:: python
   
                   'init': {
-                      'N':                200,
-                          #starting population size
-                      'K_scape_num':      0,
-                          #the scape_num of the raster to use as the carrying-capacity raster (K)
-                      'K_fact':           2
-                          #the factor to multiply the K raster by in order to generate pop.K
-                      }, # <END> 'init'
-  
-              ############################
-              #### pop num. 0: mating ####
-              ############################
-  
+                      #starting population size
+                      'N':                250,
+
+:py:`int`
+
+default: 250
+
+reset? P
+
+This defines the starting size of this :py:`Population`. Importantly, this
+may or may not be near the stationary size of the :py:`Population` after
+the :py:`Model` has burned in, because that size will depend on the
+carrying-capacity raster (set by the **K** parameter), and on
+the dynamics of specific a :py:`Model` (because of the interaction of
+its various parameters).
+
+
+------------------------------------------------------------------------------
+
+**K_scape**
+
+.. code-block:: python
+
+                      #name of the carrying-capacity Scape
+                      'K_scape':         'scape_0',
+
+:py:`str`
+
+default: 'scape_0'
+
+reset? P
+
+This indicates, by name, the :py:`Scape` to be used as the
+carrying-capacity raster for a :py:`Population`. The values of this
+:py:`Scape` should express the carrying capacity at each cell, in number
+of :py:`Individual`\s. Note that the sum of the values of this :py:`Scape`
+can serve as a rough estimate of the expected stationary 
+:py:`Population` size; however, observed stationary size could vary
+substantially depending on various other :py:`Model` parameters (e.g. birth
+and death rates and mean number of offspring per mating event) as well
+as on stochastic events (e.g. failure to colonize, or survive in, all
+habitable portions of the :py:`Land`).
+
+
+^^^^^^
+Mating
+^^^^^^
+
+------------------------------------------------------------------------------
+
+**repro_age**
+
+.. code-block:: python
+
                   'mating'    : {
+                      #age(s) at sexual maturity (if tuple, female first)
                       'repro_age':            0,
-                          #age at sexual maturity (int or float for non-sexual species, tuple or list
-                              #of two ints/floats for sexual species; set to 'None' to not make this
-                              #an age-structured species
+
+{:py:`int`, :py:`(int, int)`, :py:`None`}
+
+default: 0
+
+reset? P
+
+This defines the age at which :py:`Individual`\s in the :py:`Population`
+can begin to reproduce. If the value provided is a 2-tuple of different
+numbers (and the :py:`Population` uses separate sexes), then the first
+number will be used as females' reproductive age, the second as males'.
+If the value is 0, or :py:`None`, :py:`Individual`\s are capable
+of reproduction from time of time.
+
+
+------------------------------------------------------------------------------
+
+**max_age**
+
+.. code-block:: python
+                        
+                      #maximum age
                       'max_age':              5,
-                          #age beyond which all individuals will automatically die; default to None
+
+{:py:`int`, :py:`None`}
+
+default: 1
+
+reset? P
+
+This defines the maximum age an individual can achieve before being
+forcibly culled from the population. Defaults to 1 (which will create
+a Wright-Fisher-like simulation, with discrete generations). Can be set
+to any other age, or can be set to :py:`None` (in which case no maxmimum
+age is enforced).
+
+
+------------------------------------------------------------------------------
+
+**sex**
+
+.. code-block:: python
+        
+                      #whether to assign sexes
                       'sex':                  False,
-                          #is this a sexual species?
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This determines whether :py:`Individual`\s will be assigned separate sexes
+that are used to ensure only male-female mating events.
+
+
+------------------------------------------------------------------------------
+
+**sex_ratio**
+
+.. code-block:: python
+                        
+                      #ratio of males to females
                       'sex_ratio':            1/1,
-                          #ratio of males to females
-                      #NOTE: I CAN PROBABLY GET RID OF THIS PARAMETER...
+
+
+{:py:`float`, :py:`int`}
+
+default: 1/1
+
+reset? P
+
+This defines the ratio of males to females (i.e. it will be converted to
+a probability that an offspring is a male, which is used as the probability
+of a Bernoulli draw of that offspring's sex). 
+
+
+------------------------------------------------------------------------------
+
+**distweighted_birth**
+
+.. code-block:: python
+
+                      #whether P(birth) should be weighted by parental dist
                       'distweighted_birth':  False,
-                          #should the probability of birth be weighted by the distance between
-                              #individuals in a pair?
+
+
+#NOTE: I WILL PROBABLY GET RID OF THIS PARAMETER...
+
+
+------------------------------------------------------------------------------
+
+**R**
+
+.. code-block:: python
+
+                      #pop intrinsic growth rate
                       'R':                    0.5,
-                          #pop intrinsic growth rate
+
+:py:`float`
+
+default: 0.5
+
+reset? P
+
+This defines a :py:`Population`'s intrinsic growth rate, which is used
+as the 'R' value in the spatialized logistic growth equation that
+regulates population density (:math:`\frac{\mathrm{d}
+N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})`).
+
+
+------------------------------------------------------------------------------
+
+**b**
+
+.. code-block:: python
+                       
+                      #pop instrinsic birth rate (MUST BE 0<=b<=1)
                       'b':                    0.2,
-                          #population intrinsic birth rate (implemented as the probability
-                              #that an identified potential mating pair successfully mates);
-                              #NOTE: this may later need to be re-implemented to allow for spatial
-                              #variation in intrinsic rate (e.g. expression as a raster) and/or for
-                              #density-dependent births as well as deaths
-                      'n_births_distr_lambda':      4,
-                          #expected value of offspring for a successful mating pair (used as the lambda value in a Poisson distribution)
+
+:py:`float` in interval [0, 1]
+
+default: 0.2
+
+reset? P
+
+This defines a :py:`Population`'s intrinsic birth rate, which is
+implemented as the probability that an identified potential mating
+pair successfully produces offspring. Because this is a probability, as
+the capitalized reminder in the parameters file mentions, this value must
+be in the inclusive interval [0, 1].
+
+NOTE: this may later need to be re-implemented to allow for spatial
+variation in intrinsic rate (i.e.. expression of a birth-rate raster),
+and/or for density-dependent birth as well as mortality
+
+
+------------------------------------------------------------------------------
+
+**n_births_dist_lambda**
+
+.. code-block:: python
+
+                      #expectation of distr of n offspring per mating pair
+                      'n_births_distr_lambda':      1,
+
+{:py:`float`, :py:`int`}
+
+default: 1
+
+reset? P
+
+This defines the lambda parameter for the Poisson distribution from 
+which a mating pair's number of offspring is drawn. Hence it is the
+expected value for the number of offspring born in a
+successful mating event.
+
+
+------------------------------------------------------------------------------
+
+**mating_radius**
+
+.. code-block:: python
+
+                      #radius of mate-search area
                       'mating_radius':        1
-                          #radius of mate-searching area
-                      }, # <END> 'mating'
-  
-              ###############################
-              #### pop num. 0: mortality ####
-              ###############################
-  
-                  'mortality'     : {
-                      'n_deaths_distr_sigma':           0.2,
-                          #std for the normal distribution used to choose the r.v. of deaths
-                              #per timestep (mean of this distribution is the overshoot,
-                              #as calculated from pop.size and pop.census())
-                      'dens_dependent_fitness':   True,
-                          #should fitness be density dependent? (note: helps to avoid subpopulation 'clumping')
-                      'dens_grid_window_width':   None,
-                          #with window-width used for the Density_Grid_Stack that calculates pop density
-                              #(if set to None, defaults to the closest factor of the larger landscape
-                              #dimension to 1/10th of that dimension)
-                              #NOTE: will eventually default to an approximation of Wright's genetic neighborhood
-                              #distance, based on the population's movement/dispersal parameters
+
+{:py:`float`, :py:`int`}
+
+default: 1
+
+reset? Y
+
+This defines the radius within which an :py:`Indvidual` can find a mate.
+This radius is provided to queries run on the :py:`_KDTree` object.
+
+
+^^^^^^^^^
+Mortality
+^^^^^^^^^
+
+------------------------------------------------------------------------------
+
+**d_min**
+
+.. code-block:: python
+        
+                      #min P(death) (MUST BE 0<=d_min<=1)
                       'd_min':                     0.01,
-                          #minimum neutral (i.e. non-selection driven) probability of death
-                      'd_max':                    0.90,
-                          #maximum neutral probability of death
-                      }, # <END> 'mortality'
-  
-              ##############################
-              #### pop num. 0: movement ####
-              ##############################
-  
+
+:py:`float` in interval [0, 1]
+
+default: 0.01
+
+reset? N
+
+This defines the minimum probabilty of death that an :py:`Individual`
+can face each time its Bernoulli death-decision is drawn. Because this 
+is a probability, as the capitalized reminder in 
+the parameters file mentions, this value must be in the 
+inclusive interval [0, 1].
+
+------------------------------------------------------------------------------
+
+**d_max**
+
+.. code-block:: python
+
+                      #max P(death) (MUST BE 0<=d_max<=1)
+                      'd_max':                    0.99,
+
+:py:`float` in interval [0, 1]
+
+default: 0.99
+
+reset? N
+
+This defines the minimum probabilty of death that an :py:`Individual`
+can face each time its Bernoulli death-decision is drawn. Because this 
+is a probability, as the capitalized reminder in 
+the parameters file mentions, this value must be in the 
+inclusive interval [0, 1].
+
+
+------------------------------------------------------------------------------
+
+**density_grid_window_width**
+
+
+.. code-block:: python
+
+                  'mortality'     : {
+                      #width of window used to estimate local pop density
+                      'dens_grid_window_width':   None,
+
+{:py:`float`, :py:`int`, :py:`None`}
+
+default: None
+
+reset? N
+
+This defines the width of the window used by the :py:`_DensityGridStack`
+to estimate a raster of local :py:`Population` densities. The user should
+feel free to set different values for this parameter (which could be
+especially helpful when calling :py:`Model.plot_density` to inspect the
+resulting surfaces calculated at different window widths, if trying
+to heuristically choose a reasonable value to set for a
+particular simulation scenario). But be aware that choosing particularly
+small window widths (in our experience, windows smaller than ~1/20th of
+the larger :py:`Land` dimension) will cause dramatic increases in the 
+run-time of the density calculation (which runs twice per timestep).
+Defaults to :py:`None`, which internally will be set to 1/10th of the
+larger :py:`Land` dimension; for many purposes this will work, but for
+others the user may wish to control this.
+
+
+^^^^^^^^
+Movement
+^^^^^^^^
+
+------------------------------------------------------------------------------
+
+**direction_distr_mu**
+
+.. code-block:: python
+ 
+                'movement': {
+                    #expectation of distr of movement direction
+                    'direction_distr_mu':     1,
+                    #concentration of distr of movement direction
+                    'direction_distr_kappa':  0,
+                    #expectation of distr of movement distance
+                    'distance_distr_mu':      0.5,
+                    #variance of distr of movement distance
+                    'distance_distr_sigma':   0.5,
+                    #expectation of distr of dispersal distance
+                    'dispersal_distr_mu':     0.5,
+                    #variance of distr of dispersal distance
+                    'dispersal_distr_sigma':  0.5,
+                    %s
+                    },    # <END> 'movement'
+                    
+
+
+
+
                   'movement': {
                      'move':          True,
                           #is this a mobile species?
                       'direction_distr_mu':     0,
                           #mu for von mises distribution defining movement directions
+                          #NOTE: these values won't be used is a MovementSurf is used!
                       'direction_distr_kappa':  0,
                           #kappa for von mises distribution
                       'distance_distr_mu':      0.5,
@@ -1732,6 +2426,7 @@ seed : bool, optional
         Will add a section for parameterizing how the random number
         generators are seeded, so that results will be reproducible.
 
+-------
 Returns
 -------
 out : None
@@ -1739,10 +2434,12 @@ out : None
     location and filename indicated (or by default, will be written to a
     file named "GEONOMICS_params_<datetime>.py" in the working directory).
 
+--------
 See Also
 --------
 sim.params.make_parameters_file
 
+-----
 Notes
 -----
 All parameters of this function are optional. Calling the function without
@@ -1753,6 +2450,7 @@ create model from that parameters file; run the model) serve as a base case
 to test successful package installation, and are wrapped around by the
 convenience function `gnx.run_default_model`.
 
+--------
 Examples
 --------
 In the simplest example, we can create a parameters file for the default
@@ -1838,6 +2536,7 @@ filepath : str
     String indicating the location of the Geonomics parameters file that
     should be made into a ParametersDict object.
 
+-------
 Returns
 -------
 
@@ -1845,17 +2544,20 @@ An object of the ParametersDict class (a dict of nested dicts, all
 of which have key-value pairs whose values can be accessed using typical
 dict notation or using dot notation with the keys).
 
+------
 Raises
 ------
 AssertionError
     If either the Scapes or the Populations parameterized in the parameters
     file have not all been given distinct names
 
+--------
 See Also
 --------
 sim.params.read
 sim.params.ParametersDict
 
+--------
 Examples
 --------
 Read a parameters file called "null_model.py" (located in the current
@@ -1893,11 +2595,13 @@ parameters : {ParametersDict, str}, optional
     file to make a ParametersDict object, then will use that object to
     make the Model.
 
+-------
 Returns
 -------
 out : Model
     An object of the Model class
 
+------
 Raises
 ------
 ValueError
@@ -1912,11 +2616,13 @@ ValueError
     from the parameters file being used, cannot be successfully made into a
     Model
 
+--------
 See Also
 --------
 gnx.read_parameters_file
 sim.model.Model
 
+--------
 Examples
 --------
 Make a Model from a single, valid "GEONOMICS_params_<...>.py" file that can
