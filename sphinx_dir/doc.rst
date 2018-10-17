@@ -34,6 +34,24 @@ Geonomics
 A Python package for easy construction of individual-based, spatially explicit, forward-time, and highly customizable landscape-genomics simulations
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+
+********
+Provides
+********
+
+  1. :py:`Land`, :py:`GenomicArchitecture`, :py:`Trait`,
+     :py:`Individual`, :py:`Population`, and :py:`Community` classes
+  2. A :py:`Model` class that builds objects of the aforementioned classes 
+     according to the scenario stipulated in a parameters file,
+     then uses them to run numerous simulation iterations
+  3. Classes to help the user to save data and basic statistics 
+     from those iterations at all desired timesteps
+  3. Classes to help the user model arbitrarily complex landscape- and 
+     demographic-change scenarios
+  4. Numerous visualization methods, to help the user design, run, explore, 
+     present, and explain their models' behavior and results
+
+
 *****
 Intro
 *****
@@ -65,11 +83,38 @@ own, arbitrarily complex Geonomics models as long as they know how to install
 the package, open a Python console, call Python functions, and edit some
 default values in a pre-packaged script. 
 
-For proper acquaintance with the model, however, it will be helpful to 
-understand the concept of **object-oriented programming**.  Python is a very 
-handy language for object-oriented programming, and this is the primary 
-programming paradigm in which Geonomics is written. Essentially, 
-object-orientation involves: 
+Geonomics will allow you to:
+
+  - create a landscape (known as 
+    the :py:`Land`) with any number of layers (known as :py:`Scape`\s) in it; 
+  - create any number of populations (:py:`Population`\s) living on that
+    :py:`Land`, each of which is composed of a bunch of 
+    independent :py:`Indivdual`\s, and each of which will have a bunch of
+    parameters dsecribing what it's like and how it lives;
+  - optionally give the :py:`Individual`\s of any :py:`Population`\s
+    genomes, which can optionally determine phenotypes for any number 
+    of :py:`Trait`\s (all of this is controlled by the
+    :py:`GenomicArchitecture` that you would create for
+    the :py:`Population`\s);
+  - simulate any number of timsesteps of the evolution of those
+    :py:`Population`\s on that :py:`Land`, where each timestep can include
+    movement, mating, mortality (by density-dependence and optionally also by
+    natural selection), and demographic, life-history, or
+    environmental changes
+
+-------------------------------------------------------------------------------
+
+==================
+Object-orientation
+==================
+
+For a more technical understanding of the model, it may be helpful to 
+understand the concept of **object-oriented programming**.  Here is a very
+brief tutorial for the unacquainted:
+
+Python is a very handy language for object-oriented programming, 
+and this is the primary programming paradigm in which Geonomics is written. 
+Essentially, object-orientation involves: 
 
   1. Defining certain types of data structures, or **classes** (e.g.
      :code:`Car`), and assigning them various behaviors, or **methods**
@@ -82,31 +127,24 @@ object-orientation involves:
      beep!", wheras :code:`batmobile.honk()` might
      return "<Batman theme song>"). 
      
-Geonomics defines a number of **classes**, some with a number of **methods**
-designed specifically for the user. The user will create **objects**
-belongining to these classes, using their own particular data values
-(i.e. with the values they define in the paramaters files they create). Then
-the user will call key **methods** on these **objects**, in order to get them
-to carry out their behaviors (that is to say, to get them to run a
-simulation).
+Geonomics defines a number of **classes** (such as the :py:`Land`, :py:`Scape`,
+:py:`Popualtion`, :py:`GenomicArchitecture`, and :py:`Trait` classes mentioned
+above. The user will use the values they specfiy in a parameters file to
+create **objects** belongining to these classes. Then the user will call
+key **methods** that belong to these **objects**, to get them
+to carry out certain behaviors (which are what constitute the simulation).
 
 The subsequent documentation will present the **classes** definined in
 Geonomics and their key **methods**. It will explain exactly what those methods
 do, and how what they do fits into the overall structure and function of 
 Geonomics models.
 
-In brief, Geonomics provides the following components:
 
-  1. :code:`Land`, :code:`GenomicArchitecture`, :code:`Trait`,
-     :code:`Individual`, :code:`Population`, and :code:`Community` classes;
-  2. A :code:`Model` class that builds objects of the aforementioned classes 
-     according to the scenario stipulated in a parameters file,
-     uses them to run numerous simulation iterations, and saves data 
-     and basic statistics from those iterations at all desired timesteps;
-  3. Classes for planning arbitrarily complex landscape- and 
-     demographic-change scenarios;
-  4. Numerous visualization methods, to help users design, run, explore, 
-     present, and explain their models' behavior and results.
+-------------------------------------------------------------------------------
+
+===============
+Getting started
+===============
 
 **For the beginner**, we recommend the following steps:
   1. Review the following three sections ('Model organization', 'Data
@@ -128,7 +166,6 @@ In brief, Geonomics provides the following components:
 **For the `impatient` beginner**, as soon as Geonomics has been
 installed, you should be able to run the following code:
 
-
 .. code-block:: python
 
      import geonomics as gnx
@@ -140,11 +177,17 @@ parameters file in your current working directory,
 then use that file to instantiate and run a :code:`Model` using the default
 parameter values.
 
+
+-------------------------------------------------------------------------------
+
+=================
+The documentation
+=================
+
 Finally, some brief notes about the structure and style of this documentation: 
 
-  It is designed to be read from from the beginning (though not
-  necessarily all the way to the end, as the information generally
-  becomes increasingly detailed). However, given the 
+  It is designed to be read from from the top down; information generally 
+  becomes increasingly detailed as you scroll down). However, given the 
   interrelationships between all the components of a Geonomics 
   :py:`Model`, there are inevitably places where you'll run
   into material that relates to material from another section.
@@ -157,6 +200,8 @@ Finally, some brief notes about the structure and style of this documentation:
 
 Merry modeling!
 
+
+-------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
 
@@ -216,6 +261,9 @@ the resolution (attribute 'res'), upper-left corner ('ulc'),
 and projection ('prj'), which default to 1, (0,0), and None but
 will be set otherwise if some or all of the :py:`Scape` layers are read in from
 real-world GIS rasters.
+
+
+-------------------------------------------------------------------------------
 
 ===========================================================
 Genomes, :py:`GenomicArchitecture`, and :py:`Trait` objects
@@ -300,6 +348,9 @@ all loci (rows) in the :py:`GenomicArchitecture`;
 these values will override any other values provided in the 'genome' 
 subsection of the population's parameters.
 
+
+-------------------------------------------------------------------------------
+
 ===============================================================
 :py:`Individual`, :py:`Population`, and :py:`Community` objects
 ===============================================================
@@ -350,6 +401,8 @@ future development of methods for interaction between :py:`Population`\s.
 (e.g. to simulate coevolutionary, speciation, or hybridization scenarios).
 
 
+-------------------------------------------------------------------------------
+
 ===================
 :py:`Model` Objects
 ===================
@@ -394,6 +447,9 @@ primarily designed for passively running numerous iterations of a :py:`Model`,
 to generate data for analysis, whereas :py:`Model.walk` is primarily designed
 for the purposes of learning, teaching, or debugging the package, or 
 developing, exploring, introspecting, or visaulizing particular :py:`Model`\s. 
+
+
+-------------------------------------------------------------------------------
 
 =================
 Secondary classes
@@ -549,6 +605,9 @@ Dispersal is currently implemeneted identically to spatially random movement
 relative its parents' centroid). But the option to use a 
 :py:`_MovementSurface` for dispersal will be offered soon.
 
+
+-------------------------------------------------------------------------------
+
 ============
 Reproduction
 ============
@@ -578,6 +637,9 @@ with :py:`Trait`\s in their
 :py:`GenomicArchitecture`\s, offspring phenotypes are 
 determined at birth. Mutations are also drawn and introduced at this 
 point (see section 'Mutation for details).
+
+
+-------------------------------------------------------------------------------
 
 =========
 Mortality
@@ -693,6 +755,9 @@ the absolute difference between an :py:`Individual`'s
 optimal and actual phenotypes increases; the default value of 1 causes 
 fitness to decrease linearly around the optimal phenotypic value). 
 
+
+-------------------------------------------------------------------------------
+
 ========
 Mutation
 ========
@@ -725,15 +790,19 @@ are more or less analogous:
   but as a deleterious mutation in another). 
 
 
-======================
-Population interaction
-======================
+-------------------------------------------------------------------------------
+
+=======================
+Population interactions
+=======================
 
 This functionality is not yet included available. But the Community class was 
 created in advance recognition that this functionality could be desirable 
 for future versions (e.g. to simulate coevolutionary, speciation, or 
 hybridization scenarios).
 
+
+-------------------------------------------------------------------------------
 
 ==========================
 Land and population change
@@ -926,7 +995,6 @@ This section should serve as your primary point of reference
 if you confront any uncertainty while creating your own parameters files.
 We'll start with the section of parameters that
 pertains to the :py:`Land` object.
-
 
 
 ===============

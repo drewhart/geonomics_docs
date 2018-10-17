@@ -60,6 +60,26 @@
 <h1>Geonomics<a class="headerlink" href="#geonomics" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="a-python-package-for-easy-construction-of-individual-based-spatially-explicit-forward-time-and-highly-customizable-landscape-genomics-simulations">
 <h2>A Python package for easy construction of individual-based, spatially explicit, forward-time, and highly customizable landscape-genomics simulations<a class="headerlink" href="#a-python-package-for-easy-construction-of-individual-based-spatially-explicit-forward-time-and-highly-customizable-landscape-genomics-simulations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="provides">
+<h3>Provides<a class="headerlink" href="#provides" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ol class="arabic simple">
+<li><code class="code py python docutils literal"><span class="name"><span class="pre">Land</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>,
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> classes</li>
+<li>A <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> class that builds objects of the aforementioned classes
+according to the scenario stipulated in a parameters file,
+then uses them to run numerous simulation iterations</li>
+<li>Classes to help the user to save data and basic statistics
+from those iterations at all desired timesteps</li>
+</ol>
+<ol class="arabic simple" start="3">
+<li>Classes to help the user model arbitrarily complex landscape- and
+demographic-change scenarios</li>
+<li>Numerous visualization methods, to help the user design, run, explore,
+present, and explain their models’ behavior and results</li>
+</ol>
+</div></blockquote>
+</div>
 <div class="section" id="intro">
 <h3>Intro<a class="headerlink" href="#intro" title="Permalink to this headline">¶</a></h3>
 <p>Backward-time (i.e. coalescent) simulators abound.
@@ -87,11 +107,36 @@ interested, expert users). Essentially, anyone should be able to build their
 own, arbitrarily complex Geonomics models as long as they know how to install
 the package, open a Python console, call Python functions, and edit some
 default values in a pre-packaged script.</p>
-<p>For proper acquaintance with the model, however, it will be helpful to
-understand the concept of <strong>object-oriented programming</strong>.  Python is a very
-handy language for object-oriented programming, and this is the primary
-programming paradigm in which Geonomics is written. Essentially,
-object-orientation involves:</p>
+<p>Geonomics will allow you to:</p>
+<blockquote>
+<div><ul class="simple">
+<li>create a landscape (known as
+the <code class="code py python docutils literal"><span class="name"><span class="pre">Land</span></span></code>) with any number of layers (known as <code class="code py python docutils literal"><span class="name"><span class="pre">Scape</span></span></code>s) in it;</li>
+<li>create any number of populations (<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s) living on that
+<code class="code py python docutils literal"><span class="name"><span class="pre">Land</span></span></code>, each of which is composed of a bunch of
+independent <code class="code py python docutils literal"><span class="name"><span class="pre">Indivdual</span></span></code>s, and each of which will have a bunch of
+parameters dsecribing what it’s like and how it lives;</li>
+<li>optionally give the <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s of any <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s
+genomes, which can optionally determine phenotypes for any number
+of <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s (all of this is controlled by the
+<code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> that you would create for
+the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s);</li>
+<li>simulate any number of timsesteps of the evolution of those
+<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s on that <code class="code py python docutils literal"><span class="name"><span class="pre">Land</span></span></code>, where each timestep can include
+movement, mating, mortality (by density-dependence and optionally also by
+natural selection), and demographic, life-history, or
+environmental changes</li>
+</ul>
+</div></blockquote>
+<hr class="docutils" />
+<div class="section" id="object-orientation">
+<h4>Object-orientation<a class="headerlink" href="#object-orientation" title="Permalink to this headline">¶</a></h4>
+<p>For a more technical understanding of the model, it may be helpful to
+understand the concept of <strong>object-oriented programming</strong>.  Here is a very
+brief tutorial for the unacquainted:</p>
+<p>Python is a very handy language for object-oriented programming,
+and this is the primary programming paradigm in which Geonomics is written.
+Essentially, object-orientation involves:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li>Defining certain types of data structures, or <strong>classes</strong> (e.g.
@@ -106,32 +151,20 @@ beep!”, wheras <code class="code docutils literal"><span class="pre">batmobile
 return “&lt;Batman theme song&gt;”).</li>
 </ol>
 </div></blockquote>
-<p>Geonomics defines a number of <strong>classes</strong>, some with a number of <strong>methods</strong>
-designed specifically for the user. The user will create <strong>objects</strong>
-belongining to these classes, using their own particular data values
-(i.e. with the values they define in the paramaters files they create). Then
-the user will call key <strong>methods</strong> on these <strong>objects</strong>, in order to get them
-to carry out their behaviors (that is to say, to get them to run a
-simulation).</p>
+<p>Geonomics defines a number of <strong>classes</strong> (such as the <code class="code py python docutils literal"><span class="name"><span class="pre">Land</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Scape</span></span></code>,
+<code class="code py python docutils literal"><span class="name"><span class="pre">Popualtion</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> classes mentioned
+above. The user will use the values they specfiy in a parameters file to
+create <strong>objects</strong> belongining to these classes. Then the user will call
+key <strong>methods</strong> that belong to these <strong>objects</strong>, to get them
+to carry out certain behaviors (which are what constitute the simulation).</p>
 <p>The subsequent documentation will present the <strong>classes</strong> definined in
 Geonomics and their key <strong>methods</strong>. It will explain exactly what those methods
 do, and how what they do fits into the overall structure and function of
 Geonomics models.</p>
-<p>In brief, Geonomics provides the following components:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><code class="code docutils literal"><span class="pre">Land</span></code>, <code class="code docutils literal"><span class="pre">GenomicArchitecture</span></code>, <code class="code docutils literal"><span class="pre">Trait</span></code>,
-<code class="code docutils literal"><span class="pre">Individual</span></code>, <code class="code docutils literal"><span class="pre">Population</span></code>, and <code class="code docutils literal"><span class="pre">Community</span></code> classes;</li>
-<li>A <code class="code docutils literal"><span class="pre">Model</span></code> class that builds objects of the aforementioned classes
-according to the scenario stipulated in a parameters file,
-uses them to run numerous simulation iterations, and saves data
-and basic statistics from those iterations at all desired timesteps;</li>
-<li>Classes for planning arbitrarily complex landscape- and
-demographic-change scenarios;</li>
-<li>Numerous visualization methods, to help users design, run, explore,
-present, and explain their models’ behavior and results.</li>
-</ol>
-</div></blockquote>
+</div>
+<hr class="docutils" />
+<div class="section" id="getting-started">
+<h4>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h4>
 <dl class="docutils">
 <dt><strong>For the beginner</strong>, we recommend the following steps:</dt>
 <dd><ol class="first last arabic simple">
@@ -164,11 +197,14 @@ installed, you should be able to run the following code:</p>
 parameters file in your current working directory,
 then use that file to instantiate and run a <code class="code docutils literal"><span class="pre">Model</span></code> using the default
 parameter values.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="the-documentation">
+<h4>The documentation<a class="headerlink" href="#the-documentation" title="Permalink to this headline">¶</a></h4>
 <p>Finally, some brief notes about the structure and style of this documentation:</p>
 <blockquote>
-<div><p>It is designed to be read from from the beginning (though not
-necessarily all the way to the end, as the information generally
-becomes increasingly detailed). However, given the
+<div><p>It is designed to be read from from the top down; information generally
+becomes increasingly detailed as you scroll down). However, given the
 interrelationships between all the components of a Geonomics
 <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>, there are inevitably places where you’ll run
 into material that relates to material from another section.
@@ -178,6 +214,8 @@ information.</p>
 that Numpy has been imported <code class="code py python docutils literal"><span class="keyword"><span class="pre">as</span></span> <span class="name"><span class="pre">np</span></span></code>.</p>
 </div></blockquote>
 <p>Merry modeling!</p>
+<hr class="docutils" />
+</div>
 </div>
 <hr class="docutils" />
 <div class="section" id="model-organization">
@@ -229,6 +267,7 @@ and projection (‘prj’), which default to 1, (0,0), and None but
 will be set otherwise if some or all of the <code class="code py python docutils literal"><span class="name"><span class="pre">Scape</span></span></code> layers are read in from
 real-world GIS rasters.</p>
 </div>
+<hr class="docutils" />
 <div class="section" id="genomes-genomicarchitecture-and-trait-objects">
 <h4>Genomes, <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> objects<a class="headerlink" href="#genomes-genomicarchitecture-and-trait-objects" title="Permalink to this headline">¶</a></h4>
 <p><code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> objects (see section ‘<code class="code py python docutils literal"><span class="name"><span class="pre">Individuals</span></span></code>
@@ -318,6 +357,7 @@ all loci (rows) in the <code class="code py python docutils literal"><span class
 these values will override any other values provided in the ‘genome’
 subsection of the population’s parameters.</p>
 </div>
+<hr class="docutils" />
 <div class="section" id="individual-population-and-community-objects">
 <h4><code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> objects<a class="headerlink" href="#individual-population-and-community-objects" title="Permalink to this headline">¶</a></h4>
 <p>Being that Geonomics is an individual-based model, individuals serve as
@@ -362,6 +402,7 @@ of interest. However, its implementation will facilitate the potential
 future development of methods for interaction between <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s.
 (e.g. to simulate coevolutionary, speciation, or hybridization scenarios).</p>
 </div>
+<hr class="docutils" />
 <div class="section" id="model-objects">
 <h4><code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> Objects<a class="headerlink" href="#model-objects" title="Permalink to this headline">¶</a></h4>
 <p>Objects of the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> class serve as the main interface between the user
@@ -409,6 +450,7 @@ to generate data for analysis, whereas <code class="code py python docutils lite
 for the purposes of learning, teaching, or debugging the package, or
 developing, exploring, introspecting, or visaulizing particular <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>s.</p>
 </div>
+<hr class="docutils" />
 <div class="section" id="secondary-classes">
 <h4>Secondary classes<a class="headerlink" href="#secondary-classes" title="Permalink to this headline">¶</a></h4>
 <p>The typical user will not need to access or interact with the following
@@ -541,6 +583,7 @@ section ‘<code class="code py python docutils literal"><span class="name"><spa
 relative its parents’ centroid). But the option to use a
 <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> for dispersal will be offered soon.</p>
 </div>
+<hr class="docutils" />
 <div class="section" id="reproduction">
 <h4>Reproduction<a class="headerlink" href="#reproduction" title="Permalink to this headline">¶</a></h4>
 <p>Each timestep, for each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, all pairs of individuals within
@@ -568,6 +611,7 @@ with <code class="code py python docutils literal"><span class="name"><span clas
 determined at birth. Mutations are also drawn and introduced at this
 point (see section ‘Mutation for details).</p>
 </div>
+<hr class="docutils" />
 <div class="section" id="mortality">
 <h4>Mortality<a class="headerlink" href="#mortality" title="Permalink to this headline">¶</a></h4>
 <p>Mortality can occur as a combination of two factors: <strong>density dependence</strong>
@@ -666,6 +710,7 @@ optimal and actual phenotypes increases; the default value of 1 causes
 fitness to decrease linearly around the optimal phenotypic value).</p>
 </div>
 </div>
+<hr class="docutils" />
 <div class="section" id="mutation">
 <h4>Mutation<a class="headerlink" href="#mutation" title="Permalink to this headline">¶</a></h4>
 <p>Geonomics can model mutations of three different types: <strong>neutral</strong>,
@@ -696,13 +741,15 @@ a beneficial mutation is one region of the <code class="code py python docutils 
 but as a deleterious mutation in another).</li>
 </ul>
 </div>
-<div class="section" id="population-interaction">
-<h4>Population interaction<a class="headerlink" href="#population-interaction" title="Permalink to this headline">¶</a></h4>
+<hr class="docutils" />
+<div class="section" id="population-interactions">
+<h4>Population interactions<a class="headerlink" href="#population-interactions" title="Permalink to this headline">¶</a></h4>
 <p>This functionality is not yet included available. But the Community class was
 created in advance recognition that this functionality could be desirable
 for future versions (e.g. to simulate coevolutionary, speciation, or
 hybridization scenarios).</p>
 </div>
+<hr class="docutils" />
 <div class="section" id="land-and-population-change">
 <h4>Land and population change<a class="headerlink" href="#land-and-population-change" title="Permalink to this headline">¶</a></h4>
 <p>For a given <code class="code py python docutils literal"><span class="name"><span class="pre">Scape</span></span></code>, any number of landsacpe change events can be planned.
