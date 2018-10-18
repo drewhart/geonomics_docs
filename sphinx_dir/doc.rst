@@ -39,7 +39,7 @@ A Python package for easy construction of individual-based, spatially explicit, 
 Provides
 ********
 
-  1. :py:`Land`, :py:`GenomicArchitecture`, :py:`Trait`,
+  1. :py:`Landscape`, :py:`GenomicArchitecture`, :py:`Trait`,
      :py:`Individual`, :py:`Population`, and :py:`Community` classes
   2. A :py:`Model` class that builds objects of the aforementioned classes 
      according to the scenario stipulated in a parameters file,
@@ -85,10 +85,9 @@ default values in a pre-packaged script.
 
 Geonomics will allow you to:
 
-  - create a landscape (known as 
-    the :py:`Land`) with any number of layers (known as :py:`Scape`\s) in it; 
-  - create any number of populations (:py:`Population`\s) living on that
-    :py:`Land`, each of which is composed of a bunch of 
+  - create a :py:`Landscape` with any number of :py:`Layers` in it; 
+  - create any number of :py:`Population`\s living on that
+    :py:`Landscape`, each of which is composed of a bunch of 
     independent :py:`Indivdual`\s, and each of which will have a bunch of
     parameters dsecribing what it's like and how it lives;
   - optionally give the :py:`Individual`\s of any :py:`Population`\s
@@ -97,7 +96,7 @@ Geonomics will allow you to:
     :py:`GenomicArchitecture` that you would create for
     the :py:`Population`\s);
   - simulate any number of timsesteps of the evolution of those
-    :py:`Population`\s on that :py:`Land`, where each timestep can include
+    :py:`Population`\s on that :py:`Landscape`, where each timestep can include
     movement, mating, mortality (by density-dependence and optionally also by
     natural selection), and demographic, life-history, or
     environmental changes
@@ -127,7 +126,8 @@ Essentially, object-orientation involves:
      beep!", wheras :code:`batmobile.honk()` might
      return "<Batman theme song>"). 
      
-Geonomics defines a number of **classes** (such as the :py:`Land`, :py:`Scape`,
+Geonomics defines a number of **classes**
+(such as the :py:`Landscape`, :py:`Layer`,
 :py:`Popualtion`, :py:`GenomicArchitecture`, and :py:`Trait` classes mentioned
 above. The user will use the values they specfiy in a parameters file to
 create **objects** belongining to these classes. Then the user will call
@@ -234,32 +234,32 @@ Geonomics classes. Users will interface with these classes more or less
 directly when running Geonomics models, so a fundamental understanding of how 
 they're organized and how they work will be useful.
 
-==================================
-:py:`Land` and :py:`Scape` objects
-==================================
+=======================================
+:py:`Landscape` and :py:`Layer` objects
+=======================================
 
 One of the core components of a Geonomics model is the land. The land is
-modeled by the :py:`Land` class. This class is an 
+modeled by the :py:`Landscape` class. This class is an 
 integer-keyed :py:`dict` composed of numerous instances of the
-class :py:`Scape`. Each :py:`Scape` represents a separate 
+class :py:`Layer`. Each :py:`Layer` represents a separate 
 environmental variable (or 'layer', in GIS terminology),
 which is modeled a 2d Numpy array (or raster; in
 attribute 'rast'), of identical dimensions to each 
-other :py:`Scape` in the :py:`Land`
+other :py:`Layer` in the :py:`Landscape`
 object, and with the values of its environmental variable 'e' constrained to
-the interval [0 <= e <= 1]. Each :py:`Scape` can be initialized from its own
+the interval [0 <= e <= 1]. Each :py:`Layer` can be initialized from its own
 parameters subsection within the 'land' parameters section of a Geonomics
 parameters file. 
 
 For each :py:`Population` (see section ':py:`Individuals`
-and :py:`Populations`', below), the different :py:`Scape`
-layers in the :py:`Land` can be used to model habitat 
+and :py:`Populations`', below), the different :py:`Layer`
+layers in the :py:`Landscape` can be used to model habitat 
 viability, habitat connectivity, or variables imposing spatially varying
-natural selection. :py:`Land` and :py:`Scape` objects
+natural selection. :py:`Landscape` and :py:`Layer` objects
 also contain some metatdata (as public attributes), including
 the resolution (attribute 'res'), upper-left corner ('ulc'),
 and projection ('prj'), which default to 1, (0,0), and None but
-will be set otherwise if some or all of the :py:`Scape` layers are read in from
+will be set otherwise if some or all of the :py:`Layer` layers are read in from
 real-world GIS rasters.
 
 
@@ -362,8 +362,8 @@ Each :py:`Individual` has an index (saved
 as attribute 'idx'), a sex (attribute 'sex'), an age (attribute 'age'), 
 an x,y position (in continuous space; attributes 'x' and 'y'), and a 
 :py:`list` of environment values (attribute 'e'), extracted from the 
-:py:`Individual`'s current cell on each :py:`Scape` of the :py:`Land` on which 
-the :py:`Individual` lives.
+:py:`Individual`'s current cell on each :py:`Layer`
+of the :py:`Landscape` on which the :py:`Individual` lives.
 
 The :py:`Population` class is an :py:`OrderedDict`
 (defined by the :py:`collections` 
@@ -395,7 +395,7 @@ are collected in the :py:`Model`'s
 is simply an integer-keyed :py:`dict` 
 of :py:`Population`\s. For the time being, the :py:`Community` object allows a 
 Geonomics :py:`Model` to simulate multiple :py:`Population`\s simultaneously on 
-the same :py:`Land`, but otherwise affords no additional functionality
+the same :py:`Landscape`, but otherwise affords no additional functionality
 of interest. However, its implementation will facilitate the potential 
 future development of methods for interaction between :py:`Population`\s. 
 (e.g. to simulate coevolutionary, speciation, or hybridization scenarios).
@@ -409,7 +409,7 @@ future development of methods for interaction between :py:`Population`\s.
 
 Objects of the :py:`Model` class serve as the main interface between the user 
 and the Geonomics program. (While it is certainly possible for a user 
-to work directly with the :py:`Land`
+to work directly with the :py:`Landscape`
 and :py:`Population` or :py:`Community` objects to 
 script their own custom models, the typical user should find that the 
 :py:`Model` object allows them accomplish their goals with minimal toil.)
@@ -422,7 +422,7 @@ for creating and running a  :py:`Model` object is as follows:
   2. Define the scenario to be simulated, by opening and editing that 
      parameters file (and optionally, creating/editing corresponding 
      files, e.g. genomic-architecture CSV files;
-     or raster or numpy-array files to be used as :py:`Scape`\s);
+     or raster or numpy-array files to be used as :py:`Layer`\s);
   3. Instantiate a :py:`Model` object from that parameters file, by calling 
      :py:`mod = gnx.make_model('/path/to/params_filename.py')`;
   4. Run the :py:`Model`, by calling :py:`mod.run()`.
@@ -435,7 +435,7 @@ When a :py:`Model` is run, it will:
      determine that the burn-in is complete);
   2. Run the main model for the stipulated number of timesteps;
   3. Repeat this for the stipulated number of iterations (retaining or 
-     refreshing the first run's initial :py:`Land` and :py:`Population` 
+     refreshing the first run's initial :py:`Landscape` and :py:`Population` 
      objects as stipulated).
 
 The :py:`Model` object offers one other method, however, :py:`Model.walk`, 
@@ -472,16 +472,16 @@ The :py:`_MovementSurface` class allows Geonomics
 to model a :py:`Population`'s 
 realistic movement across a spatially varying landscape. It does this by 
 creating an array of circular probability distributions (i.e. VonMises 
-distributions), one for each cell on the :py:`Land`, from which 
+distributions), one for each cell on the :py:`Landscape`, from which 
 :py:`Individual`\s choose their directions each time they move. To create the
 :py:`_MovementSurface` for a :py:`Population`,
-the user must indicate the :py:`Scape` 
-that should be used to create it (i.e. the :py:`Scape` that represents 
+the user must indicate the :py:`Layer` 
+that should be used to create it (i.e. the :py:`Layer` that represents 
 landscape permeability for that :py:`Population`). The :py:`_MovementSurface`'s 
 distributions can be **simple (i.e. unimodal)**, such that the 
 maximum value of the distribution at each cell will point toward the
 maximum value in the 8-cell neighborhood; this works best for permeability 
-:py:`Scape`\s with shallow, monotonic gradients, because the differences 
+:py:`Layer`\s with shallow, monotonic gradients, because the differences 
 between permeability values of neighboring cells can be minor (e.g. a 
 gradient representing the directionality of a prevalent current). 
 Alternatively, the distributions can be **mixture (i.e. multimodal)**
@@ -489,12 +489,14 @@ distributions, which are weighted sums of 8 unimodal distributions, one
 for each neighboring cell, where the weights are the relative cell 
 permeabilities (i.e. the relative probabilities that an :py:`Individual` would 
 move into each of the 8 neighboring cells); this works best for non-monotonic, 
-complex permeability :py:`Scape`\s (e.g. a DEM of a mountainous region that is 
-used as a permeability :py:`Scape`). (The :py:`Land` is surrounded by a margin 
-of 0-permeability cells before the :py:`_MovementSurface` is calculated, such 
-that :py:`Land` edges are treated as barriers to movement.) The class consists 
+complex permeability :py:`Layer`\s (e.g. a DEM of a mountainous region that is 
+used as a permeability :py:`Layer`). 
+(The :py:`Landscape` is surrounded by a margin of 0-permeability 
+cells before the :py:`_MovementSurface` is calculated, such 
+that :py:`Landscape` edges are treated 
+as barriers to movement.) The class consists 
 principally of a 3d Numpy array (x by y by z, where x and y are the 
-dimensions of the :py:`Land` and z is the length of the vector of values 
+dimensions of the :py:`Landscape` and z is the length of the vector of values 
 used to approximate the distributions in each cell.
 
 -----------------------
@@ -505,7 +507,7 @@ The :py:`_DensityGridStack` class implements an algorithm for rapid estimating
 an array of the local density of a :py:`Population`. The density is estimated 
 using a sliding window approach, with the window-width determining the 
 neighborhood size of the estimate. The resulting array has a spatial 
-resolution equivalent to that of the :py:`Land`, and is used in all
+resolution equivalent to that of the :py:`Landscape`, and is used in all
 density-dependent operations.
 
 -------------
@@ -532,12 +534,12 @@ construction of the :py:`Model`, then drawn randomly as needed (i.e.
 each time an :py:`Individual` produces a gamete). This provides a 
 reasonable trade-off between realistic modelling of recombination and runtime.
 
------------------------------------------------
-:py:`_LandChanger` and :py:`_PopulationChanger`
------------------------------------------------
+----------------------------------------------------
+:py:`_LandscapeChanger` and :py:`_PopulationChanger`
+----------------------------------------------------
 
 These classes manage all of the landscape changes and demographic changes 
-that were parameterized for the :py:`Land` and
+that were parameterized for the :py:`Landscape` and
 :py:`Population` objects to which they inhere. 
 The functions creating these changes are defined at the outset, 
 then queued and called at their scheduled timesteps.
@@ -673,15 +675,17 @@ Density dependence
 Density dependence is implemented using a spatialized form of the class 
 logistic growth equation (:math:`\frac{\mathrm{d}
 N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})`, 
-where the x,y subscripts refer to values for a given cell on the :py:`Land`).
+where the x,y subscripts refer to
+values for a given cell on the :py:`Landscape`).
 Each :py:`Population` has a carrying-capacity raster (a 2d Numpy array; 
 attribute 'K'), which is defined in the parameters file to be 
-one of the :py:`Scape`\s in the :py:`Land`.
+one of the :py:`Layer`\s in the :py:`Landscape`.
 The comparison between this raster and 
 the population-density raster calculated at each timestep serves as the 
 basis for the spatialized logistic growth equation, because both 
 equations can be calculated cell-wise for the entire extent of the 
-:py:`Land` (using the :py:`Population`'s intrinsic growth rate, the attribute 
+:py:`Landscape` (using the :py:`Population`'s
+intrinsic growth rate, the attribute 
 'R', which is set in the parameters file).
 
 The logistic equation returns an array of instantaneous population growth 
@@ -709,13 +713,13 @@ Selection on a :py:`Trait` can exhibit three regimes: **spatially divergent**,
 is the default behavior, and the most commonly used; in this form of 
 selection, an :py:`Individual`'s fitness depends on the absolute difference 
 between the :py:`Individual`'s phenotypic value and the environmental
-value of the relevant :py:`Scape` (i.e. the :py:`Scape` that represents the 
+value of the relevant :py:`Layer` (i.e. the :py:`Layer` that represents the 
 environmental variable acting as the selective force) in the cell where 
 the :py:`Individual` is located.
 
 **Universal** selection (which can be toggled using the 'univ_adv' 
 parameter with a :py:`Trait`'s section in the parameters file) occurs 
-when a phenotype of 1 is optimal everywhere on the :py:`Land`. In other 
+when a phenotype of 1 is optimal everywhere on the :py:`Landscape`. In other 
 words, it represents directional selection on an entire :py:`Population`,
 regardless of :py:`Individual`\s' spatial contexts. (Note that this can
 be thought of as operating the same as spatially divergent selection,
@@ -729,7 +733,8 @@ is *not mutually exclusive* with the other two; in other words,
 selection on a certain :py:`Trait` be both spatially contingent 
 and either spatially divergent or universal. Spatially contingent selection 
 can be implemented by providing an array of values (equal in dimensions 
-to the :py:`Land`) to the 'phi' value of a :py:`Trait`, rather than a scalar 
+to the :py:`Landscape`) to the 'phi' value of a
+:py:`Trait`, rather than a scalar 
 value (which could be done within the parameters file itself, but may be 
 more easily accomplished as a step between reading in a parameters file and 
 instantiating a :py:`Model` object from it). (Note that non-spatailly
@@ -746,7 +751,7 @@ be thought of as special cases of the following equation for the fitness of
 
 where :math:`\\phi_{p;x,y}` is the selection coefficient of trait 
 :math:`p`; :math:`e_{p;x,y}` is the environmental variable of the 
-relevant :py:`Scape` at :py:`Individual` :math:`i`'s x,y location
+relevant :py:`Layer` at :py:`Individual` :math:`i`'s x,y location
 (which can also be thought of as the :py:`Individual`'s optimal 
 phenotype); :math:`z_{i;p}` is :py:`Individual` :math:`i`'s (actual) 
 phenotype for :py:`Trait` :math:`p`; and :math:`gamma_{p}` controls 
@@ -786,7 +791,7 @@ are more or less analogous:
   because the same mutant genotype in the same :py:`Individual`
   could have opposite effects on that :py:`Individual`'s fitness 
   in different environmental contexts (i.e. it could behave as
-  a beneficial mutation is one region of the :py:`Land` 
+  a beneficial mutation is one region of the :py:`Landscape` 
   but as a deleterious mutation in another). 
 
 
@@ -804,18 +809,19 @@ hybridization scenarios).
 
 -------------------------------------------------------------------------------
 
-==========================
-Land and population change
-==========================
+===========================================
+:py:`Landscape` and :py:`Population` change
+===========================================
 
-For a given :py:`Scape`, any number of landsacpe change events can be planned. 
+For a given :py:`Layer`, any number of change events 
+can be planned. 
 In the parameters file, for each event, the user stipulates the initial
 timestep; the final timestep; the end raster (i.e. the array 
-of the :py:`Scape` that will exist after the event is complete, defined using
+of the :py:`Layer` that will exist after the event is complete, defined using
 the **end_rast** parameter); and the 
 interval at which intermediate changes will occur.  When the :py:`Model` is 
-created, the stepped series of intermediate landscapes (and 
-:py:`_MovementSurface` objects, if the :py:`Scape` that is changing serves 
+created, the stepped series of intermediate :py:`Layers` (and 
+:py:`_MovementSurface` objects, if the :py:`Layer` that is changing serves 
 as the basis of a :py:`_MovementSurface` for any :py:`Population`) will be 
 created and queued, so that they will swap out accordingly at the appropriate 
 timesteps.
@@ -825,7 +831,7 @@ also be planned. In the parameters file, for each event, the user
 stipulates the type of the event ('monotonic', 'cyclical', 'random', or 
 'custom') as well as the values of a number of associated 
 parameters (precisely which parameters depdends on the type of event chosen).
-As with landscape change events, all necessary stepwise changes will be 
+As with :py:`Landscape` change events, all necessary stepwise changes will be 
 planned and queued when the :py:`Model` is created, and will be 
 executed at the appropriate timesteps.
 
@@ -860,7 +866,8 @@ that has no :py:`GenomicArchitecture`; and likewise, the
 :py:`Population.plot_demographic_changes` method cannot be called for a 
 :py:`Population` for which demographic changes were not parameterized).
 
-The :py:`Land` object and its :py:`Scape`\s also both have a :py:`plot` method.
+The :py:`Landscape` object and its :py:`Layer`\s also
+both have a :py:`plot` method.
 
 
 -------------------------------------------------------------------------------
@@ -873,10 +880,10 @@ In order to create and run a Geonomics :py:`Model`, you will need a valid
 Geonomics parameters file. No worry though -- this is very easy to create!
 To generate a new, template parameters file, you will simply call the
 :py:`gnx.make_parameters_file` function, feeding it the appropriate
-arguments (to indicate how many :py:`Population`\s and :py:`Scape`\s you
+arguments (to indicate how many :py:`Population`\s and :py:`Layer`\s you
 want to include in your :py:`Model`; which parameters sections you want
 included in the file, both for those
-:py:`Scape`\s and :py:`Population`\s and for
+:py:`Layer`\s and :py:`Population`\s and for
 other components of the :py:`Model`; and the path and filename for your new
 parameters file). Geonomics will then automatically create the file for you, 
 arranged as you requested and saved where you requested.
@@ -920,7 +927,7 @@ When you then open that file, you will see the following:
       #### main ####
       ##############
           'main': {
-              # dimensions of the Land
+              # dimensions of the Landscape
               'dim':                      (20,20),
 
      #.
@@ -994,12 +1001,12 @@ reset? <ranking>
 This section should serve as your primary point of reference
 if you confront any uncertainty while creating your own parameters files.
 We'll start with the section of parameters that
-pertains to the :py:`Land` object.
+pertains to the :py:`Landscape` object.
 
 
-===============
-Land parameters
-===============
+====================
+Landscape parameters
+====================
 
 ----
 Main
@@ -1020,9 +1027,9 @@ default: :py:`(20,20)`
 
 reset: P
   
-  This defines the x and y dimensions of the :py:`Land`, in units of cells. As
-  you might imagine, these values are used for a wide variety of basic
-  operations throughout Geonomics. Change the
+  This defines the x and y dimensions of the :py:`Landscape`,
+  in units of cells. As you might imagine, these values are used 
+  for a wide variety of basic operations throughout Geonomics. Change the
   default value to the dimensions of the landscape you wish to simulate on.
 
 
@@ -1041,13 +1048,13 @@ default: :py:`(1,1)`
 
 reset: N
 
-  This defines the :py:`Land` resolution (or cell-size) in the x and y
-  dimensions. This information is only used if GIS rasters of :py:`Land` 
+  This defines the :py:`Landscape` resolution (or cell-size) in the x and y
+  dimensions. This information is only used if GIS rasters of :py:`Landscape` 
   layers are to be written out as GIS raster files (as parameterized in the
   'Data' parameters). Defaults to the meaningless value (1,1), and this value
   generally needn't be changed in your parameters file, because it will 
   be automatically updated to the resolution of any GIS rasters that 
-  are read in for use as :py:`Scapes` (assuming they all share the same
+  are read in for use as :py:`Layers` (assuming they all share the same
   resolution; otherwise, an Error is thrown). 
 
 
@@ -1066,13 +1073,15 @@ default: :py:`(0,0)`
 
 reset: N
 
-  This defines the upper-left corner (ULC) of the :py:`Land` (in the units of
+  This defines the upper-left corner (ULC) of the 
+  :py:`Landscape` (in the units of
   some real-world coordinate reference system, e.g. decimal degrees, or
-  meters). This information is only used if GIS rasters of :py:`Land` layers are
-  to be written out as GIS raster files. Defaults to the meaningless value
+  meters). This information is only used if GIS rasters of 
+  :py:`Landscape` layers are to be written out as GIS raster files. 
+  Defaults to the meaningless value
   (0,0), and this value usually needn't be changed in your parameters file,
   because it will be automatically updated to match the ULC value 
-  of any GIS rasters that are read in for use as :py:`Scapes` (assuming 
+  of any GIS rasters that are read in for use as :py:`Layers` (assuming 
   they all share the same ULC; otherwise, an Error is thrown).
 
         
@@ -1091,49 +1100,50 @@ default: :py:`None`
 
 reset: N
 
-  This defines the projection of the :py:`Land`, as a string of Well Known Text
-  (WKT). This information is only used if GIS rasters of :py:`Land` layers are
+  This defines the projection of the :py:`Landscape`, as a
+  string of Well Known Text (WKT). 
+  This information is only used if GIS rasters of :py:`Landscape` layers are
   to be written out as GIS raster files. Defaults to :py:`None`, which is fine,
   because this value will be automatically updated to match the projection
-  of any GIS rasters that are read in for us as :py:`Scapes` (assuming they
+  of any GIS rasters that are read in for us as :py:`Layers` (assuming they
   all share the same projection; otherwise, an Error is thrown)
 
 
 
 ------
-Scapes
+Layers
 ------
 
 ------------------------------------------------------------------------------
 
-**scape_<n>**
+**layer_<n>**
 
 .. code-block:: python
      
       ################
-      #### scapes ####
+      #### layers ####
       ################
-          'scapes': {
-              #scape name (SCAPE NAMES MUST BE UNIQUE!) 
-              'scape_0': {
+          'layers': {
+              #layer name (LAYER NAMES MUST BE UNIQUE!) 
+              'layer_0': {
 
 {:py:`str`, :py:`int`}
 
-default: :py:`scape_<n>` 
+default: :py:`layer_<n>` 
 
 reset? P
 
-This parameter defines the name for each :py:`Scape`. (Note that unlike most
+This parameter defines the name for each :py:`Layer`. (Note that unlike most
 parameters, it is a :py:`dict` key, the value for which is a :py:`dict`
-of parameters defining the :py:`Scape` being named.) As the capitalized
-reminder in the parameters states, each :py:`Scape` must have a unique name
-(so that a parameterized :py:`Scape` isn't overwritten in the
-:py:`ParametersDict` by a second, identically-named :py:`Scape`; Geonomics
+of parameters defining the :py:`Layer` being named.) As the capitalized
+reminder in the parameters states, each :py:`Layer` must have a unique name
+(so that a parameterized :py:`Layer` isn't overwritten in the
+:py:`ParametersDict` by a second, identically-named :py:`Layer`; Geonomics
 checks for unique names and throws an Error if this condition is not met.
-:py:`Scape` names can, but needn't be, descriptive of what each 
-:py:`Scape` represents. Example valid values include: 0, 0.1, 'scape0', 1994,
-'1994', 'mean_ann_tmp'. Names default to :py:`scape_<n>`, where n is a series of
-integers starting from 0.
+:py:`Layer` names can, but needn't be, descriptive of what each 
+:py:`Layer` represents. Example valid values include: 0, 0.1, 'layer_0', 1994,
+'1994', 'mean_ann_tmp'. Names default to :py:`layer_<n>`,
+where n is a series of integers starting from 0.
 
 
 
@@ -1141,7 +1151,7 @@ integers starting from 0.
 Init
 ^^^^
 
-There are four different types of :py:`Scapes` that can be created. The
+There are four different types of :py:`Layers` that can be created. The
 parameters for each are explained in the next four subsections.
 
 """"""
@@ -1154,7 +1164,7 @@ random
 
 .. code-block:: python
     
-                      #parameters for a 'random'-type Scape
+                      #parameters for a 'random'-type Layer
                       'rand': {
                           #number of random points
                           'n_pts':                        500,
@@ -1166,8 +1176,8 @@ default: 500
 reset? P
 
 This defines the number of randomly located, randomly valued points
-from which the random :py:`Scape` will be interpolated. (Locations drawn
-from uniform distributions between 0 and the :py:`Land` dimensions on
+from which the random :py:`Layer` will be interpolated. (Locations drawn
+from uniform distributions between 0 and the :py:`Landscape` dimensions on
 each axis. Values drawn from a uniform distribution between 0 and 1.)
 
 
@@ -1188,7 +1198,7 @@ default: :py:`'cubic'`
 reset? N
 
 This defines the method to use to interpolate random points to the array that
-will serve as the :py:`Scape`'s raster. Whichever of the three valid values
+will serve as the :py:`Layer`'s raster. Whichever of the three valid values
 is chosen (:py:`'linear'`, :py:`'cubic'`, or :py:`'nearest'`) will be passed
 on as an argument to :py:`scipy.interpolate.griddata`. Note that the
 :py:`'nearest'` method will generate a random categorical array, such as
@@ -1205,7 +1215,7 @@ defined
 
 .. code-block:: python
    
-                      #parameters for a 'defined'-type Scape 
+                      #parameters for a 'defined'-type Layer 
                       'defined': {
                           #point coordinates
                           'pts':                    None,
@@ -1217,7 +1227,7 @@ default: :py:`None`
 reset? Y
 
 This defines the coordinates of the points that will be used to 
-interpolate this :py:`Scape`. 
+interpolate this :py:`Layer`. 
 
 
 ------------------------------------------------------------------------------
@@ -1236,7 +1246,7 @@ default: :py:`None`
 reset? Y
 
 This defines the values of the points that will be used to 
-interpolate this :py:`Scape`. 
+interpolate this :py:`Layer`. 
 
 
 ------------------------------------------------------------------------------
@@ -1245,7 +1255,7 @@ interpolate this :py:`Scape`.
 
 .. code-block:: python
 
-                          #interpolation method ('linear', 'cubic', or 'nearest')
+                          #interpolation method {'linear', 'cubic', 'nearest'}
                           'interp_method':                'cubic',
                           },
 
@@ -1256,7 +1266,7 @@ default: :py:`'cubic'`
 reset? N
 
 This defines the method to use to interpolate random points to the array that
-will serve as the :py:`Scape`'s raster. Whichever of the three valid values
+will serve as the :py:`Layer`'s raster. Whichever of the three valid values
 is chosen (:py:`'linear'`, :py:`'cubic'`, or :py:`'nearest'`) will be passed
 on as an argument to :py:`scipy.interpolate.griddata`. Note that the
 :py:`'nearest'` method will generate a random categorical array, such as
@@ -1273,7 +1283,7 @@ file
 
 .. code-block:: python
   
-                      #parameters for a 'file'-type Scape 
+                      #parameters for a 'file'-type Layer 
                       'file': {
                           #</path/to/file>.<ext>
                           'filepath':                     '/PATH/TO/FILE.EXT',
@@ -1285,11 +1295,11 @@ default: :py:`'/PATH/TO/FILE.EXT'`
 reset? Y
 
 This defines the location and name of the file that should be read in as the
-raster-array for this :py:`Scape`. Valid file types include a '.txt' file
+raster-array for this :py:`Layer`. Valid file types include a '.txt' file
 containing a 2d :py:`np.ndarray`, or any GIS raster file that can be read
 by :py:`osgeo.gdal.Open`. In all cases, the raster-array read in from the
 file must have dimensions equal to the stipulated dimensions of the
-:py:`Land` (as defined in the **dims** parameter, above); otherwise,
+:py:`Landscape` (as defined in the **dims** parameter, above); otherwise,
 Geonomics will throw an Error.
 
 
@@ -1299,7 +1309,7 @@ Geonomics will throw an Error.
 
 .. code-block:: python
 
-                          #minimum value to use to rescale the Scape to [0,1]
+                          #minimum value to use to rescale the Layer to [0,1]
                           'scale_min_val':                None,
 
 {:py:`float`, :py:`int`}
@@ -1311,17 +1321,17 @@ reset? P
 This defines the minimum value (in the units of the variable represented by
 the file you are reading in) to use when rescaling the file's array to
 values between 0 and 1. (This is done to satisfy the requirement that all
-Geonomics :py:`Scape`\s have arrays in that interval). Defaults to :py:`None`
+Geonomics :py:`Layer`\s have arrays in that interval). Defaults to :py:`None`
 (in which case Geonomics will set it to the minimum value observed in this
 file's array). But note that you should put good thought into
 this parameter, because it *won't* necessarily be the minimum value
 observed in the file; for example, if this file is being used
-to create a :py:`Scape` that will undergo environmental change
+to create a :py:`Layer` that will undergo environmental change
 in your `Model`, causing its real-world values to drop
 below this file's minimum value, then you will probably want to set
-this value to the minimum real-world value that will occur for this :py:`Scape`
+this value to the minimum real-world value that will occur for this :py:`Layer`
 during your :py:`Model` scenario, so that low values
-that later arise on this `Scape` don't get truncated at 0.
+that later arise on this `Layer` don't get truncated at 0.
 
 
 ------------------------------------------------------------------------------
@@ -1330,7 +1340,7 @@ that later arise on this `Scape` don't get truncated at 0.
 
 .. code-block:: python
 
-                          #maximum value to use to rescale the Scape to [0,1]
+                          #maximum value to use to rescale the Layer to [0,1]
                           'scale_max_val':                None,
 
 {:py:`float`, :py:`int`}
@@ -1342,17 +1352,17 @@ reset? P
 This defines the maximum value (in the units of the variable represented by
 the file you are reading in) to use when rescaling the file's array to
 values between 0 and 1. (This is done to satisfy the requirement that all
-Geonomics :py:`Scape`\s have arrays in that interval). Defaults to :py:`None`
+Geonomics :py:`Layer`\s have arrays in that interval). Defaults to :py:`None`
 (in which case Geonomics will set it to the maximum value observed in this
 file's array). But note that you should put good thought into
 this parameter, because it *won't* necessarily be the maximum value
 observed in the file; for example, if this file is being used
-to create a :py:`Scape` that will undergo environmental change
+to create a :py:`Layer` that will undergo environmental change
 in your `Model`, causing its real-world values to increase
 above this file's maximum value, then you will probably want to set
 this value to the maximum real-world value that will occur for this 
-:py:`Scape` during your :py:`Model` scenario, so that high values that 
-later arise on this `Scape` don't get truncated at 1.
+:py:`Layer` during your :py:`Model` scenario, so that high values that 
+later arise on this `Layer` don't get truncated at 1.
 
 """""
 nlmpy
@@ -1364,9 +1374,9 @@ nlmpy
 
 .. code-block:: python
 
-                      #parameters for an 'nlmpy'-type Scape
+                      #parameters for an 'nlmpy'-type Layer
                       'nlmpy': {
-                          #nlmpy function to use the create this Scape
+                          #nlmpy function to use the create this Layer
                           'function':                 'mpd',
 
 :py:`str` that is the name of an :py:`nlmpy` function
@@ -1376,7 +1386,7 @@ default: :py:`'mpd'`
 reset? P
 
 This indicates the :py:`nlmpy` function that should be used to generate
-this :py:`Scape`'s array. (:py:`nlmpy` is a Python package for
+this :py:`Layer`'s array. (:py:`nlmpy` is a Python package for
 generating neutral landscape models; NLMs.) Defaults to :py:`'mpd'` (the
 function for creating a midpoint-displacement NLM). Can be set to any other
 :py:`str` that identifies a valid :py:`nlmpy` function, but then the
@@ -1406,12 +1416,12 @@ reset? P
 
 This defines the number of rows in the :py:`nlmpy` array that is created.
 As the capitalized reminder in the parameters file mentions, this must be
-equal to the y-dimension of the :py:`Land`; otherwise, an error
+equal to the y-dimension of the :py:`Landscape`; otherwise, an error
 will be thrown. Note that this parameter (as for the remaining parameters in
 this section, other than the **function** parameter) is valid for the
 default :py:`nlmpy.mpd` function that is set by the
 **function** parameter); if you are using a different :py:`nlmpy`
-function to create this :py:`Scape` then this and the remaining parameters
+function to create this :py:`Layer` then this and the remaining parameters
 must be changed to the parameters that that function needs, 
 and *only* those parameters (because they will be unpacked into that function,
 i.e. passed on to it, at the time it is called).
@@ -1435,12 +1445,12 @@ reset? P
 
 This defines the number of columns in the :py:`nlmpy` array that is created.
 As the capitalized reminder in the parameters file mentions, this must be
-equal to the x-dimension of the :py:`Land`; otherwise, an error
+equal to the x-dimension of the :py:`Landscape`; otherwise, an error
 will be thrown. Note that this parameter (as for the remaining parameters in
 this section, other than the **function** parameter) is valid for the
 default :py:`nlmpy.mpd` function that is set by the
 **function** parameter); if you are using a different :py:`nlmpy`
-function to create this :py:`Scape` then this and the remaining parameters
+function to create this :py:`Layer` then this and the remaining parameters
 must be changed to the parameters that that function needs, 
 and *only* those parameters (because they will be unpacked into that function,
 i.e. passed on to it, at the time it is called).
@@ -1468,7 +1478,7 @@ Note that this parameter (and the remaining parameters in
 this section, other than the **function** parameter) is valid for the
 default :py:`nlmpy` function (:py:`nlmpy.mpd`, which is set by the
 **function** parameter); but if you are using a different :py:`nlmpy`
-function to create this :py:`Scape` then this and the remaining parameters
+function to create this :py:`Layer` then this and the remaining parameters
 must be changed to the parameters that that function needs, 
 and *only* those parameters (because they will be unpacked into that function,
 i.e. passed on to it, at the time it is called).
@@ -1484,7 +1494,7 @@ Change
 
 .. code-block:: python
 
-                  #land-change event for this Scape
+                  #land-change event for this Layer
                   'change': {
                       #end raster for event (DIM MUST EQUAL DIM OF LAND!)
                       'end_rast':         np.zeros((20,20)),
@@ -1495,10 +1505,10 @@ default: :py:`np.zeros((20,20))`
 
 reset? Y
 
-This defines the end raster for a landscape-change event (i.e. the array 
-this :py:`Scape` will change into over the course of the event). As the
+This defines the end raster for a :py:`Landscape`-change event (i.e. the array 
+this :py:`Layer` will change into over the course of the event). As the
 capitalized reminder in the parameters file mentions, this raster must of
-course have the same dimensions as the `Land` to which the `Scape` belongs;
+course have the same dimensions as the `Landscape` to which the `Layer` belongs;
 otherwise, Genomics will throw an Error. Defaults a placeholder array
 of zeros, so should be parameterized to meet your needs. Valid values are
 a 2-d :py:`np.ndarray` object (stipulating the raster itself), or a :py:`str`
@@ -1522,7 +1532,7 @@ default: 49
 
 reset? P
 
-This indicates the timestep on which the landscape-change event
+This indicates the timestep on which the :py:`Landscape`-change event
 will begin. Defaults to 49, but should be set to suit your
 specific scenario.
 
@@ -1542,7 +1552,7 @@ default: 99
 
 reset? P
 
-This indicates the timestep on which the landscape-change event
+This indicates the timestep on which the :py:`Landscape`-change event
 will finish. Defaults to 99, but should be set to suit your
 specific scenario.
 
@@ -1563,20 +1573,20 @@ default: 5
 reset? P
 
 This indicates the number of stepwise changes to use to model a
-landscape-change event. The changes during a landscape-chagne event
-are linearly interpolated (cellwise for the whole :py:`Scape`) to this
-number of discrete, instantaneous landscape changes between
+:py:`Landscape`-change event. The changes during a :py:`Landscape`-change event
+are linearly interpolated (cellwise for the whole :py:`Layer`) to this
+number of discrete, instantaneous :py:`Landscape` changes between
 the starting and ending rasters. Thus, the fewer the number of 
 steps, the larger, magnitudinally, each change will be. So generally, more
 steps is 'better', as it will better approximate change that is continuous
 in time. However, there is a potenitally significant memory trade-off here:
 The whole series of stepwise-changed arrays is computed when the
 :py:`Model` is created, then saved and used at the appropriate timestep
-during each :py:`Model` run (and if the :py:`Scape` that is changing is used
+during each :py:`Model` run (and if the :py:`Layer` that is changing is used
 by any :py:`Population` as a :py:`_MovementSurface` then each intermediate
 :py:`_MovementSurface` is also calculated when the :py:`Model` is first
 built. These objects take up memory, which may be limiting for larger
-:py:`Model`\s and/or :py:`Land` objects. This will probably not be a
+:py:`Model`\s and/or :py:`Landscape` objects. This will probably not be a
 major issue, but is worth considering.
 
 
@@ -1607,7 +1617,7 @@ reset? P
 This parameter defines the name for each :py:`Population`.
 (Note that unlike most
 parameters, it is a :py:`dict` key, the value for which is a :py:`dict`
-of parameters defining the :py:`Scape` being named.) As the capitalized
+of parameters defining the :py:`Layer` being named.) As the capitalized
 reminder in the parameters states, each :py:`Population`
 must have a unique name (so that a parameterized 
 :py:`Population` isn't overwritten in the :py:`ParametersDict` by a
@@ -1649,29 +1659,29 @@ its various parameters).
 
 ------------------------------------------------------------------------------
 
-**K_scape**
+**K_layer**
 
 .. code-block:: python
 
-                      #name of the carrying-capacity Scape
-                      'K_scape':         'scape_0',
+                      #name of the carrying-capacity Layer
+                      'K_layer':         'layer_0',
 
 :py:`str`
 
-default: 'scape_0'
+default: 'layer_0'
 
 reset? P
 
-This indicates, by name, the :py:`Scape` to be used as the
+This indicates, by name, the :py:`Layer` to be used as the
 carrying-capacity raster for a :py:`Population`. The values of this
-:py:`Scape` should express the carrying capacity at each cell, in number
-of :py:`Individual`\s. Note that the sum of the values of this :py:`Scape`
+:py:`Layer` should express the carrying capacity at each cell, in number
+of :py:`Individual`\s. Note that the sum of the values of this :py:`Layer`
 can serve as a rough estimate of the expected stationary 
 :py:`Population` size; however, observed stationary size could vary
 substantially depending on various other :py:`Model` parameters (e.g. birth
 and death rates and mean number of offspring per mating event) as well
 as on stochastic events (e.g. failure to colonize, or survive in, all
-habitable portions of the :py:`Land`).
+habitable portions of the :py:`Landscape`).
 
 
 ^^^^^^
@@ -1936,10 +1946,10 @@ resulting surfaces calculated at different window widths, if trying
 to heuristically choose a reasonable value to set for a
 particular simulation scenario). But be aware that choosing particularly
 small window widths (in our experience, windows smaller than ~1/20th of
-the larger :py:`Land` dimension) will cause dramatic increases in the 
+the larger :py:`Landscape` dimension) will cause dramatic increases in the 
 run-time of the density calculation (which runs twice per timestep).
 Defaults to :py:`None`, which internally will be set to 1/10th of the
-larger :py:`Land` dimension; for many purposes this will work, but for
+larger :py:`Landscape` dimension; for many purposes this will work, but for
 others the user may wish to control this.
 
 
@@ -2303,7 +2313,7 @@ Movement
                       #timesteps; a value of 0 or None will default to a single
                       #data-collection step after the model has run
                   'include_land':         False,
-                      #if True, will save the Land object each time other data is saved
+                      #if True, will save the Landscape object each time other data is saved
                       #(probably only useful if land is changing in some way not manually coded by the user)
                   'include_fixed_sites':  False,
                       #if True, and if genetic data is to be formatted as VCFs,
@@ -2397,18 +2407,18 @@ filepath : str, optional
     "GEONOMICS_params_<datetime>.py" will be written to the working
     directory.
 scapes : {int, list of dicts}, optional
-    Number (and optionally, types) of Scape-parameter sections to include
+    Number (and optionally, types) of Layer-parameter sections to include
     in the parameters file that is generated. Defaults to 1. Valid values
     and their associated behaviors are:
 
     int:
-        Add sections for the stipulated number of Scapes, each with default
+        Add sections for the stipulated number of Layers, each with default
         settings:
         
-          - parameters for creating Scapes of type 'random' (i.e.
-            Scapes that will be generated by interpolation from
+          - parameters for creating Layers of type 'random' (i.e.
+            Layers that will be generated by interpolation from
             randomly valued random points)
-          - no ScapeChanger parameters
+          - no LayerChanger parameters
 
     [dict, ..., dict]:
         Each dict in this list should be of the form:
@@ -2419,7 +2429,7 @@ scapes : {int, list of dicts}, optional
 
         }
 
-        This will add one section of Scape parameters, with the
+        This will add one section of Layer parameters, with the
         contents indicated, for each dict in this list.
 populations : {int, list of dicts}, optional
     Number (and optionally, types) of Population-parameter sections to
@@ -2534,7 +2544,7 @@ file, and then call the Model.run method to run the model (setting the
 TODO: PUT TYPICAL MODEL OUTPUT HERE, EVEN THOUGH IT'S ONLY PRINTED?
 
 We can use some of the function's arguments, to create a parameters
-file for a model with 3 Scapes and 1 Population (all with the default
+file for a model with 3 Layers and 1 Population (all with the default
 components for their sections of the parameters file) and with a section
 for parameterizing data collection.
 
@@ -2543,7 +2553,7 @@ for parameterizing data collection.
 As a more complex example that is likely to be similar to most use cases,
 we can create a parameters file for a model scenario with:
 
-    - 2 Scapes (one being an nlmpy Scape that will not change over model
+    - 2 Layers (one being an nlmpy Layer that will not change over model
       time, the other being a raster read in from a GIS file and being
       subject to change over model time);
     - 2 Populations (the first having genomes, 2 Traits, and movement
@@ -2558,7 +2568,7 @@ We can save this to a file named "2-pop_2-trait_model.py" in our current
 working directory.
 
 >>> gnx.make_parameters_file(
->>>     #list of 2 dicts, each containing the values for each Scape's
+>>>     #list of 2 dicts, each containing the values for each Layer's
 >>>     #parameters section
 >>>     scapes = [
 >>>         {'type': 'nlmpy'},                              #scape 1 
@@ -2593,7 +2603,7 @@ working directory.
 Create a new ParametersDict object.
 
 Read the Geonomics parameters file saved at the location indicated by
-'filepath', check its validity (i.e. that all the Scapes and Populations
+'filepath', check its validity (i.e. that all the Layers and Populations
 parameterized in that file have been given distinct names), then use the
 file to instantiate a ParametersDict object.
 
@@ -2616,7 +2626,7 @@ dict notation or using dot notation with the keys).
 Raises
 ------
 AssertionError
-    If either the Scapes or the Populations parameterized in the parameters
+    If either the Layers or the Populations parameterized in the parameters
     file have not all been given distinct names
 
 --------
@@ -2700,7 +2710,7 @@ produced by calling gnx.make_parameters_file without any arguments).
 >>> gnx.make_model()
 <class 'sim.model.Model'>
 Model name:                                     GEONOMICS_params_13-10-2018_15:54:03
-Scapes:                                         0: '0'
+Layers:                                         0: '0'
 Populations:                                    0: '0'
 Number of iterations:                           1
 Number of burn-in timesteps (minimum):          30
@@ -2716,7 +2726,7 @@ directory.
 >>> gnx.make_model('null_model.py')
 <class 'sim.model.Model'>
 Model name:                                     null_model
-Scapes:                                         0: 'tmp'
+Layers:                                         0: 'tmp'
                                                 1: 'ppt'
 Populations:                                    0: 'C. fasciata'
 Number of iterations:                           2500
