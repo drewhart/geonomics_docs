@@ -60,20 +60,20 @@ Backward-time (i.e. coalescent) simulators abound.
 But they are inadequate for simulation of many scenarios of 
 interest, including: natural selection on traits with arbitrary genomic 
 architectures; spatially variable natural selection; simulation of populations
-distributed continiously and moving realistically across
+distributed continuously and moving realistically across
 complex landscapes; complex demographic change simultaneous with ongoing, 
 often non-stationary environmental change; and coevolutionary interactions 
-between multiple species or incpient species. Few existing forward-time 
+between multiple species or incipient species. Few existing forward-time 
 simulators can model all of these phenomena, and the few that can often 
 impose a high cost of entry (e.g. learning a new, non-standard programming
 language in order to write one's desired simulations). Geonomics aims to fill 
-this empty niche by combining ease of use with , all in a popular, 
-general-purpose scripting language. If it succeeds at doing this, Geonomics 
-should prove uniquely useful for a wide range of purposes, from intro-level 
-educational use to high-quality theoretical, methogological, empirical, and
+this empty niche by combining ease of use with broad extensibility. 
+If it succeeds at doing this, Geonomics should prove uniquely useful
+for a wide range of purposes, from intro-level educational use to
+high-quality theoretical, methodological, empirical, and
 applied research.
 
-Geonomics is written in Python. Python is a full-fledged scripting language 
+Geonomics is written in Python, a full-fledged scripting language 
 that is relatively easy to learn (and fun!). So it can be pretty quick for a
 new user to get up to speed and start doing useful work. For work with
 Geonomics, this turnaround time should be even quicker. Geonomics aims to
@@ -88,7 +88,7 @@ Geonomics will allow you to:
   - create a :py:`Landscape` with any number of :py:`Layers` in it; 
   - create any number of :py:`Population`\s living on that
     :py:`Landscape`, each of which is composed of a bunch of 
-    independent :py:`Indivdual`\s, and each of which will have a bunch of
+    independent :py:`Individual`\s, and each of which will have a bunch of
     parameters dsecribing what it's like and how it lives;
   - optionally give the :py:`Individual`\s of any :py:`Population`\s
     genomes, which can optionally determine phenotypes for any number 
@@ -206,7 +206,7 @@ Merry modeling!
 -------------------------------------------------------------------------------
 
 ******************
-Model organization 
+Model organization
 ******************
 
   ::
@@ -1714,28 +1714,6 @@ of reproduction from time of time.
 
 ------------------------------------------------------------------------------
 
-**max_age**
-
-.. code-block:: python
-                        
-                      #maximum age
-                      'max_age':              5,
-
-{:py:`int`, :py:`None`}
-
-default: 1
-
-reset? P
-
-This defines the maximum age an individual can achieve before being
-forcibly culled from the population. Defaults to 1 (which will create
-a Wright-Fisher-like simulation, with discrete generations). Can be set
-to any other age, or can be set to :py:`None` (in which case no maxmimum
-age is enforced).
-
-
-------------------------------------------------------------------------------
-
 **sex**
 
 .. code-block:: python
@@ -1880,6 +1858,28 @@ Mortality
 
 ------------------------------------------------------------------------------
 
+**max_age**
+
+.. code-block:: python
+                        
+                      #maximum age
+                      'max_age':              1,
+
+{:py:`int`, :py:`None`}
+
+default: 1
+
+reset? P
+
+This defines the maximum age an individual can achieve before being
+forcibly culled from the population. Defaults to 1 (which will create
+a Wright-Fisher-like simulation, with discrete generations). Can be set
+to any other age, or can be set to :py:`None` (in which case no maxmimum
+age is enforced).
+
+
+------------------------------------------------------------------------------
+
 **d_min**
 
 .. code-block:: python
@@ -1964,80 +1964,341 @@ Movement
 .. code-block:: python
  
                 'movement': {
-                    #expectation of distr of movement direction
-                    'direction_distr_mu':     1,
-                    #concentration of distr of movement direction
-                    'direction_distr_kappa':  0,
-                    #expectation of distr of movement distance
-                    'distance_distr_mu':      0.5,
-                    #variance of distr of movement distance
-                    'distance_distr_sigma':   0.5,
-                    #expectation of distr of dispersal distance
-                    'dispersal_distr_mu':     0.5,
-                    #variance of distr of dispersal distance
-                    'dispersal_distr_sigma':  0.5,
-                    %s
-                    },    # <END> 'movement'
-                    
+                     #mode of distr of movement direction
+                     'direction_distr_mu':     1,
+
+{:py:`int`, :py;`float`}
+
+default: 1
+
+reset? N
+
+This is the :math:`\mu` parameter of the VonMises distribution
+(a circularized Gaussian distribution) from which
+movement directions are chosen when movement is random and isotropic 
+(rather than
+being determined by a :py:`_MovementSurface`; if a :py:`_MovementSurface`
+is being usen this parameter is ignored). The :math:`\kappa` value
+that is fed into this same distribution (**direction_distr_kappa**)
+causes it to be very dispersed,
+such that the distribution is effectively a uniform distribution on 
+the unit circle (i.e. all directions are effectively equally probable).
+For this reason, changing this parameter without changing the 
+**direction_distr_kappa** value also, will make no change in the directions
+drawn for movement.  If random, isotropic
+movement is what you aim to model then there is probably little reason 
+to change these parameters.
 
 
+**direction_distr_kappa**
+
+.. code-block:: python
+
+                     #concentration of distr of movement direction
+                     'direction_distr_kappa':  0,
+
+{:py:`int`, :py:`float`}
+
+default: 0
+
+reset? N
+
+This is the :math:`\kappa` parameter of the VonMises distribution
+(a circularized Gaussian distribution) from which
+movement directions are chosen when movement is random and isotropic 
+(rather than
+being determined by a :py:`_MovementSurface`; if a :py:`_MovementSurface`
+is being usen this parameter is ignored). The default value of 0 will  
+cause this distribution to be very dispersed, approximating a uniform
+distribution on the unit circle and rendering the :math:`\mu`
+value (**direction_distr_mu**) effectively meaningless. However, as this
+parameter's value increases the resulting circular distributions will become
+more concentrated around :math:`\mu`, making the value fed to
+**direction_distr_mu** influential. If random, isotropic
+movement is what you aim to model then there is probably little reason 
+to change these parameters.
 
 
-                  'movement': {
-                     'move':          True,
-                          #is this a mobile species?
-                      'direction_distr_mu':     0,
-                          #mu for von mises distribution defining movement directions
-                          #NOTE: these values won't be used is a MovementSurf is used!
-                      'direction_distr_kappa':  0,
-                          #kappa for von mises distribution
-                      'distance_distr_mu':      0.5,
-                          #mean movement-distance (lognormal distribution)
-                      'distance_distr_sigma':   0.5,
-                          #sd of movement distance
-                      'dispersal_distr_mu':     0.5,
-                          #mean dispersal distance (lognormal distribution)
-                      'dispersal_distr_sigma':  0.5,
-                          #sd of dispersal distance
-  
-                      'move_surf'     : {
-                          'scape_num':                    0,
-                              #scape number to use as the movement surface
-                          'mixture':                      True,
-                              #should this MovementSurface be composed of
-                              #VonMises mixture distribution approximations (i.e.
-                              #True) or of unimodal VonMises distribution
-                              #approximations (i.e. False); the latter is better
-                              #for landscapes characterized by gradual gradients
-                              #(i.e. where many cells' neighborhoods have very
-                              #little variation between the highest- and lowest
-                              #permeability values, so that mixture distributions
-                              #would be largely uniform in all directions);
-                              #defaults to True
-                          'approximation_len':            7500,
-                              #length of the lookup vectors (numpy arrays) used to approximate
-                                  #the VonMises mixture distributions at each cell
-                          'vm_distr_kappa':                     None,
-                              #kappa value to use in the von Mises mixture distributions (KDEs)
-                                  #underlying resistance surface movement
-                          'gauss_KDE_bw':                 None
-                              #bandwidth value to use in the Gaussian KDEs that are created to
-                                  #approximate the von Mises mixture distributions (KDEs)
-                                  #underlying resistance surface movement
-                          } # <END> 'move_surf'
-  
-                      },    # <END> 'movement'
-  
-  
-              ##############################
-              #### pop num. 0: gen_arch ####
-              ##############################
-  
+**distance_distr_mu**
+
+.. code-block:: python
+
+                     #mean of distr of movement distance
+                     'distance_distr_mu':      0.5,
+
+{:py:`int`, :py:`float`}
+
+default: 0.5
+
+reset? Y
+
+This is the :math:`\mu` parameter of the Wald distribution used to draw
+movement distances, expressed in units of raster-cells. This parameter and
+**distance_distr_sigma** (the Wald distribution's :math:`sigma`) should be
+set to reflect a distribution of movement distances that is appropriate
+for your scenario.
+
+
+**distance_distr_sigma**
+
+.. code-block:: python
+
+                     #variance of distr of movement distance
+                     'distance_distr_sigma':   0.5,
+
+{:py:`int`, :py:`float`}
+
+default: 0.5 
+
+reset? Y
+
+This is the :math:`\sigma` parameter of the Wald distribution used to draw
+movement distances, expressed in units of raster-cells. This parameter and
+**distance_distr_mu** (the Wald distribution's :math:`mu`) should be
+set to reflect a distribution of movement distances that is appropriate
+for your scenario.
+
+
+**dispersal_distr_mu**
+
+.. code-block:: python
+
+                     #mean of distr of dispersal distance
+                     'dispersal_distr_mu':     0.5,
+
+{:py:`int`, :py:`float`}
+
+default: 0.5
+
+reset? Y
+
+This is the :math:`\mu` parameter of the Wald distribution used to draw
+dispersal distances, expressed in units of raster-cells. This parameter and
+**distance_distr_sigma** (the Wald distribution's :math:`sigma`) should be
+set to reflect a distribution of dispersal distances that is appropriate
+for your scenario.
+
+
+**dispersal_distr_sigma**
+
+.. code-block:: python
+
+                     #variance of distr of dispersal distance
+                     'dispersal_distr_sigma':  0.5,
+                 
+{:py:`int`, :py:`float`}
+
+default: 0.5
+
+reset? Y
+
+This is the :math:`\sigma` parameter of the Wald distribution used to draw
+dispersal distances, expressed in units of raster-cells. This parameter and
+**distance_distr_mu** (the Wald distribution's :math:`mu`) should be
+set to reflect a distribution of dispersal distances that is appropriate
+for your scenario.
+
+
+""""""""""""""""
+_MovementSurface
+""""""""""""""""
+
+**layer**
+
+.. code-block:: python
+
+                     'move_surf'     : {
+                         #move-surf Layer name
+                         'layer':                'layer_0',
+
+:py:`str`
+
+default: :py:`'layer_0'`
+
+reset? P
+
+This indicates, by name, the :py:`Layer` to be used as to construct the
+:py:`_MovementSurface` for a :py:`Population`. Note that this can also
+be thought of as the :py:`Layer` that should serve as a
+:py:`Population`'s permeability raster (because :py:`Individual`\s moving
+on this :py:`_MovementSurface` toward the higher (if mixture distributions
+are used) or highest (if unimodl distributions are used)
+values in their neighborhoods). 
+
+
+**mixture**
+
+.. code-block:: python
+
+                         #whether to use mixture distrs
+                         'mixture':              True,
+
+:py:`bool`
+
+default: True
+
+reset? P
+
+This indicates whether the :py:`_MovementSurface` should be built using
+VonMises mixture distributions or unimodal VonMises distributions. 
+If True, each cell in the :py:`_MovementSurface` will have an approximate
+circular distribution that is a
+weighted sum of 8 unimodal VonMises distributions (one per cell in the 8-cell
+neighborhood); each of those summed unimodal distributions will have as its 
+mode the direction of the neighboring cell on which it is based and as its 
+weight the relative permeability of the cell on which it is based 
+(relative to the full neighborhood). If False, each cell in the
+:py:`_MovementSurface` will have an approximated circular distribution 
+that is a single
+VonMises distribution with its mode being the direction of the maximum-valued
+cell in the 8-cell neighborhood and its concentration determined by
+**vm_distr_kappa**.
+
+
+**vm_distr_kappa**
+
+.. code-block:: python
+
+                         #concentration of distrs
+                         'vm_distr_kappa':       12,
+
+{:py:`int`, :py:`float`}
+
+default: 12 
+
+reset? N
+
+This sets the concentration of the VonMises distributions used to build
+the approximated circular distributions in the :py:`_MovementSurface`.
+The default value was chosen heuristically as one that provides a reasonable
+concentration in the direction of a unimodal VonMises distribution's mode 
+without causing VonMises mixture distributions built from an 
+evenly weighted sum of distributions pointing toward the 
+8-cell-neighborhood directions to have 8 pronounced modes. 
+There will probably be little need to change the default value, but if
+interested then the user could create :py:`Model`\s with various values
+of this parameter and then use the :py:`Model.plot_movement_surface`
+method to explore the influence of the parameter on the resulting
+:py:`_MovementSurface`\s.
+
+
+                   
+------------------------------------------------------------------------------
+
+^^^^^^^^^^^^^^^^^^^^
+_GenomicArchitecture
+^^^^^^^^^^^^^^^^^^^^
+
+**gen_arch_file**
+
+.. code-block:: python
+
                   'gen_arch': {
-                      'L':                        10,
-                          #total number of loci
-                      'l_c':                      [10],
-                          #chromosome lengths [sum(l_c) == L is enforced]
+                      #/path/to/file.csv defining custom genomic arch
+                      'gen_arch_file':            None,
+
+{:py:`str`, :py:`None`}
+
+default: {:py:`None`, :py:`'<your_model_name>_pop-<n>_gen_arch.csv'`
+
+reset? P
+
+This arguments indicates whether a custom genomic architecture file should
+be used to create a :py:`Population`'s :py:`GenomicArchitecture`, and if so,
+where that file is located. If the value is :py:`None`, no file will be
+used and the values of this :py:`Population`'s other genomic
+architecture parameters in the parameters file will be used to create
+the :py:`GenomicArchitecture`. If the value is a :py:`str` pointing to a
+custom genomic-architecture file 
+(i.e. a CSV file with loci as rows and 'locus_num',
+'p', 'dom', 'r', 'trait', and 'alpha' as columns stipulating the starting
+allele frequencies, dominance values, inter-locus recombination rates,
+trait names, and effect sizes of all loci). Geonomics will create an empty
+file of this format for each :py:`Population` for which the 
+'custom_genomic_architecture' argument is provided the value True when
+:py:`gnx.make_parameters_file` is called (which will be saved as
+'<your_model_name>_pop-<n>_gen_arch.csv'). 
+
+Note that when Geonomics reads in a custom genomic architecture file
+to create a :py:`Model`, it will check
+that the length (i.e. number of rows) in this file is equal to the length
+stipulated by the **L** parameter, and will also check that the first value
+at the top of the 'r' column is 0.5 (which is used to implement independent
+assortment during gametogenesis). If either of these checks fails,
+Geonomics throws an Error.
+
+
+**L**
+
+.. code-block:: python
+ 
+                      #num of loci
+                      'L':                        1000,
+
+:py:`int`
+
+default: 1000
+
+reset? P
+
+This indicates the total number of loci that the genomes in a
+:py:`Population` should have.
+
+
+**l_c**
+
+.. code-block:: python
+                        
+                      #num of chromosomes
+                      'l_c':                      [750, 250],
+
+:py:`list` of :py:`int`\s
+
+default: :py:`[750, 250]`
+
+reset? P
+
+This indicates the lengths (in number of loci) of each of the chromosomes 
+in the genomes in a :py:`Population`.  Note that the sum of this :py:`list`
+must equal **L**, otherwise Geonomics will throw an Error. 
+Also note that Geonomics models genomes as single **L** x 2
+arrays, where separate chromosomes are delineated by points along
+the genome where the recombination rate is 0.5;
+thus, for a model where recombination rates are often at or near 0.5, this
+parameter will have little meaning.
+
+.. code-block:: python
+
+
+                      #genome-wide per-base neutral mut rate (0 to disable)
+                      'mu_neut':                  1e-9,
+                      #genome-wide per-base deleterious mut rate (0 to disable)
+                      'mu_delet':                 0,
+                      #whether to save mutation logs
+                      'mut_log':                  False,
+                      #shape of distr of deleterious effect sizes
+                      'delet_s_distr_shape':      0.2,
+                      #scale of distr of deleterious effect sizes
+                      'delet_s_distr_scale':      0.2,
+                      #alpha of distr of recomb rates
+                      'r_distr_alpha':            0.5,
+                      #beta of distr of recomb rates
+                      'r_distr_beta':             15e9,
+                      #whether loci should be dominant (for allele '1')
+                      'dom':                      False,
+                      #whether to allow pleiotropy
+                      'pleiotropy':               False,
+                      #custom fn for drawing recomb rates
+                      'recomb_rate_custom_fn':    None,
+                      #number of recomb paths to hold in memory
+                      'recomb_lookup_array_size': int(1e3),
+                      #total number of recomb paths to simulate
+                      'n_recomb_paths':           int(1e4),
+                        
+
+
+
+
                       'gen_arch_file':            None,
                           #if not None, should point to a file stipulating a
                               #custom genomic architecture (i.e. a CSV with loci
@@ -2491,19 +2752,6 @@ stats : bool, optional
         statistics will be calculated during the model runs, and when.
         (This will be managed by the model's StatsCollector object.)
 
-seed : bool, optional
-    Whether to include a seed-parameter section in the parameters file that
-    is generated. Defaults to None. Valid values and their associated
-    behaviors are:
-
-    None, False:
-        Will not add a section for parameterizing how the random number
-        generators are seeded, hence generators will be seeded at
-        random and results will be unreproducible.
-    True:
-        Will add a section for parameterizing how the random number
-        generators are seeded, so that results will be reproducible.
-
 -------
 Returns
 -------
@@ -2562,7 +2810,6 @@ we can create a parameters file for a model scenario with:
       demographic change)
     - data-collection;
     - stats-collection;
-    - a section for setting the seed for the random-number generators.
 
 We can save this to a file named "2-pop_2-trait_model.py" in our current
 working directory.
@@ -2587,8 +2834,8 @@ working directory.
 >>>          'movement_surface': True,
 >>>          'demographic_change': True}
 >>>         ],
->>>     #arguments to the data, stats,and seed parameters
->>>     data = True, stats = True, seed = True,
+>>>     #arguments to the data and stats parameters
+>>>     data = True, stats = True, 
 >>>     #destination to which to write the resulting parameter file
 >>>     filepath = '2-pop_2-trait_model.py')
 
