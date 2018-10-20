@@ -86,19 +86,19 @@ present, and explain their models’ behavior and results</li>
 But they are inadequate for simulation of many scenarios of
 interest, including: natural selection on traits with arbitrary genomic
 architectures; spatially variable natural selection; simulation of populations
-distributed continiously and moving realistically across
+distributed continuously and moving realistically across
 complex landscapes; complex demographic change simultaneous with ongoing,
 often non-stationary environmental change; and coevolutionary interactions
-between multiple species or incpient species. Few existing forward-time
+between multiple species or incipient species. Few existing forward-time
 simulators can model all of these phenomena, and the few that can often
 impose a high cost of entry (e.g. learning a new, non-standard programming
 language in order to write one’s desired simulations). Geonomics aims to fill
-this empty niche by combining ease of use with , all in a popular,
-general-purpose scripting language. If it succeeds at doing this, Geonomics
-should prove uniquely useful for a wide range of purposes, from intro-level
-educational use to high-quality theoretical, methogological, empirical, and
+this empty niche by combining ease of use with broad extensibility.
+If it succeeds at doing this, Geonomics should prove uniquely useful
+for a wide range of purposes, from intro-level educational use to
+high-quality theoretical, methodological, empirical, and
 applied research.</p>
-<p>Geonomics is written in Python. Python is a full-fledged scripting language
+<p>Geonomics is written in Python, a full-fledged scripting language
 that is relatively easy to learn (and fun!). So it can be pretty quick for a
 new user to get up to speed and start doing useful work. For work with
 Geonomics, this turnaround time should be even quicker. Geonomics aims to
@@ -113,7 +113,7 @@ default values in a pre-packaged script.</p>
 <li>create a <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> with any number of <code class="code py python docutils literal"><span class="name"><span class="pre">Layers</span></span></code> in it;</li>
 <li>create any number of <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s living on that
 <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, each of which is composed of a bunch of
-independent <code class="code py python docutils literal"><span class="name"><span class="pre">Indivdual</span></span></code>s, and each of which will have a bunch of
+independent <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s, and each of which will have a bunch of
 parameters dsecribing what it’s like and how it lives;</li>
 <li>optionally give the <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s of any <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s
 genomes, which can optionally determine phenotypes for any number
@@ -275,7 +275,7 @@ and <code class="code py python docutils literal"><span class="name"><span class
 If they are, each <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>’s genome is modeled as a
 2-by-L Numpy array (where 2 is the ploidy, currently fixed at
 diploidy, and L is genome length) containing 0s and 1s (because
-Geonomics strictly models diallelic SNPs).</p>
+Geonomics strictly models biallelic SNPs, i.e SNPs with ‘0’- and ‘1’-alleles).</p>
 <p>The parameter L, as well as numerous other genomic parameters (including
 locus-wise starting frequencies of the 1 alleles; locus-wise dominance effects;
 locus-wise recombination rates; and genome-wide mutation rates for neutral,
@@ -898,7 +898,7 @@ Python code) in which it appears in a parameters file;</li>
 this parameter (i.e. change it from its default value), and
 encoded as follows:<ul>
 <li>‘Y’: almost certainly, <em>or</em> must be reset for your <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> to run</li>
-<li>‘P’: it is possible/probable that you will want to reset this
+<li>‘P’: it is quite possible that you will want to reset this
 parameter, but this will depend on your use and scenario</li>
 <li>‘N’: almost certainly not, <em>or</em> no need to reset because it should be
 set intelligently anyhow (Note: this does <em>not</em> mean that you cannot
@@ -1018,7 +1018,8 @@ all share the same projection; otherwise, an Error is thrown)</div></blockquote>
 <p>default: <code class="code py python docutils literal"><span class="name"><span class="pre">layer_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code></p>
 <p>reset? P</p>
 <p>This parameter defines the name for each <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>. (Note that unlike most
-parameters, it is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code> key, the value for which is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code>
+parameters, this parameter is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code> key,
+the value for which is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code>
 of parameters defining the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> being named.) As the capitalized
 reminder in the parameters states, each <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> must have a unique name
 (so that a parameterized <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> isn’t overwritten in the
@@ -1027,7 +1028,8 @@ checks for unique names and throws an Error if this condition is not met.
 <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> names can, but needn’t be, descriptive of what each
 <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> represents. Example valid values include: 0, 0.1, ‘layer_0’, 1994,
 ‘1994’, ‘mean_ann_tmp’. Names default to <code class="code py python docutils literal"><span class="name"><span class="pre">layer_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code>,
-where n is a series of integers starting from 0.</p>
+where n is a series of integers starting from 0 and counting the number
+of <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>s.</p>
 <div class="section" id="init">
 <h6>Init<a class="headerlink" href="#init" title="Permalink to this headline">¶</a></h6>
 <p>There are four different types of <code class="code py python docutils literal"><span class="name"><span class="pre">Layers</span></span></code> that can be created. The
@@ -1350,9 +1352,9 @@ major issue, but is worth considering.</p>
 <p>default: <code class="code py python docutils literal"><span class="name"><span class="pre">pop_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code></p>
 <p>reset? P</p>
 <p>This parameter defines the name for each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>.
-(Note that unlike most
-parameters, it is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code> key, the value for which is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code>
-of parameters defining the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> being named.) As the capitalized
+(Note that unlike most parameters, this parameter is
+a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code> key, the value for which is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code>
+of parameters defining the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> being named.) As the capitalized
 reminder in the parameters states, each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
 must have a unique name (so that a parameterized
 <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> isn’t overwritten in the <code class="code py python docutils literal"><span class="name"><span class="pre">ParametersDict</span></span></code> by a
@@ -1362,7 +1364,7 @@ checks for unique names and throws an Error if this condition is not met.
 <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> represents. Example valid values include: 0, ‘pop0’,
 ‘high-dispersal’, ‘C. fasciata’. Names default to
 <code class="code py python docutils literal"><span class="name"><span class="pre">pop_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code>, where n is a series of
-integers starting from 0.</p>
+integers starting from 0 and counting the number of <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s.</p>
 <div class="section" id="id1">
 <h6>Init<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h6>
 <hr class="docutils" />
@@ -1419,20 +1421,6 @@ numbers (and the <code class="code py python docutils literal"><span class="name
 number will be used as females’ reproductive age, the second as males’.
 If the value is 0, or <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s are capable
 of reproduction from time of time.</p>
-<hr class="docutils" />
-<p><strong>max_age</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#maximum age</span>
-<span class="s1">&#39;max_age&#39;</span><span class="p">:</span>              <span class="mi">5</span><span class="p">,</span>
-</pre></div>
-</div>
-<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
-<p>default: 1</p>
-<p>reset? P</p>
-<p>This defines the maximum age an individual can achieve before being
-forcibly culled from the population. Defaults to 1 (which will create
-a Wright-Fisher-like simulation, with discrete generations). Can be set
-to any other age, or can be set to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code> (in which case no maxmimum
-age is enforced).</p>
 <hr class="docutils" />
 <p><strong>sex</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to assign sexes</span>
@@ -1521,6 +1509,20 @@ This radius is provided to queries run on the <code class="code py python docuti
 <div class="section" id="id2">
 <h6>Mortality<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h6>
 <hr class="docutils" />
+<p><strong>max_age</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#maximum age</span>
+<span class="s1">&#39;max_age&#39;</span><span class="p">:</span>              <span class="mi">1</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: 1</p>
+<p>reset? P</p>
+<p>This defines the maximum age an individual can achieve before being
+forcibly culled from the population. Defaults to 1 (which will create
+a Wright-Fisher-like simulation, with discrete generations). Can be set
+to any other age, or can be set to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code> (in which case no maxmimum
+age is enforced).</p>
+<hr class="docutils" />
 <p><strong>d_min</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#min P(death) (MUST BE 0&lt;=d_min&lt;=1)</span>
 <span class="s1">&#39;d_min&#39;</span><span class="p">:</span>                     <span class="mf">0.01</span><span class="p">,</span>
@@ -1576,422 +1578,1010 @@ others the user may wish to control this.</p>
 <h6>Movement<a class="headerlink" href="#movement" title="Permalink to this headline">¶</a></h6>
 <hr class="docutils" />
 <p><strong>direction_distr_mu</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>              <span class="s1">&#39;movement&#39;</span><span class="p">:</span> <span class="p">{</span>
-                  <span class="c1">#expectation of distr of movement direction</span>
-                  <span class="s1">&#39;direction_distr_mu&#39;</span><span class="p">:</span>     <span class="mi">1</span><span class="p">,</span>
-                  <span class="c1">#concentration of distr of movement direction</span>
-                  <span class="s1">&#39;direction_distr_kappa&#39;</span><span class="p">:</span>  <span class="mi">0</span><span class="p">,</span>
-                  <span class="c1">#expectation of distr of movement distance</span>
-                  <span class="s1">&#39;distance_distr_mu&#39;</span><span class="p">:</span>      <span class="mf">0.5</span><span class="p">,</span>
-                  <span class="c1">#variance of distr of movement distance</span>
-                  <span class="s1">&#39;distance_distr_sigma&#39;</span><span class="p">:</span>   <span class="mf">0.5</span><span class="p">,</span>
-                  <span class="c1">#expectation of distr of dispersal distance</span>
-                  <span class="s1">&#39;dispersal_distr_mu&#39;</span><span class="p">:</span>     <span class="mf">0.5</span><span class="p">,</span>
-                  <span class="c1">#variance of distr of dispersal distance</span>
-                  <span class="s1">&#39;dispersal_distr_sigma&#39;</span><span class="p">:</span>  <span class="mf">0.5</span><span class="p">,</span>
-                  <span class="o">%</span><span class="n">s</span>
-                  <span class="p">},</span>    <span class="c1"># &lt;END&gt; &#39;movement&#39;</span>
-
-
-
-
-
-                <span class="s1">&#39;movement&#39;</span><span class="p">:</span> <span class="p">{</span>
-                   <span class="s1">&#39;move&#39;</span><span class="p">:</span>          <span class="bp">True</span><span class="p">,</span>
-                        <span class="c1">#is this a mobile species?</span>
-                    <span class="s1">&#39;direction_distr_mu&#39;</span><span class="p">:</span>     <span class="mi">0</span><span class="p">,</span>
-                        <span class="c1">#mu for von mises distribution defining movement directions</span>
-                        <span class="c1">#NOTE: these values won&#39;t be used is a MovementSurf is used!</span>
-                    <span class="s1">&#39;direction_distr_kappa&#39;</span><span class="p">:</span>  <span class="mi">0</span><span class="p">,</span>
-                        <span class="c1">#kappa for von mises distribution</span>
-                    <span class="s1">&#39;distance_distr_mu&#39;</span><span class="p">:</span>      <span class="mf">0.5</span><span class="p">,</span>
-                        <span class="c1">#mean movement-distance (lognormal distribution)</span>
-                    <span class="s1">&#39;distance_distr_sigma&#39;</span><span class="p">:</span>   <span class="mf">0.5</span><span class="p">,</span>
-                        <span class="c1">#sd of movement distance</span>
-                    <span class="s1">&#39;dispersal_distr_mu&#39;</span><span class="p">:</span>     <span class="mf">0.5</span><span class="p">,</span>
-                        <span class="c1">#mean dispersal distance (lognormal distribution)</span>
-                    <span class="s1">&#39;dispersal_distr_sigma&#39;</span><span class="p">:</span>  <span class="mf">0.5</span><span class="p">,</span>
-                        <span class="c1">#sd of dispersal distance</span>
-
-                    <span class="s1">&#39;move_surf&#39;</span>     <span class="p">:</span> <span class="p">{</span>
-                        <span class="s1">&#39;scape_num&#39;</span><span class="p">:</span>                    <span class="mi">0</span><span class="p">,</span>
-                            <span class="c1">#scape number to use as the movement surface</span>
-                        <span class="s1">&#39;mixture&#39;</span><span class="p">:</span>                      <span class="bp">True</span><span class="p">,</span>
-                            <span class="c1">#should this MovementSurface be composed of</span>
-                            <span class="c1">#VonMises mixture distribution approximations (i.e.</span>
-                            <span class="c1">#True) or of unimodal VonMises distribution</span>
-                            <span class="c1">#approximations (i.e. False); the latter is better</span>
-                            <span class="c1">#for landscapes characterized by gradual gradients</span>
-                            <span class="c1">#(i.e. where many cells&#39; neighborhoods have very</span>
-                            <span class="c1">#little variation between the highest- and lowest</span>
-                            <span class="c1">#permeability values, so that mixture distributions</span>
-                            <span class="c1">#would be largely uniform in all directions);</span>
-                            <span class="c1">#defaults to True</span>
-                        <span class="s1">&#39;approximation_len&#39;</span><span class="p">:</span>            <span class="mi">7500</span><span class="p">,</span>
-                            <span class="c1">#length of the lookup vectors (numpy arrays) used to approximate</span>
-                                <span class="c1">#the VonMises mixture distributions at each cell</span>
-                        <span class="s1">&#39;vm_distr_kappa&#39;</span><span class="p">:</span>                     <span class="bp">None</span><span class="p">,</span>
-                            <span class="c1">#kappa value to use in the von Mises mixture distributions (KDEs)</span>
-                                <span class="c1">#underlying resistance surface movement</span>
-                        <span class="s1">&#39;gauss_KDE_bw&#39;</span><span class="p">:</span>                 <span class="bp">None</span>
-                            <span class="c1">#bandwidth value to use in the Gaussian KDEs that are created to</span>
-                                <span class="c1">#approximate the von Mises mixture distributions (KDEs)</span>
-                                <span class="c1">#underlying resistance surface movement</span>
-                        <span class="p">}</span> <span class="c1"># &lt;END&gt; &#39;move_surf&#39;</span>
-
-                    <span class="p">},</span>    <span class="c1"># &lt;END&gt; &#39;movement&#39;</span>
-
-
-            <span class="c1">##############################</span>
-            <span class="c1">#### pop num. 0: gen_arch ####</span>
-            <span class="c1">##############################</span>
-
-                <span class="s1">&#39;gen_arch&#39;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s1">&#39;L&#39;</span><span class="p">:</span>                        <span class="mi">10</span><span class="p">,</span>
-                        <span class="c1">#total number of loci</span>
-                    <span class="s1">&#39;l_c&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="mi">10</span><span class="p">],</span>
-                        <span class="c1">#chromosome lengths [sum(l_c) == L is enforced]</span>
-                    <span class="s1">&#39;gen_arch_file&#39;</span><span class="p">:</span>            <span class="bp">None</span><span class="p">,</span>
-                        <span class="c1">#if not None, should point to a file stipulating a</span>
-                            <span class="c1">#custom genomic architecture (i.e. a CSV with loci</span>
-                            <span class="c1">#as rows and &#39;locus_num&#39;, &#39;p&#39;, &#39;dom&#39;, &#39;r&#39;, &#39;trait&#39;,</span>
-                            <span class="c1">#and &#39;alpha&#39; as columns, such as is created by</span>
-                            <span class="c1">#main.make_parameters_file, when the custom_gen_arch</span>
-                            <span class="c1">#arugment is True)</span>
-                    <span class="s1">&#39;mu_neut&#39;</span><span class="p">:</span>                  <span class="mf">1e-9</span><span class="p">,</span>
-                        <span class="c1">#genome-wide neutral mutation rate, per base per generation</span>
-                            <span class="c1">#(set to 0 to disable neutral mutation)</span>
-                    <span class="s1">&#39;mu_delet&#39;</span><span class="p">:</span>                 <span class="mi">0</span><span class="p">,</span>
-                        <span class="c1">#genome-wide deleterious mutation rate, per base per generation</span>
-                            <span class="c1">#(set to 0 to disable deleterious mutation)</span>
-                            <span class="c1">#NOTE: these mutations will fall outside the loci involved in any traits</span>
-                            <span class="c1">#being simulated, and are simply treated as universally deleterious, with the same</span>
-                            <span class="c1">#negative influence on fitness regardless of spatial context</span>
-                    <span class="s1">&#39;mut_log&#39;</span><span class="p">:</span>                  <span class="bp">False</span><span class="p">,</span>
-                        <span class="c1">#whether or not to store a mutation log; if true, will be saved as mut_log.txt</span>
-                        <span class="c1">#within each iteration&#39;s subdirectory</span>
-                    <span class="s1">&#39;delet_s_distr_shape&#39;</span><span class="p">:</span>      <span class="mf">0.2</span><span class="p">,</span>
-                    <span class="s1">&#39;delet_s_distr_scale&#39;</span><span class="p">:</span>      <span class="mf">0.2</span><span class="p">,</span>
-                        <span class="c1">#mean and standard deviation of the gamma distribution</span>
-                        <span class="c1">#parameterizig the per-allele effect size of</span>
-                        <span class="c1">#deleterious mutations (std = 0 will fix all mutations</span>
-                        <span class="c1">#for the mean value)</span>
-                    <span class="s1">&#39;r_distr_alpha&#39;</span><span class="p">:</span>            <span class="mf">0.5</span><span class="p">,</span>
-                        <span class="c1">#alpha for beta distribution of linkage values</span>
-                            <span class="c1">#NOTE: alpha = 14.999e9, beta = 15e9 has a VERY sharp peak on D = 0.4998333,</span>
-                            <span class="c1">#with no values exceeding equalling or exceeding 0.5 in 10e6 draws in R</span>
-                    <span class="s1">&#39;r_distr_beta&#39;</span><span class="p">:</span>             <span class="mf">15e9</span><span class="p">,</span>
-                        <span class="c1">#beta for beta distribution of linkage values</span>
-                    <span class="s1">&#39;dom&#39;</span><span class="p">:</span>                      <span class="bp">False</span><span class="p">,</span>
-                        <span class="c1">#whether or not loci should be dominant</span>
-                        <span class="c1">#(if True, the 1 allele will be dominant at each locus;</span>
-                        <span class="c1">#if False, all loci will be codominant; defaults to False)</span>
-                    <span class="s1">&#39;pleiotropy&#39;</span><span class="p">:</span>               <span class="bp">True</span><span class="p">,</span>
-                        <span class="c1">#allow pleiotropy? (i.e. allow same locus to affect value of more than one trait?) false</span>
-                    <span class="s1">&#39;recomb_rate_custom_fn&#39;</span><span class="p">:</span>    <span class="bp">None</span><span class="p">,</span>
-                        <span class="c1">#if provided, must be a function that returns a single recombination rate value (r) when called</span>
-                    <span class="s1">&#39;recomb_lookup_array_size&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e3</span><span class="p">),</span>
-                        <span class="c1">#the size of the recombination-path lookup array to have</span>
-                            <span class="c1">#read in at one time (needs to be comfortably larger than the anticipated totaly number of</span>
-                            <span class="c1">#recombination paths to be drawn at once, i.e. than 2 times the anticipated most number of births at once)</span>
-                    <span class="s1">&#39;n_recomb_paths&#39;</span><span class="p">:</span>           <span class="nb">int</span><span class="p">(</span><span class="mf">1e4</span><span class="p">),</span>
-                        <span class="c1">#the total number of distinct recombination paths to</span>
-                            <span class="c1">#generate at the outset, to approximate truly free recombination at the recombination rates specified</span>
-                            <span class="c1">#by the genomic architecture (hence the larger the value the less the likelihood of mis-approximation artifacts)</span>
-
-                    <span class="s1">&#39;traits&#39;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="c1">#########</span>
-                        <span class="c1">#trait 0#</span>
-                        <span class="c1">#########</span>
-                        <span class="mi">0</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="c1">#trait name; each trait must get a unique numeric or</span>
-                        <span class="c1">#string name (e.g. 0, &#39;trt0&#39;, &#39;bill_length&#39;); trait</span>
-                        <span class="c1">#names default to serial integers from 0</span>
-                            <span class="s1">&#39;scape_num&#39;</span><span class="p">:</span>        <span class="mi">2</span><span class="p">,</span>
-                                <span class="c1">#the landscape numbers to be used for selection on this trait</span>
-                            <span class="s1">&#39;phi&#39;</span><span class="p">:</span>              <span class="mf">0.1</span><span class="p">,</span>
-                                <span class="c1">#phenotypic selection coefficient for this trait; can either be a</span>
-                                    <span class="c1">#numeric value, or can be an array of spatialized selection</span>
-                                    <span class="c1">#values (with dimensions equal to land.dims)</span>
-                            <span class="s1">&#39;n_loci&#39;</span><span class="p">:</span>           <span class="mi">1</span><span class="p">,</span>
-                                <span class="c1">#number of loci to be assigned to this trait</span>
-                            <span class="s1">&#39;mu&#39;</span><span class="p">:</span>      <span class="mf">1e-9</span><span class="p">,</span>
-                                <span class="c1">#mutation rate for this trait (if set to 0, or if genome[&#39;mutation&#39;] == False, no mutation will occur)</span>
-                                    <span class="c1">#(set to 0 to disable mutation for this trait)</span>
-                            <span class="s1">&#39;alpha_distr_mu&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                            <span class="s1">&#39;alpha_distr_sigma&#39;</span> <span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-                                <span class="c1">#the mean and standard deviation of the normal distribution used to choose effect size</span>
-                                    <span class="c1">#(alpha) for this trait&#39;s loci</span>
-                                    <span class="c1">#NOTE: for mean = 0, std = 0.5, one average locus is enough to generate both optimum</span>
-                                    <span class="c1">#genotypes; for mean = 0, std = 0.025, 10 loci should generate both (on average, but depends of course on</span>
-                                    <span class="c1">#the random sample of alphas drawn); and so on linearly</span>
-                            <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>            <span class="mi">1</span><span class="p">,</span>
-                                <span class="c1">#gamma exponent for the trait&#39;s fitness function (determines the shape of the</span>
-                                <span class="c1">#curve of fitness as a function of absolute difference between an individual&#39;s</span>
-                                <span class="c1">#phenotype and its environment; &lt;1 = concave up, 1 = linear, &gt;1 = convex up)</span>
-                            <span class="s1">&#39;univ_adv&#39;</span><span class="p">:</span>      <span class="bp">False</span>
-                                <span class="c1">#is the trait universally advantageous? if so, phenotypes closer to 1 will</span>
-                                    <span class="c1">#have higher fitness at all locations on the land</span>
-                            <span class="p">},</span> <span class="c1"># &lt;END&gt; trait 0</span>
-      <span class="c1">#########</span>
-                        <span class="c1">#trait 1#</span>
-                        <span class="c1">#########</span>
-                        <span class="mi">1</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="c1">#trait name; each trait must get a unique numeric or</span>
-                        <span class="c1">#string name (e.g. 0, &#39;trt0&#39;, &#39;bill_length&#39;); trait</span>
-                        <span class="c1">#names default to serial integers from 0</span>
-                            <span class="s1">&#39;scape_num&#39;</span><span class="p">:</span>        <span class="mi">2</span><span class="p">,</span>
-                                <span class="c1">#the landscape numbers to be used for selection on this trait</span>
-                            <span class="s1">&#39;phi&#39;</span><span class="p">:</span>              <span class="mf">0.1</span><span class="p">,</span>
-                                <span class="c1">#phenotypic selection coefficient for this trait; can either be a</span>
-                                    <span class="c1">#numeric value, or can be an array of spatialized selection</span>
-                                    <span class="c1">#values (with dimensions equal to land.dims)</span>
-                            <span class="s1">&#39;n_loci&#39;</span><span class="p">:</span>           <span class="mi">1</span><span class="p">,</span>
-                                <span class="c1">#number of loci to be assigned to this trait</span>
-                            <span class="s1">&#39;mu&#39;</span><span class="p">:</span>      <span class="mf">1e-9</span><span class="p">,</span>
-                                <span class="c1">#mutation rate for this trait (if set to 0, or if genome[&#39;mutation&#39;] == False, no mutation will occur)</span>
-                                    <span class="c1">#(set to 0 to disable mutation for this trait)</span>
-                            <span class="s1">&#39;alpha_distr_mu&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                            <span class="s1">&#39;alpha_distr_sigma&#39;</span> <span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
-                                <span class="c1">#the mean and standard deviation of the normal distribution used to choose effect size</span>
-                                    <span class="c1">#(alpha) for this trait&#39;s loci</span>
-                                    <span class="c1">#NOTE: for mean = 0, std = 0.5, one average locus is enough to generate both optimum</span>
-                                    <span class="c1">#genotypes; for mean = 0, std = 0.025, 10 loci should generate both (on average, but depends of course on</span>
-                                    <span class="c1">#the random sample of alphas drawn); and so on linearly</span>
-                            <span class="s1">&#39;gamma&#39;</span><span class="p">:</span>            <span class="mi">1</span><span class="p">,</span>
-                                <span class="c1">#gamma exponent for the trait&#39;s fitness function (determines the shape of the</span>
-                                <span class="c1">#curve of fitness as a function of absolute difference between an individual&#39;s</span>
-                                <span class="c1">#phenotype and its environment; &lt;1 = concave up, 1 = linear, &gt;1 = convex up)</span>
-                            <span class="s1">&#39;univ_adv&#39;</span><span class="p">:</span>      <span class="bp">False</span>
-                                <span class="c1">#is the trait universally advantageous? if so, phenotypes closer to 1 will</span>
-                                    <span class="c1">#have higher fitness at all locations on the land</span>
-                            <span class="p">},</span> <span class="c1"># &lt;END&gt; trait 1</span>
-
-
-    <span class="c1">#### NOTE: Individual Traits&#39; sections can be copy-and-pasted (and</span>
-    <span class="c1">#### assigned distinct keys and names), to create additional Traits.</span>
-
-
-                        <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;traits&#39;</span>
-
-                    <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;gen_arch&#39;</span>
-
-
-            <span class="c1">############################</span>
-            <span class="c1">#### pop num. 0: change ####</span>
-            <span class="c1">############################</span>
-
-                <span class="s1">&#39;change&#39;</span><span class="p">:</span> <span class="p">{</span>
-
-                    <span class="s1">&#39;dem&#39;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="c1">#(all population sizes are expressed relative to the carrying-capacity</span>
-                            <span class="c1">#raster at the time that the demographic change event begins (i.e. as</span>
-                            <span class="c1">#factors by which pop.K will be multiplied; thus they can also be thought</span>
-                            <span class="c1">#of as multipliers of the expected total population size (i.e. pop.K.sum())</span>
-                            <span class="c1">#and they will generally change the average population size by that multiple,</span>
-                            <span class="c1">#but of course not precisely, because population size is stochastic. If you</span>
-                            <span class="c1">#seek exact control of total population size, please seek a simpler simulation</span>
-                            <span class="c1">#model, perhaps a coalescent one.</span>
-
-                        <span class="mi">0</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="c1">#can add an arbitrary number of demographic change events for</span>
-                                <span class="c1">#each population, each event identified by a distinct integer</span>
-                            <span class="s1">&#39;kind&#39;</span><span class="p">:</span>             <span class="s1">&#39;custom&#39;</span><span class="p">,</span>
-                                <span class="c1">#what kind of change event? (&#39;monotonic&#39;, &#39;stochastic&#39;, &#39;cyclical&#39;, &#39;custom&#39;)</span>
-                            <span class="s1">&#39;start&#39;</span><span class="p">:</span>            <span class="mi">200</span><span class="p">,</span>
-                                <span class="c1">#at which timestep should the event start?</span>
-                            <span class="s1">&#39;end&#39;</span><span class="p">:</span>              <span class="mi">1200</span><span class="p">,</span>
-                                <span class="c1">#at which timestep should the event end?</span>
-                            <span class="s1">&#39;rate&#39;</span><span class="p">:</span>             <span class="o">.</span><span class="mi">98</span><span class="p">,</span>
-                                <span class="c1">#at what rate should the population change each timestep</span>
-                                    <span class="c1">#(positive for growth, negative for reduction)</span>
-                            <span class="s1">&#39;interval&#39;</span><span class="p">:</span>         <span class="mi">11</span><span class="p">,</span>
-                                <span class="c1">#at what interval should stochastic change take place (None defaults to every timestep)</span>
-                            <span class="s1">&#39;dist&#39;</span><span class="p">:</span>             <span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
-                                <span class="c1">#what distribution to draw stochastic population sizes from (valid values: &#39;uniform&#39;, &#39;normal&#39;)</span>
-                            <span class="s1">&#39;size_target&#39;</span><span class="p">:</span>      <span class="bp">None</span><span class="p">,</span>
-                                <span class="c1">#what is the target size of the demographic change event (defaults to None)</span>
-                            <span class="s1">&#39;n_cycles&#39;</span><span class="p">:</span>         <span class="mi">20</span><span class="p">,</span>
-                                <span class="c1">#how many cycles of cyclical change should occur during the event?</span>
-                            <span class="s1">&#39;size_range&#39;</span><span class="p">:</span>       <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span>
-                                <span class="c1">#an iterable of the min and max population sizes to be used in stochastic or cyclical changes</span>
-                            <span class="s1">&#39;timesteps&#39;</span><span class="p">:</span>        <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">],</span>
-                                <span class="c1">#at which timesteps should custom changes take place?</span>
-                            <span class="s1">&#39;sizes&#39;</span><span class="p">:</span>            <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.25</span><span class="p">],</span>
-                                <span class="c1">#what custom size-changes should occur at the above-stipulated timesteps?</span>
-                            <span class="p">}</span> <span class="c1"># &lt;END&gt; event 0</span>
-
-
-
-
-    <span class="c1">#### NOTE: Individual demographic change events&#39; sections can be</span>
-    <span class="c1">#### copy-and-pasted (and assigned distinct keys and names), to create</span>
-    <span class="c1">#### additional events.</span>
-
-
-                        <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;dem&#39;</span>
-
-                    <span class="s1">&#39;parameters&#39;</span><span class="p">:</span> <span class="p">{</span>
-                        <span class="c1">#other (i.e. non-demographic) population change events</span>
-                        <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="c1">#the life-history parameters to be changed should be the keys in this dict,</span>
-                                <span class="c1">#and values are dictionaries containing a list of timesteps</span>
-                                <span class="c1">#at which to changed those parameters and a list of values</span>
-                                <span class="c1">#to which to change them</span>
-                            <span class="s1">&#39;timesteps&#39;</span><span class="p">:</span>        <span class="bp">None</span><span class="p">,</span>
-                            <span class="s1">&#39;vals&#39;</span><span class="p">:</span>           <span class="bp">None</span>
-                                <span class="p">}</span>
-
-
-    <span class="c1">#### NOTE: Individual life-history paramter change events&#39; sections can be</span>
-    <span class="c1">#### copy-and-pasted (and assigned distinct keys and names), to create</span>
-    <span class="c1">#### additional events.</span>
-
-
-                            <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;parameters&#39;</span>
-
-                        <span class="p">}</span> <span class="c1"># &lt;END&gt; &#39;change&#39;</span>
-
-                <span class="p">},</span> <span class="c1"># &lt;END&gt; pop num. 0</span>
-
-
-
-    <span class="c1">#### NOTE: Individual Populations&#39; sections can be copy-and-pasted (and</span>
-    <span class="c1">#### assigned distinct keys and names), to create additional Populations.</span>
-
-
-            <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;pops&#39;</span>
-
-        <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;comm&#39;</span>
-
-<span class="c1">###############</span>
-<span class="c1">#### MODEL ####</span>
-<span class="c1">###############</span>
-    <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="c1">#parameters to control the number of burn-in and main timesteps to</span>
-            <span class="c1">#run for each iterations</span>
-            <span class="s1">&#39;T&#39;</span><span class="p">:</span>            <span class="mi">100</span><span class="p">,</span>
-                <span class="c1">#total model runtime (in timesteps)</span>
-            <span class="s1">&#39;burn_T&#39;</span><span class="p">:</span>       <span class="mi">30</span>
-                <span class="c1">#minimum burn-in runtime (in timesteps; this is a mininimum because</span>
-                    <span class="c1">#burn-in will run for at least this long but until</span>
-                    <span class="c1">#stationarity detected, which will likely be longer)</span>
-            <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;timesteps&#39;</span>
-
-        <span class="s1">&#39;its&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="c1">#parameters to control how many iterations of the model to run,</span>
-            <span class="c1">#and whether or not to randomize the land and/or community</span>
-            <span class="c1">#objects in each model iteration</span>
-            <span class="s1">&#39;n_its&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-                <span class="c1">#how many iterations of the model should be run?</span>
-            <span class="s1">&#39;rand_land&#39;</span><span class="p">:</span>    <span class="bp">False</span><span class="p">,</span>
-                <span class="c1">#randomize the land for each new iteration?</span>
-            <span class="s1">&#39;rand_comm&#39;</span><span class="p">:</span>    <span class="bp">False</span><span class="p">,</span>
-                <span class="c1">#randomize the community for each new iteration?</span>
-            <span class="s1">&#39;rand_burn&#39;</span><span class="p">:</span>  <span class="bp">False</span><span class="p">,</span>
-                <span class="c1">#randomize the burn-in for each new iteration? (i.e. burn in</span>
-                <span class="c1">#each time, or burn in once at creation and then use the same</span>
-                <span class="c1">#burnt-in population for each iteration?)</span>
-            <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;iterations&#39;</span>
-
-
-        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="c1">#dictionary defining the data to be collected, the sampling</span>
-            <span class="c1">#strategy to use, the timesteps for collection, and other parameters</span>
-            <span class="s1">&#39;sampling&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="c1">#args to be unpacked into sampling function (see docstring</span>
-                    <span class="c1">#of sample_data function in data module for details)</span>
-                <span class="s1">&#39;scheme&#39;</span><span class="p">:</span>               <span class="s1">&#39;random&#39;</span><span class="p">,</span>
-                    <span class="c1">#valid: &#39;all&#39;, &#39;random&#39;, &#39;point&#39;, or &#39;transect&#39;</span>
-                <span class="s1">&#39;n&#39;</span><span class="p">:</span>                    <span class="mi">50</span><span class="p">,</span>
-                    <span class="c1">#size of samples to be collected (in number of individuals)</span>
-                <span class="s1">&#39;points&#39;</span><span class="p">:</span>               <span class="bp">None</span><span class="p">,</span>
-                    <span class="c1">#the x,y points at which data should be sampled (expressed</span>
-                        <span class="c1">#as a list or tuple of length-2 lists or 2-tuples)</span>
-                <span class="s1">&#39;transect_endpoints&#39;</span><span class="p">:</span>   <span class="bp">None</span><span class="p">,</span>
-                    <span class="c1">#endpoints of the transect to be sampled (only needed if</span>
-                        <span class="c1">#scheme is &#39;transect), expressed as a pair of</span>
-                        <span class="c1">#ordered x,y pairs (in tuples or lists)</span>
-                <span class="s1">&#39;n_transect_points&#39;</span><span class="p">:</span>    <span class="bp">None</span><span class="p">,</span>
-                    <span class="c1">#the number of evenly spaced points along the transect</span>
-                    <span class="c1">#at which to sample (only needed if scheme is &#39;transect&#39;)</span>
-                <span class="s1">&#39;radius&#39;</span><span class="p">:</span>               <span class="bp">None</span><span class="p">,</span>
-                    <span class="c1">#radius around sampling points within which to sample</span>
-                    <span class="c1">#individuals (only needed is scheme is &#39;point&#39; or</span>
-                    <span class="c1">#&#39;transect&#39;)</span>
-                <span class="s1">&#39;when&#39;</span><span class="p">:</span>                 <span class="bp">None</span><span class="p">,</span>
-                    <span class="c1">#can be an integer (in which case data will be collected every</span>
-                    <span class="c1">#that many timesteps, plus at the end) or a list of specific</span>
-                    <span class="c1">#timesteps; a value of 0 or None will default to a single</span>
-                    <span class="c1">#data-collection step after the model has run</span>
-                <span class="s1">&#39;include_land&#39;</span><span class="p">:</span>         <span class="bp">False</span><span class="p">,</span>
-                    <span class="c1">#if True, will save the Landscape object each time other data is saved</span>
-                    <span class="c1">#(probably only useful if land is changing in some way not manually coded by the user)</span>
-                <span class="s1">&#39;include_fixed_sites&#39;</span><span class="p">:</span>  <span class="bp">False</span><span class="p">,</span>
-                    <span class="c1">#if True, and if genetic data is to be formatted as VCFs,</span>
-                        <span class="c1">#the VCFs will contain fixed sites, not just variants</span>
-                        <span class="c1">#(defaults to False)</span>
-                <span class="p">},</span>
-            <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s1">&#39;gen_format&#39;</span><span class="p">:</span>           <span class="p">[</span><span class="s1">&#39;vcf&#39;</span><span class="p">,</span> <span class="s1">&#39;fasta&#39;</span><span class="p">],</span>
-                    <span class="c1">#format to use for saving genetic data;</span>
-                        <span class="c1">#currently valid values: &#39;vcf&#39;, &#39;fasta&#39;,</span>
-                        <span class="c1">#or a list containing both, if both</span>
-                        <span class="c1">#should be written</span>
-                <span class="s1">&#39;geo_vect_format&#39;</span><span class="p">:</span>      <span class="s1">&#39;csv&#39;</span><span class="p">,</span>
-                    <span class="c1">#format to use for saving geographic points;</span>
-                        <span class="c1">#currently valid values: &#39;csv&#39;, &#39;shapefile&#39;, &#39;geojson&#39;</span>
-                <span class="s1">&#39;geo_rast_format&#39;</span><span class="p">:</span>      <span class="s1">&#39;geotiff&#39;</span><span class="p">,</span>
-                    <span class="c1">#format to use for saving landscape rasters (which will</span>
-                        <span class="c1">#only be saved if the &#39;include_land&#39; parameter in the</span>
-                        <span class="c1">#sampling subdict is True);</span>
-                        <span class="c1">#currently valid values: &#39;geotiff&#39;, &#39;txt&#39;</span>
-                <span class="p">},</span>
-            <span class="p">},</span> <span class="c1">#&lt;END&gt; &#39;data&#39;</span>
-
-
-        <span class="s1">&#39;stats&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="c1">#dictionary defining which stats to be calculated, and parameters for</span>
-                <span class="c1">#their calculation (including frequency, in timesteps, of collection)</span>
-                <span class="c1">#valid stats include:</span>
-                    <span class="c1"># &#39;Nt&#39;  : population census size</span>
-                    <span class="c1"># &#39;het&#39; : heterozygosity</span>
-                    <span class="c1"># &#39;maf&#39; : minor allele frequency</span>
-                    <span class="c1"># &#39;ld&#39;  : linkage disequilibrium</span>
-                    <span class="c1"># &#39;mean_fit&#39; : mean fitness</span>
-            <span class="s1">&#39;Nt&#39;</span><span class="p">:</span>       <span class="p">{</span><span class="s1">&#39;calc&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                         <span class="s1">&#39;freq&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-                        <span class="p">},</span>
-            <span class="s1">&#39;het&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;calc&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                         <span class="s1">&#39;freq&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-                         <span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
-                        <span class="p">},</span>
-            <span class="s1">&#39;maf&#39;</span><span class="p">:</span>      <span class="p">{</span><span class="s1">&#39;calc&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                         <span class="s1">&#39;freq&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-                        <span class="p">},</span>
-            <span class="s1">&#39;ld&#39;</span><span class="p">:</span>       <span class="p">{</span><span class="s1">&#39;calc&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                         <span class="s1">&#39;freq&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-                        <span class="p">},</span>
-            <span class="s1">&#39;mean_fit&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;calc&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
-                         <span class="s1">&#39;freq&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                        <span class="p">},</span>
-            <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;stats&#39;</span>
-
-
-        <span class="s1">&#39;seed&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="c1">#parameters to control whether and how to set the seed</span>
-            <span class="s1">&#39;set&#39;</span><span class="p">:</span>          <span class="bp">True</span><span class="p">,</span>
-                <span class="c1">#set the seed? (for reproducibility)</span>
-            <span class="s1">&#39;num&#39;</span><span class="p">:</span>          <span class="mi">94618</span>
-                <span class="c1">#value used to seed random number generators</span>
-            <span class="p">},</span> <span class="c1"># &lt;END&gt; &#39;seed&#39;</span>
-
-        <span class="p">}</span> <span class="c1"># &lt;END&gt; &#39;model&#39;</span>
-
-    <span class="p">}</span> <span class="c1"># &lt;END&gt; params</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;movement&#39;</span><span class="p">:</span> <span class="p">{</span>
+     <span class="c1">#mode of distr of movement direction</span>
+     <span class="s1">&#39;direction_distr_mu&#39;</span><span class="p">:</span>     <span class="mi">1</span><span class="p">,</span>
 </pre></div>
 </div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, :py;`float`}</p>
+<p>default: 1</p>
+<p>reset? N</p>
+<p>This is the <span class="math">\(\mu\)</span> parameter of the VonMises distribution
+(a circularized normal distribution) from which
+movement directions are chosen when movement is random and isotropic
+(rather than
+being determined by a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>; if a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>
+is being usen this parameter is ignored). The <span class="math">\(\kappa\)</span> value
+that is fed into this same distribution (<strong>direction_distr_kappa</strong>)
+causes it to be very dispersed,
+such that the distribution is effectively a uniform distribution on
+the unit circle (i.e. all directions are effectively equally probable).
+For this reason, changing this parameter without changing the
+<strong>direction_distr_kappa</strong> value also, will make no change in the directions
+drawn for movement.  If random, isotropic
+movement is what you aim to model then there is probably little reason
+to change these parameters.</p>
+<p><strong>direction_distr_kappa</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#concentration of distr of movement direction</span>
+<span class="s1">&#39;direction_distr_kappa&#39;</span><span class="p">:</span>  <span class="mi">0</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>}</p>
+<p>default: 0</p>
+<p>reset? N</p>
+<p>This is the <span class="math">\(\kappa\)</span> parameter of the VonMises distribution
+(a circularized normal distribution) from which
+movement directions are chosen when movement is random and isotropic
+(rather than
+being determined by a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>; if a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>
+is being usen this parameter is ignored). The default value of 0 will
+cause this distribution to be very dispersed, approximating a uniform
+distribution on the unit circle and rendering the <span class="math">\(\mu\)</span>
+value (<strong>direction_distr_mu</strong>) effectively meaningless. However, as this
+parameter’s value increases the resulting circular distributions will become
+more concentrated around <span class="math">\(\mu\)</span>, making the value fed to
+<strong>direction_distr_mu</strong> influential. If random, isotropic
+movement is what you aim to model then there is probably little reason
+to change these parameters.</p>
+<p><strong>distance_distr_mu</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mean of distr of movement distance</span>
+<span class="s1">&#39;distance_distr_mu&#39;</span><span class="p">:</span>      <span class="mf">0.5</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>}</p>
+<p>default: 0.5</p>
+<p>reset? Y</p>
+<p>This is the <span class="math">\(\mu\)</span> parameter of the Wald distribution used to draw
+movement distances, expressed in units of raster-cells. This parameter and
+<strong>distance_distr_sigma</strong> (the Wald distribution’s <span class="math">\(sigma\)</span>) should be
+set to reflect a distribution of movement distances that is appropriate
+for your scenario.</p>
+<p><strong>distance_distr_sigma</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#variance of distr of movement distance</span>
+<span class="s1">&#39;distance_distr_sigma&#39;</span><span class="p">:</span>   <span class="mf">0.5</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>}</p>
+<p>default: 0.5</p>
+<p>reset? Y</p>
+<p>This is the <span class="math">\(\sigma\)</span> parameter of the Wald distribution used to draw
+movement distances, expressed in units of raster-cells. This parameter and
+<strong>distance_distr_mu</strong> (the Wald distribution’s <span class="math">\(mu\)</span>) should be
+set to reflect a distribution of movement distances that is appropriate
+for your scenario.</p>
+<p><strong>dispersal_distr_mu</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mean of distr of dispersal distance</span>
+<span class="s1">&#39;dispersal_distr_mu&#39;</span><span class="p">:</span>     <span class="mf">0.5</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>}</p>
+<p>default: 0.5</p>
+<p>reset? Y</p>
+<p>This is the <span class="math">\(\mu\)</span> parameter of the Wald distribution used to draw
+dispersal distances, expressed in units of raster-cells. This parameter and
+<strong>distance_distr_sigma</strong> (the Wald distribution’s <span class="math">\(sigma\)</span>) should be
+set to reflect a distribution of dispersal distances that is appropriate
+for your scenario.</p>
+<p><strong>dispersal_distr_sigma</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#variance of distr of dispersal distance</span>
+<span class="s1">&#39;dispersal_distr_sigma&#39;</span><span class="p">:</span>  <span class="mf">0.5</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>}</p>
+<p>default: 0.5</p>
+<p>reset? Y</p>
+<p>This is the <span class="math">\(\sigma\)</span> parameter of the Wald distribution used to draw
+dispersal distances, expressed in units of raster-cells. This parameter and
+<strong>distance_distr_mu</strong> (the Wald distribution’s <span class="math">\(mu\)</span>) should be
+set to reflect a distribution of dispersal distances that is appropriate
+for your scenario.</p>
+<div class="section" id="id3">
+<h7>_MovementSurface<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h7>
+<p><strong>layer</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;move_surf&#39;</span>     <span class="p">:</span> <span class="p">{</span>
+    <span class="c1">#move-surf Layer name</span>
+    <span class="s1">&#39;layer&#39;</span><span class="p">:</span>                <span class="s1">&#39;layer_0&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code></p>
+<p>default: <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘layer_0’</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates, by name, the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> to be used as to construct the
+<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> for a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>. Note that this can also
+be thought of as the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> that should serve as a
+<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s permeability raster (because <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s moving
+on this <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> toward the higher (if mixture distributions
+are used) or highest (if unimodl distributions are used)
+values in their neighborhoods).</p>
+<p><strong>mixture</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to use mixture distrs</span>
+<span class="s1">&#39;mixture&#39;</span><span class="p">:</span>              <span class="bp">True</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: True</p>
+<p>reset? P</p>
+<p>This indicates whether the <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> should be built using
+VonMises mixture distributions or unimodal VonMises distributions.
+If True, each cell in the <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> will have an approximate
+circular distribution that is a
+weighted sum of 8 unimodal VonMises distributions (one per cell in the 8-cell
+neighborhood); each of those summed unimodal distributions will have as its
+mode the direction of the neighboring cell on which it is based and as its
+weight the relative permeability of the cell on which it is based
+(relative to the full neighborhood). If False, each cell in the
+<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> will have an approximated circular distribution
+that is a single
+VonMises distribution with its mode being the direction of the maximum-valued
+cell in the 8-cell neighborhood and its concentration determined by
+<strong>vm_distr_kappa</strong>.</p>
+<p><strong>vm_distr_kappa</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#concentration of distrs</span>
+<span class="s1">&#39;vm_distr_kappa&#39;</span><span class="p">:</span>       <span class="mi">12</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>}</p>
+<p>default: 12</p>
+<p>reset? N</p>
+<p>This sets the concentration of the VonMises distributions used to build
+the approximated circular distributions in the <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>.
+The default value was chosen heuristically as one that provides a reasonable
+concentration in the direction of a unimodal VonMises distribution’s mode
+without causing VonMises mixture distributions built from an
+evenly weighted sum of distributions pointing toward the
+8-cell-neighborhood directions to have 8 pronounced modes.
+There will probably be little need to change the default value, but if
+interested then the user could create <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>s with various values
+of this parameter and then use the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_movement_surface</span></span></code>
+method to explore the influence of the parameter on the resulting
+<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>s.</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="genomicarchitecture">
+<h6>_GenomicArchitecture<a class="headerlink" href="#genomicarchitecture" title="Permalink to this headline">¶</a></h6>
+<p><strong>gen_arch_file</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;gen_arch&#39;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="c1">#/path/to/file.csv defining custom genomic arch</span>
+    <span class="s1">&#39;gen_arch_file&#39;</span><span class="p">:</span>            <span class="bp">None</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: {<code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘&lt;your_model_name&gt;_pop-&lt;n&gt;_gen_arch.csv’</span></span></code></p>
+<p>reset? P</p>
+<p>This arguments indicates whether a custom genomic architecture file should
+be used to create a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>, and if so,
+where that file is located. If the value is <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, no file will be
+used and the values of this <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s other genomic
+architecture parameters in the parameters file will be used to create
+the <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>. If the value is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code> pointing to a
+custom genomic-architecture file
+(i.e. a CSV file with loci as rows and ‘locus_num’,
+‘p’, ‘dom’, ‘r’, ‘trait’, and ‘alpha’ as columns stipulating the starting
+allele frequencies, dominance values, inter-locus recombination rates,
+trait names, and effect sizes of all loci). Geonomics will create an empty
+file of this format for each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> for which the
+‘custom_genomic_architecture’ argument is provided the value True when
+<code class="code py python docutils literal"><span class="name"><span class="pre">gnx</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">make_parameters_file</span></span></code> is called (which will be saved as
+‘&lt;your_model_name&gt;_pop-&lt;n&gt;_gen_arch.csv’).</p>
+<p>Note that when Geonomics reads in a custom genomic architecture file
+to create a <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>, it will check
+that the length (i.e. number of rows) in this file is equal to the length
+stipulated by the <strong>L</strong> parameter, and will also check that the first value
+at the top of the ‘r’ column is 0.5 (which is used to implement independent
+assortment during gametogenesis). If either of these checks fails,
+Geonomics throws an Error.</p>
+<p><strong>L</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#num of loci</span>
+<span class="s1">&#39;L&#39;</span><span class="p">:</span>                        <span class="mi">1000</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 1000</p>
+<p>reset? P</p>
+<p>This defines the total number of loci in the genomes in a
+<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>.</p>
+<p><strong>l_c</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#num of chromosomes</span>
+<span class="s1">&#39;l_c&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="mi">750</span><span class="p">,</span> <span class="mi">250</span><span class="p">],</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code> of <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>s</p>
+<p>default: <code class="code py python docutils literal"><span class="punctuation"><span class="pre">[</span></span><span class="literal number integer"><span class="pre">750</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal number integer"><span class="pre">250</span></span><span class="punctuation"><span class="pre">]</span></span></code></p>
+<p>reset? P</p>
+<p>This defines the lengths (in number of loci) of each of the chromosomes
+in the genomes in a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>.  Note that the sum of this <code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code>
+must equal <strong>L</strong>, otherwise Geonomics will throw an Error.
+Also note that Geonomics models genomes as single <strong>L</strong> x 2
+arrays, where separate chromosomes are delineated by points along
+the genome where the recombination rate is 0.5;
+thus, for a model where recombination rates are often at or near 0.5, this
+parameter will have little meaning.</p>
+<p><strong>mu_neut</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#genome-wide per-base neutral mut rate (0 to disable)</span>
+<span class="s1">&#39;mu_neut&#39;</span><span class="p">:</span>                  <span class="mf">1e-9</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 1e-9</p>
+<p>reset? P</p>
+<p>This defines the genome-wide per-base neutral mutation rate.
+This value can be set to 0 to disable neutral mutation.</p>
+<p><strong>mu_delet</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#genome-wide per-base deleterious mut rate (0 to disable)</span>
+<span class="s1">&#39;mu_delet&#39;</span><span class="p">:</span>                 <span class="mi">0</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 0</p>
+<p>reset? P</p>
+<p>This defines the genome-wide per-base deleterious mutation rate.
+This value can be set to 0 to disable deleterious mutation. Note that all
+deleterious mutation will fall outside the loci that affect any <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s
+a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> may have, and will behave simply as globally
+deleterious mutations (i.e. mutations that reduce the mutated
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>’s fitness regardless of that <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>’s
+spatial location).</p>
+<p><strong>delet_alpha_distr_shape</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#shape of distr of deleterious effect sizes</span>
+<span class="s1">&#39;delet_alpha_distr_shape&#39;</span><span class="p">:</span>      <span class="mf">0.2</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 0.2</p>
+<p>reset? P</p>
+<p>This defines the shape parameter of the gamma distribution from which
+the effect sizes of deleterious loci are drawn. (Values drawn will be
+truncated to the interval [0,1].)</p>
+<p><strong>delet_alpha_distr_scale</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#scale of distr of deleterious effect sizes</span>
+<span class="s1">&#39;delet_alpha_distr_scale&#39;</span><span class="p">:</span>      <span class="mf">0.2</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 0.2</p>
+<p>reset? P</p>
+<p>This defines the scale parameter of the gamma distribution from which
+the effect sizes of deleterious loci are drawn. (Values drawn will be
+truncated to the interval [0,1].)</p>
+<p><strong>r_distr_alpha</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#alpha of distr of recomb rates</span>
+<span class="s1">&#39;r_distr_alpha&#39;</span><span class="p">:</span>            <span class="mf">0.5</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 0.5</p>
+<p>reset? P</p>
+<p>This defines the alpha parameter of the beta distribution from which
+interlocus recombination rates are drawn. (Values drawn will be truncated to
+the interval [0, 0.5].)</p>
+<p><strong>r_distr_beta</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#beta of distr of recomb rates</span>
+<span class="s1">&#39;r_distr_beta&#39;</span><span class="p">:</span>            <span class="mf">15e9</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 15e9</p>
+<p>reset? P</p>
+<p>This defines the beta parameter of the beta distribution from which
+interlocus recombination rates are drawn. (Values drawn will be truncated to
+the interval [0, 0.5].)</p>
+<p><strong>dom</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether loci should be dominant (for allele &#39;1&#39;)</span>
+<span class="s1">&#39;dom&#39;</span><span class="p">:</span>                      <span class="bp">False</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: False</p>
+<p>reset? P</p>
+<p>This indicates whether loci should be treated as dominant (if True)
+for the ‘1’ allele  or as codominant (if False). Codominance is the default
+behavior, because it is assumed that Geonomics will often be used
+to model quantitative traits, for which this is a reasonable assumption.</p>
+<p><strong>pleiotropy</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to allow pleiotropy</span>
+<span class="s1">&#39;pleiotropy&#39;</span><span class="p">:</span>               <span class="bp">False</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: False</p>
+<p>reset? P</p>
+<p>This indicates whether pleiotropy should be allowed. If True, loci will be
+permitted to contribute to more than one <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>.</p>
+<p><strong>recomb_rate_custom_fn</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#custom fn for drawing recomb rates</span>
+<span class="s1">&#39;recomb_rate_custom_fn&#39;</span><span class="p">:</span>    <span class="bp">None</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name"><span class="pre">function</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code></p>
+<p>reset? P</p>
+<p>This parameter allows the user to provide a custom function according to which
+interlocus recombination rates will be assigned. If set to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, the
+default behavior (i.e. recombination rates chosen from a beta distribution
+using <strong>r_distr_alpha</strong> and <strong>r_distr_beta</strong>) will be used.</p>
+<p><strong>n_recomb_paths_mem</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#number of recomb paths to hold in memory</span>
+<span class="s1">&#39;n_recomb_paths_mem&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e4</span><span class="p">),</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span><span class="punctuation"><span class="pre">(</span></span><span class="literal number float"><span class="pre">1e4</span></span><span class="punctuation"><span class="pre">)</span></span></code></p>
+<p>reset? P</p>
+<p>This defines the maximum number of recombination paths for Genomics to hold in
+memory at one time. Geonomics models recombination by using the interlocus
+recombination rates to draw a large number of recombination ‘paths’
+along the 2xL genome array (when the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is first built), and
+then shuffling and cycling through those recombination paths as
+needed during <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> runs. Of the total number of paths created, some
+subset will be held in memory (the number of these is defined by
+this parameter), while the remainder will live in a temporary
+file (which is occasionally read in whenever the paths in memory are close to
+being used up). Thus, to avoid problems, the number provided to this parameter
+should be comfortably larger than the largest anticipated number of
+recombination paths that will be needed during a single mating event (i.e.
+larger than two times the largest antipicated number of offspring to be born
+to the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> during one timestep).</p>
+<p><strong>n_recomb_paths_tot</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#total number of recomb paths to simulate</span>
+<span class="s1">&#39;n_recomb_paths&#39;</span><span class="p">:</span>           <span class="nb">int</span><span class="p">(</span><span class="mf">1e5</span><span class="p">),</span>
+</pre></div>
+</div>
+<p>This defines the total number of recombination paths that Geonomics will
+generate. Geonomics models recombination by using the interlocus
+recombination rates to draw a large number of recombination ‘paths’
+along the 2xL genome array (when the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is first built), and
+then shuffling and cycling through those recombination paths as
+needed during <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> runs. The larger the total number of these paths
+that is created, the more closely Geonomics will model truly
+free recombination and the more prceisely it will model the exact
+interlocus recombination rates defined in a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s
+<code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>.</p>
+<p><strong>mut_log</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to save mutation logs</span>
+<span class="s1">&#39;mut_log&#39;</span><span class="p">:</span>                  <span class="bp">None</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the location of the mutation-log file where  Geonomics should
+save a record of each mutation that occurs for a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
+<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, for each iteration. If <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, no mutation log
+will be created and written to.</p>
+<hr class="docutils" />
+<div class="section" id="traits">
+<h7>Traits<a class="headerlink" href="#traits" title="Permalink to this headline">¶</a></h7>
+<p><strong>trait_&lt;n&gt;</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#trait name (TRAIT NAMES MUST BE UNIQUE!)</span>
+<span class="s1">&#39;trait_0&#39;</span> <span class="p">:</span>   <span class="p">{</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="name"><span class="pre">trait_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code></p>
+<p>reset? P</p>
+<p>This parameter defines the name for each <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>.
+(Note that unlike most parameters, this parameter is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code> key,
+the value for which is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code>
+of parameters defining the <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> being named.) As the capitalized
+reminder in the parameters states, each <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>
+must have a unique name (so that a parameterized
+<code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> isn’t overwritten in the <code class="code py python docutils literal"><span class="name"><span class="pre">ParametersDict</span></span></code> by a
+second, identically-named <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>; Geonomics
+checks for unique names and throws an Error if this condition is not met.
+<code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> names can, but needn’t be, descriptive of what each
+<code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> represents. Example valid values include: 0, ‘trait0’,
+‘tmp_trait’, ‘bill length’. Names default to <code class="code py python docutils literal"><span class="name"><span class="pre">trait_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code>,
+where n is a series of integers starting from 0 and counting the
+number of <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s for this <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>.</p>
+<p><strong>layer</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#trait-selection Layer name</span>
+<span class="s1">&#39;layer&#39;</span><span class="p">:</span>                <span class="s1">&#39;layer_0&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code></p>
+<p>default: <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘layer_0’</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates, by name, the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> that serves as the selective force
+acting on this <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>. (For example, if this Trait is selected upon by
+annual mean temperature, then the name of the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>
+representing annual mean temperature should be provided here.)</p>
+<p><strong>phi</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#polygenic selection coefficient</span>
+<span class="s1">&#39;phi&#39;</span><span class="p">:</span>                  <span class="mf">0.05</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">np</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">ndarray</span></span></code> of <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>s}</p>
+<p>default: 0.05</p>
+<p>reset? P</p>
+<p>This defines the polygenic selection coefficient on this <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> (i.e
+the selection coefficient acting on the phenotypes, rather than the genotypes,
+of this <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>). The effect of this value can be thought of as the
+reduction (from 1) in an <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>’s survival probability when that
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> is maximally unfit (i.e. when that <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> has a
+phenotypic value of 1.0 but is located in a location with an environmental
+value of 0.0, or vice versa). When the value is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code> then the
+strength of selection will be the same for all locations on the
+<code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>. When the value is an <code class="code py python docutils literal"><span class="name"><span class="pre">np</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">ndarray</span></span></code> of
+equal dimensions to the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> then the strength of
+selection will vary across space, as indicated by the values in this array
+(what Geonomics refers to as a “spatially contingent” selection regime).</p>
+<p><strong>n_loci</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#number of loci underlying trait</span>
+<span class="s1">&#39;n_loci&#39;</span><span class="p">:</span>               <span class="mi">10</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 10</p>
+<p>reset? P</p>
+<p>This defines the number of loci that should contribute to the phenotypes
+of this <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>. These loci will be randomly drawn from across the
+genome.</p>
+<p><strong>mu</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mutation rate at loci underlying trait</span>
+<span class="s1">&#39;mu&#39;</span><span class="p">:</span>                   <span class="mf">1e-9</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 1e-9</p>
+<p>reset? P</p>
+<p>This defines the mutation rate for this <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> (i.e. the rate at which
+mutations that affect the phenotypes of this <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> will arise). Set to
+0 to disable mutation for this <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>.</p>
+<p><strong>alpha_distr_mu</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mean of distr of effect sizes</span>
+<span class="s1">&#39;alpha_distr_mu&#39;</span> <span class="p">:</span>      <span class="mi">0</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 0</p>
+<p>reset? N</p>
+<p>This defines the mean of the normal distribution from which a <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>’s
+new mutations’ effect sizes are drawn. The user will likely want to keep this
+value set at 0 and adjust <strong>alpha_distr_sigma</strong>, because for multigenic
+<code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s the baseline phenotypic value is 0.5 (the central value on a
+Geonomics <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>), so new mutations in a <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> would then
+be equally likely to decrease or increase <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s’ phenotypes from
+that baseline.</p>
+<p><strong>alpha_distr_sigma</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#variance of distr of effect size</span>
+<span class="s1">&#39;alpha_distr_sigma&#39;</span><span class="p">:</span>    <span class="mf">0.5</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 0.5</p>
+<p>reset? P</p>
+<p>This defines the standard deviation of the normal distribution from which
+a <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>’s new mutations’ effect sizes are drawn. The user will likely
+want to adjust this value and keep <strong>alpha_distr_mu</strong> set at 0, because
+for multigenic <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s the baseline phenotypic value is 0.5
+(the central value on a Geonomics <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>), so new
+mutations in a <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> would then be equally likely to decrease
+or increase <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s’ phenotypes from that baseline.</p>
+<p><strong>gamma</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#curvature of fitness function</span>
+<span class="s1">&#39;gamma&#39;</span><span class="p">:</span>                <span class="mi">1</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>}</p>
+<p>default: 1</p>
+<p>reset? N</p>
+<p>This defines the curvature of the fitness function (i.e.
+how fitness decreases as the absolute difference between an
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>’s optimal and actual phenotypes increases). The user
+will probably have no need to change this from the default value of 1
+(which causes fitness to decrease linearly around the optimal
+phenotypic value). Values &lt; 1 will cause the fitness function to be
+concave up; values &gt; 1 will cause it to be concave down.</p>
+<p><strong>univ_adv</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether the trait is universally advantageous</span>
+<span class="s1">&#39;univ_adv&#39;</span><span class="p">:</span>             <span class="bp">False</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: False</p>
+<p>reset? P</p>
+<p>This indicates whether whether selection on a <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> should be
+universal (i.e. whether a phenotype of 1 should be optimal everywhere
+on the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>). When set to True, selection of the <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>
+will be directional on the entire <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, regardless
+of <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s’ spatial contexts.</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="population-change">
+<h6>Population change<a class="headerlink" href="#population-change" title="Permalink to this headline">¶</a></h6>
+<div class="section" id="demographic-change">
+<h7>Demographic change<a class="headerlink" href="#demographic-change" title="Permalink to this headline">¶</a></h7>
+<p><strong>kind</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#kind of event {&#39;monotonic&#39;, &#39;stochastic&#39;,</span>
+<span class="c1">#&#39;cyclical&#39;, &#39;custom&#39;}</span>
+<span class="s1">&#39;kind&#39;</span><span class="p">:</span>             <span class="s1">&#39;monotonic&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘monotonic’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘stochastic’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘cyclical’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘custom’</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘monotonic’</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates what type of demographic change is being parameterized.
+Each event has a certain length (in timesteps; defined by the <strong>start</strong> and
+<strong>end</strong> parameters). Note that of the other parameters in this section, only
+those that are necessary to parameterize the type of change event indicated
+here will be used.</p>
+<p>In <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘monotonic’</span></span></code> change events, a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s
+carrying capacity raster (K) is multiplied by a constant factor
+(<strong>rate</strong>) at each timestep during the event.
+In <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘stochastic’</span></span></code> change events, K fluctuates
+around the baseline value (i.e. the K-raster at the time that the change event
+begins) at each required timestep during the event (where the sizes of the
+fluctuations are drawn from the distribution indicated by
+<strong>distr</strong>, the floor and ceiling on those sizes are set by
+<strong>size_range</strong>, and the required timesteps are determined by <strong>interval</strong>).
+In <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘cyclical’</span></span></code> change events, K undergoes a number (indicated
+by <strong>n_cycles</strong>) of sinusoidal cycles between some minimum and maximum
+values (indicated by <strong>size_range</strong>).
+In <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘custom’</span></span></code> change events, the baseline K is multiplied by a series
+of particular factors (defined by <strong>sizes</strong>) at a series of particular
+timesteps (defined by <strong>timesteps</strong>).</p>
+<p><strong>start</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#starting timestep</span>
+<span class="s1">&#39;start&#39;</span><span class="p">:</span>            <span class="mi">49</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 49</p>
+<p>reset? P</p>
+<p>This indicates the timestep at which the demographic change event
+should start.</p>
+<p><strong>end</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#ending timestep</span>
+<span class="s1">&#39;end&#39;</span><span class="p">:</span>            <span class="mi">99</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 99</p>
+<p>reset? P</p>
+<p>This indicates the timestep at which the demographic change event should end.</p>
+<p><strong>rate</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#rate, for monotonic change</span>
+<span class="s1">&#39;rate&#39;</span><span class="p">:</span>             <span class="mf">1.02</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
+<p>default: 1.02</p>
+<p>reset? P</p>
+<p>This indicates the rate at which a <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘monotonic’</span></span></code> change event should occur.
+At each timestep during the event, a new carrying capacity raster (K)
+will be calculated by multiplying the previous step’s K by this factor.
+Thus, values should be expressed relative to 1.0 indicating no change.</p>
+<p><strong>interval</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#interval of changes, for stochastic change</span>
+<span class="s1">&#39;interval&#39;</span><span class="p">:</span>         <span class="mi">1</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 1</p>
+<p>reset? P</p>
+<p>This indicates the interval at which fluctutations should occur during a
+<code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘stochastic’</span></span></code> change event (i.e. the number of timesteps to wait
+between fluctuations).</p>
+<p><strong>distr</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#distr, for stochastic change {&#39;uniform&#39;, &#39;normal&#39;}</span>
+<span class="s1">&#39;distr&#39;</span><span class="p">:</span>            <span class="s1">&#39;uniform&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘uniform’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘normal’</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘uniform’</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the distribution from which to draw the sizes of
+fluctuations in a <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘stochastic’</span></span></code> change event. Valid options are
+<cite>‘uniform’</cite> and <cite>‘normal’</cite>.</p>
+<p><strong>n_cycles</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#num cycles, for cyclical change</span>
+<span class="s1">&#39;n_cycles&#39;</span><span class="p">:</span>         <span class="mi">10</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 10</p>
+<p>reset? P</p>
+<p>This indicates the number of cyclical fluctuations that should occur during
+a <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘cyclical’</span></span></code> change event.</p>
+<p><strong>size_range</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#min &amp; max sizes, for stochastic &amp; cyclical change</span>
+<span class="s1">&#39;size_range&#39;</span><span class="p">:</span>       <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">tuple</span></span></code> of <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>s</p>
+<p>default: <code class="code py python docutils literal"><span class="punctuation"><span class="pre">(</span></span><span class="literal number float"><span class="pre">0.5</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal number float"><span class="pre">1.5</span></span><span class="punctuation"><span class="pre">)</span></span></code></p>
+<p>reset? P</p>
+<p>This defines the minimum and maximum sizes of fluctuations that can occur
+during <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘stochastic’</span></span></code> and <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘cyclical’</span></span></code> change events.</p>
+<p><strong>timesteps</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#list of timesteps, for custom change</span>
+<span class="s1">&#39;timesteps&#39;</span><span class="p">:</span>        <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">95</span><span class="p">],</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code> of <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>s</p>
+<p>default: [50, 90, 95]</p>
+<p>reset? P</p>
+<p>This defines the series of particular timesteps at which fluctutations should
+occur during a <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘custom’</span></span></code> change event.</p>
+<p><strong>sizes</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#list of sizes, for custom change</span>
+<span class="s1">&#39;sizes&#39;</span><span class="p">:</span>        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code> of <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>s</p>
+<p>default: [2, 5, 0.5]</p>
+<p>reset? P</p>
+<p>This defines the series of particular fluctutations that should occur
+during a <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘custom’</span></span></code> change event.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="life-history-change">
+<h7>Life-history change<a class="headerlink" href="#life-history-change" title="Permalink to this headline">¶</a></h7>
+<p><strong>&lt;life_hist_param&gt;</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#life-history parameter to change</span>
+<span class="s1">&#39;&lt;life_hist_param&gt;&#39;</span><span class="p">:</span> <span class="p">{</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code></p>
+<p>default: <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘&lt;life_hist_param&gt;’</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the life-history parameter to be changed by this life-history
+change event. (Note that unlike most parameters, this parameter is
+a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code> key, the value for which is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code>
+of parameters controlling how the life-history parameter that is named
+will change.)</p>
+<p><strong>timesteps</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#list of timesteps</span>
+<span class="s1">&#39;timesteps&#39;</span><span class="p">:</span>        <span class="p">[],</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code> of <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>s</p>
+<p>default: <code class="code py python docutils literal"><span class="punctuation"><span class="pre">[]</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the timesteps at which the life-history parameter being changed
+should change (to the values indicated by <strong>vals</strong>).</p>
+<p><strong>vals</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#list of values</span>
+<span class="s1">&#39;vals&#39;</span><span class="p">:</span>        <span class="p">[],</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code> of <code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>s</p>
+<p>default: <code class="code py python docutils literal"><span class="punctuation"><span class="pre">[]</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the values to which the life-history parameter being changed
+should change (at the timesteps indicated by <strong>timesteps</strong>).</p>
+</div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="model-parameters">
+<h4>Model parameters<a class="headerlink" href="#model-parameters" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id4">
+<h5>Main<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<p><strong>T</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#total Model runtime (in timesteps)</span>
+<span class="s1">&#39;T&#39;</span><span class="p">:</span>            <span class="mi">100</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 100</p>
+<p>reset? Y</p>
+<p>This indicates the total number of timesteps for which the main portion of
+a <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> (i.e. the portion after the burn-in has completed) will be run
+during each iteration.</p>
+<p><strong>burn_T</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#min burn-in runtime (in timesteps)</span>
+<span class="s1">&#39;burn_T&#39;</span><span class="p">:</span>       <span class="mi">30</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 30</p>
+<p>reset? P</p>
+<p>This indicates the minimum number of timesteps for which a <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>’s
+burn-in will run. (Note this is only a minimum because the test for
+burn-in completion includes a check that at least this many timesteps have
+elapsed, but also includes two statistical checks of stationarity of the
+size of each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> in a <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code>.)</p>
+<p><strong>seed</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#seed number</span>
+<span class="s1">&#39;num&#39;</span><span class="p">:</span>          <span class="bp">None</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates whether or not to set the seeds of the random number
+generators (by calling <code class="code py python docutils literal"><span class="name"><span class="pre">np</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">random</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">seed</span></span></code> and <code class="code py python docutils literal"><span class="name"><span class="pre">random</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">seed</span></span></code>)
+before building and running a <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>. If value is an integer, the seeds
+will be set to that value. If value is <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, seeds will not be set.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="iterations">
+<h5>Iterations<a class="headerlink" href="#iterations" title="Permalink to this headline">¶</a></h5>
+<p><strong>num_iterations</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#num iterations</span>
+<span class="s1">&#39;n_its&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 3</p>
+<p>reset? Y</p>
+<p>This indicates the number of iterations for which the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>
+should be run. (Note that for each iteration a separate subdirectory of
+data and stats will be written, if your <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> has parameterized data
+and stats to be collected.)</p>
+<p><strong>rand_landscape</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to randomize Landscape each iteration</span>
+<span class="s1">&#39;rand_landscape&#39;</span><span class="p">:</span>    <span class="bp">False</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: False</p>
+<p>reset? P</p>
+<p>This indicates whether the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> should be randomized for each
+iteration. If True, a new <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> will be generated at the start
+of each iteration. If False, the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> from iteration 0 will be
+saved and reused for each subsequent iteration.</p>
+<p><strong>rand_community</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to randomize Community each iteration</span>
+<span class="s1">&#39;rand_comm&#39;</span><span class="p">:</span>    <span class="bp">False</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: False</p>
+<p>reset? P</p>
+<p>This indicates whether the <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> should be randomized for each
+iteration. If True, a new <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> will be generated at the start
+of each iteration. If False, the <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> from iteration 0 will be
+saved and reused for each subsequent iteration (and whether that
+<code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> is saved before or after being burned in will depend on
+the value provided to the <strong>repeat_burn</strong> parameter).</p>
+<p><strong>repeat_burn</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to burn in each iteration</span>
+<span class="s1">&#39;repeat_burn&#39;</span><span class="p">:</span>  <span class="bp">False</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: False</p>
+<p>reset? P</p>
+<p>This indicates whether a reused <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> should be burned in
+separately for each iteration for which it is reused. If True, the
+<code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> from iteration 0 will be saved as soon as its instantiated,
+but will have a new burn-in run for each iteration in which it is used. If
+False, the <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> from iteration 0 will be saved after its burn-in
+is complete, and then will only have the main portion of its <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> run
+separately during each iteration. (Note that if <strong>rand_community</strong> is set to True then
+the value of this parameter will not be used.)</p>
+<hr class="docutils" />
+<div class="section" id="data">
+<h6>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h6>
+<hr class="docutils" />
+<div class="section" id="sampling">
+<h7>Sampling<a class="headerlink" href="#sampling" title="Permalink to this headline">¶</a></h7>
+<p><strong>scheme</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#sampling scheme {&#39;all&#39;, &#39;random&#39;, &#39;point&#39;, &#39;transect&#39;}</span>
+<span class="s1">&#39;scheme&#39;</span><span class="p">:</span>               <span class="s1">&#39;random&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘all’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘random’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘point’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘transect’</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘random’</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the sampling scheme to use when collecting data from a
+<code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>. Currently valid values include <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘all’</span></span></code>,
+<code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘random’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘point’</span></span></code>, and <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘transect’</span></span></code>.</p>
+<p>With <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘all’</span></span></code>, data will be collected for all <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s
+at each sampling timestep. With <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘random’</span></span></code>, data will be collected from a
+random sample of <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s (of size indicated by parameter <strong>n</strong>)
+from anywhere on the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>.
+With <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘point’</span></span></code>, data will be collected from random samples of size <strong>n</strong>
+within a certain distance (<strong>radius</strong>) of each of a set of particular
+points (<strong>points</strong>). With <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘transect’</span></span></code>, a linear transect of some
+number of points (<strong>n_transect_points</strong>) between some endpoints
+(<strong>transect_endpoints</strong>) will be created, and then data will be collected
+from random samples of size <strong>n</strong> with a certain distance (<strong>radius</strong>)
+of each point along the transect.</p>
+<p><strong>n</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#sample size at each point, for point &amp; transect sampling</span>
+<span class="s1">&#39;n&#39;</span><span class="p">:</span>                    <span class="mi">250</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: 250</p>
+<p>reset? P</p>
+<p>This indicates the total number of <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s to sample each time
+data is collected (if <strong>scheme</strong> is <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘random’</span></span></code>), or the number of
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s to sample around each one of a set of points (if <strong>scheme</strong>
+is <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘point’</span></span></code> or <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘transect’</span></span></code>). This parameter will only be used if
+<strong>scheme</strong> is <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘random’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘point’</span></span></code>, or <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘transect’</span></span></code>; otherwise
+it may be set to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>.</p>
+<p><strong>points</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#coords of collection points, for point sampling</span>
+<span class="s1">&#39;points&#39;</span><span class="p">:</span>               <span class="bp">None</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">tuple</span></span></code> of 2-<code class="code py python docutils literal"><span class="name builtin"><span class="pre">tuple</span></span></code>s, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the points around which to sample <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s for data
+collection. This parameter will only be used if <strong>scheme</strong> is <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘point’</span></span></code>;
+otherwise it may be set to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>.</p>
+<p><strong>transect_endpoints</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#coords of transect endpoints, for transect sampling</span>
+<span class="s1">&#39;transect_endpoints&#39;</span><span class="p">:</span>   <span class="bp">None</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{2-<code class="code py python docutils literal"><span class="name builtin"><span class="pre">tuple</span></span></code> of 2-<code class="code py python docutils literal"><span class="name builtin"><span class="pre">tuple</span></span></code>s, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the endpoints between which to create a transect, along which
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s will be sampled for data collection.
+This parameter will only be used if <strong>scheme</strong> is <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘transect’</span></span></code>;
+otherwise it may be set to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>.</p>
+<p><strong>n_transect_points</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#num points along transect, for transect sampling</span>
+<span class="s1">&#39;n_transect_points&#39;</span><span class="p">:</span>    <span class="bp">None</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the number of points to create on the transect along which
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s will be sampled for data collection.
+This parameter will only be used if <strong>scheme</strong> is <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘transect’</span></span></code>;
+otherwise it may be set to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>.</p>
+<p><strong>radius</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#collection radius around points, for point &amp; transect sampling</span>
+<span class="s1">&#39;radius&#39;</span><span class="p">:</span>               <span class="bp">None</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the radius around sampling points within which
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s may be sampled for data collection.
+This parameter will only be used if <strong>scheme</strong> is <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘point’</span></span></code> or
+<code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘transect’</span></span></code>; otherwise it may be set to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>.</p>
+<p><strong>when</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#when to collect data</span>
+<span class="s1">&#39;when&#39;</span><span class="p">:</span>                 <span class="bp">None</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code> of <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>s, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the timesteps during main <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> iterations
+at which data should be collected (in addition to after the final timestep
+of each iteration, when data is always collected for any <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> for which
+data collection is parameterized). If value is a non-zero <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>,
+it will be treated as a frequency at which data should be collected (e.g.
+a value of 5 will cause data to be collected every 5 timesteps). If value
+is a list of <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>s, they will be treated as the particular timesteps
+at which data should be collected. If value is 0 or <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>,
+data will be collected only after the final timestep.</p>
+<p><strong>include_landscape</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to save current Layers when data is collected</span>
+<span class="s1">&#39;include_landscape&#39;</span><span class="p">:</span>         <span class="bp">False</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: False</p>
+<p>reset? P</p>
+<p>This indicates whether to include the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>s among the
+data that is collected. If True, each <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> will be written to a raster
+or array file (according to the format indicated by
+<strong>geo_rast_format</strong>) each time data is collected.</p>
+<p><strong>include_fixed_sites</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to include fixed loci in VCF files</span>
+<span class="s1">&#39;include_fixed_sites&#39;</span><span class="p">:</span>  <span class="bp">False</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: False</p>
+<p>reset? P</p>
+<p>This indicates whether fixed sites (i.e. loci which are fixed for either the
+0 or 1 allele) should be included in any VCF files that are written. Thus,
+this parameter is only relevant if <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘vcf’</span></span></code> is one of the genetic data
+formats indicated by <strong>gen_format</strong>.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="format">
+<h7>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h7>
+<p><strong>gen_format</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#format for genetic data {&#39;vcf&#39;, &#39;fasta&#39;}</span>
+<span class="s1">&#39;gen_format&#39;</span><span class="p">:</span>           <span class="p">[</span><span class="s1">&#39;vcf&#39;</span><span class="p">,</span> <span class="s1">&#39;fasta&#39;</span><span class="p">],</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘vcf’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘fasta’</span></span></code>, <code class="code py python docutils literal"><span class="punctuation"><span class="pre">[</span></span><span class="literal string single"><span class="pre">‘vcf’</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal string single"><span class="pre">‘fasta’</span></span><span class="punctuation"><span class="pre">]</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="punctuation"><span class="pre">[</span></span><span class="literal string single"><span class="pre">‘vcf’</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal string single"><span class="pre">‘fasta’</span></span><span class="punctuation"><span class="pre">]</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the format or formats to use for writing genetic data.
+data. Currently valid formats include <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘vcf’</span></span></code> and <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘fasta’</span></span></code> formats.
+Either or both formats may be specified; all formats that are specified will
+be written each time data is collected.</p>
+<p><strong>geo_vect_format</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#format for vector geodata {&#39;csv&#39;, &#39;shapefile&#39;, &#39;geojson&#39;}</span>
+<span class="s1">&#39;geo_vect_format&#39;</span><span class="p">:</span>      <span class="s1">&#39;csv&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘csv’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘shapefile’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘geojson’</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘csv’</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the format to use for writing geographic vector data (i.e.
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s’ point locations).
+Currently valid formats include <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘csv’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘shapefile’</span></span></code>,
+and <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘geojson’</span></span></code>. Any one format may be specified.</p>
+<p><strong>geo_rast_format</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#format for raster geodata {&#39;geotiff&#39;, &#39;txt&#39;}</span>
+<span class="s1">&#39;geo_rast_format&#39;</span><span class="p">:</span>      <span class="s1">&#39;geotiff&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘geotiff’</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘txt’</span></span></code>}</p>
+<p>default: <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘geotiff’</span></span></code></p>
+<p>reset? P</p>
+<p>This indicates the format to use for writing geographic raster data (i.e.
+<code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> arrays). Currently valid formats include <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘geotiff’</span></span></code>
+and <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘txt’</span></span></code>. Either format may be specified. Note that this parameter
+will only be used if the <strong>include_landscape</strong> parameter is set to True.</p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="stats">
+<h6>Stats<a class="headerlink" href="#stats" title="Permalink to this headline">¶</a></h6>
+<p>The stats parameters section has subsection for each statistc that Geonomics
+can calculate. (Currently valid statistics include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><em>‘Nt’</em>: population size at timestep t</li>
+<li><em>‘het’</em>: heterozygosity</li>
+<li><em>‘maf’</em>: minor allele frequency</li>
+<li><em>‘mean_fit’</em>: mean fitness of a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code></li>
+<li><em>‘ld’</em>: linkage disequilibrium</li>
+</ul>
+<p>There are only a few parameters, which are shared across all</p>
+</div></blockquote>
+<p>of those subsections, and each parameter always means the same thing despite
+which statistic it is parameterizing. Thus, hereafter we provide a single of
+each of those parameters are how it works, regardless of the statistic for
+which it used:</p>
+<p><strong>calc</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to calculate</span>
+<span class="s1">&#39;calc&#39;</span><span class="p">:</span>     <span class="bp">True</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: (varies by statistic)</p>
+<p>reset? P</p>
+<p>This indicates whether or not a given statistic should be calculated. Thus,
+only those statistics whose <strong>calc</strong> parameters are set to True will be
+calculated and saved when their <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is run.</p>
+<p><strong>freq</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#calculation frequency (in timesteps)</span>
+<span class="s1">&#39;freq&#39;</span><span class="p">:</span>     <span class="mi">5</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
+<p>default: (varies by statistic)</p>
+<p>reset? P</p>
+<p>This indicates the frequency with which a given statistic should be calculated
+during each iteration (in timesteps). If set to 0, Geonomics will calculate
+and save this statistic for only the first and last timesteps
+of each iteration.</p>
+<p><strong>mean</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to calculate as pop mean</span>
+<span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+</pre></div>
+</div>
+<p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
+<p>default: (varies by statistic, and only valid for certain statistics)</p>
+<p>reset? P</p>
+<p>For some statistics that produce a vector of values each timestep
+when they are collected (containing one value per <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>),
+such as heterozygosity, this indicates
+whether those values should instead be meaned and saved as a
+single value for each timestep.</p>
 </div>
 </div>
 </div>
@@ -2007,8 +2597,8 @@ numbers and types of sections indicated by the parameters fed to this
 function. It can often be used ‘out of the box’ to make a new Model
 object, but typically it will be edited by the user to stipulate
 the scenario being simulated, then used to instantiate a Model.</p>
-<div class="section" id="id3">
-<h5>Parameters<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id5">
+<h5>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>filepath <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
 <dd>Where to write the resulting parameters file, in /path/to/filename.py
@@ -2108,20 +2698,6 @@ statistics will be calculated during the model runs, and when.
 (This will be managed by the model’s StatsCollector object.)</dd>
 </dl>
 </dd>
-<dt>seed <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd><p class="first">Whether to include a seed-parameter section in the parameters file that
-is generated. Defaults to None. Valid values and their associated
-behaviors are:</p>
-<dl class="last docutils">
-<dt>None, False:</dt>
-<dd>Will not add a section for parameterizing how the random number
-generators are seeded, hence generators will be seeded at
-random and results will be unreproducible.</dd>
-<dt>True:</dt>
-<dd>Will add a section for parameterizing how the random number
-generators are seeded, so that results will be reproducible.</dd>
-</dl>
-</dd>
 </dl>
 </div>
 <div class="section" id="returns">
@@ -2181,7 +2757,6 @@ genomes but having a MovementSurface as well, and undergoing
 demographic change)</li>
 <li>data-collection;</li>
 <li>stats-collection;</li>
-<li>a section for setting the seed for the random-number generators.</li>
 </ul>
 </div></blockquote>
 <p>We can save this to a file named “2-pop_2-trait_model.py” in our current
@@ -2206,8 +2781,8 @@ working directory.</p>
 <span class="gp">&gt;&gt;&gt; </span>         <span class="s1">&#39;movement_surface&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>         <span class="s1">&#39;demographic_change&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="p">],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#arguments to the data, stats,and seed parameters</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">stats</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#arguments to the data and stats parameters</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">data</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">stats</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#destination to which to write the resulting parameter file</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;2-pop_2-trait_model.py&#39;</span><span class="p">)</span>
 </pre></div>
@@ -2221,16 +2796,16 @@ working directory.</p>
 ‘filepath’, check its validity (i.e. that all the Layers and Populations
 parameterized in that file have been given distinct names), then use the
 file to instantiate a ParametersDict object.</p>
-<div class="section" id="id4">
-<h5>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id6">
+<h5>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>filepath <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
 <dd>String indicating the location of the Geonomics parameters file that
 should be made into a ParametersDict object.</dd>
 </dl>
 </div>
-<div class="section" id="id5">
-<h5>Returns<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id7">
+<h5>Returns<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h5>
 <p>An object of the ParametersDict class (a dict of nested dicts, all
 of which have key-value pairs whose values can be accessed using typical
 dict notation or using dot notation with the keys).</p>
@@ -2243,13 +2818,13 @@ dict notation or using dot notation with the keys).</p>
 file have not all been given distinct names</dd>
 </dl>
 </div>
-<div class="section" id="id6">
-<h5>See Also<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id8">
+<h5>See Also<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h5>
 <p>sim.params.read
 sim.params.ParametersDict</p>
 </div>
-<div class="section" id="id7">
-<h5>Examples<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id9">
+<h5>Examples<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
 <p>Read a parameters file called “null_model.py” (located in the current
 working directory).</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gnx</span><span class="o">.</span><span class="n">read_parameters_file</span><span class="p">(</span><span class="s1">&#39;null_model.py&#39;</span><span class="p">)</span>
@@ -2265,8 +2840,8 @@ working directory).</p>
 <p>Use either a ParametersDict object or the path to a valid Geonomics
 parameters file (whichever is provided to the ‘parameters’ argument) to
 create a new Model object.</p>
-<div class="section" id="id8">
-<h5>Parameters<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id10">
+<h5>Parameters<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>parameters <span class="classifier-delimiter">:</span> <span class="classifier">{ParametersDict, str}, optional</span></dt>
 <dd>The parameters to be used to make the Model object.
@@ -2282,15 +2857,15 @@ file to make a ParametersDict object, then will use that object to
 make the Model.</dd>
 </dl>
 </div>
-<div class="section" id="id9">
-<h5>Returns<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id11">
+<h5>Returns<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>out <span class="classifier-delimiter">:</span> <span class="classifier">Model</span></dt>
 <dd>An object of the Model class</dd>
 </dl>
 </div>
-<div class="section" id="id10">
-<h5>Raises<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id12">
+<h5>Raises<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>ValueError</dt>
 <dd>If the <cite>parameters</cite> argument was not provided and a single, valid
@@ -2305,13 +2880,13 @@ from the parameters file being used, cannot be successfully made into a
 Model</dd>
 </dl>
 </div>
-<div class="section" id="id11">
-<h5>See Also<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id13">
+<h5>See Also<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h5>
 <p>gnx.read_parameters_file
 sim.model.Model</p>
 </div>
-<div class="section" id="id12">
-<h5>Examples<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id14">
+<h5>Examples<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h5>
 <p>Make a Model from a single, valid “GEONOMICS_params_&lt;…&gt;.py” file that can
 be found in the current working directory (such as a file that would be
 produced by calling gnx.make_parameters_file without any arguments).</p>

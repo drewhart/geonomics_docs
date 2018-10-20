@@ -274,7 +274,7 @@ and :py:`Populations`', below) can optionally be assigned genomes.
 If they are, each :py:`Individual`'s genome is modeled as a 
 2-by-L Numpy array (where 2 is the ploidy, currently fixed at
 diploidy, and L is genome length) containing 0s and 1s (because
-Geonomics strictly models diallelic SNPs). 
+Geonomics strictly models biallelic SNPs, i.e SNPs with '0'- and '1'-alleles). 
 
 The parameter L, as well as numerous other genomic parameters (including 
 locus-wise starting frequencies of the 1 alleles; locus-wise dominance effects;
@@ -965,7 +965,7 @@ For each parameter, you will see a section with the following information:
     encoded as follows:
 
     - 'Y': almost certainly, *or* must be reset for your :py:`Model` to run
-    - 'P': it is possible/probable that you will want to reset this
+    - 'P': it is quite possible that you will want to reset this
       parameter, but this will depend on your use and scenario
     - 'N': almost certainly not, *or* no need to reset because it should be
       set intelligently anyhow (Note: this does *not* mean that you cannot
@@ -1134,7 +1134,8 @@ default: :py:`layer_<n>`
 reset? P
 
 This parameter defines the name for each :py:`Layer`. (Note that unlike most
-parameters, it is a :py:`dict` key, the value for which is a :py:`dict`
+parameters, this parameter is a :py:`dict` key,
+the value for which is a :py:`dict`
 of parameters defining the :py:`Layer` being named.) As the capitalized
 reminder in the parameters states, each :py:`Layer` must have a unique name
 (so that a parameterized :py:`Layer` isn't overwritten in the
@@ -1143,7 +1144,8 @@ checks for unique names and throws an Error if this condition is not met.
 :py:`Layer` names can, but needn't be, descriptive of what each 
 :py:`Layer` represents. Example valid values include: 0, 0.1, 'layer_0', 1994,
 '1994', 'mean_ann_tmp'. Names default to :py:`layer_<n>`,
-where n is a series of integers starting from 0.
+where n is a series of integers starting from 0 and counting the number
+of :py:`Layer`\s.
 
 
 
@@ -1615,9 +1617,9 @@ default: :py:`pop_<n>`
 reset? P
 
 This parameter defines the name for each :py:`Population`.
-(Note that unlike most
-parameters, it is a :py:`dict` key, the value for which is a :py:`dict`
-of parameters defining the :py:`Layer` being named.) As the capitalized
+(Note that unlike most parameters, this parameter is 
+a :py:`dict` key, the value for which is a :py:`dict`
+of parameters defining the :py:`Population` being named.) As the capitalized
 reminder in the parameters states, each :py:`Population`
 must have a unique name (so that a parameterized 
 :py:`Population` isn't overwritten in the :py:`ParametersDict` by a
@@ -1627,7 +1629,7 @@ checks for unique names and throws an Error if this condition is not met.
 :py:`Population` represents. Example valid values include: 0, 'pop0',
 'high-dispersal', 'C. fasciata'. Names default to 
 :py:`pop_<n>`, where n is a series of
-integers starting from 0.
+integers starting from 0 and counting the number of :py:`Population`\s.
 
 ^^^^
 Init
@@ -1974,7 +1976,7 @@ default: 1
 reset? N
 
 This is the :math:`\mu` parameter of the VonMises distribution
-(a circularized Gaussian distribution) from which
+(a circularized normal distribution) from which
 movement directions are chosen when movement is random and isotropic 
 (rather than
 being determined by a :py:`_MovementSurface`; if a :py:`_MovementSurface`
@@ -2004,7 +2006,7 @@ default: 0
 reset? N
 
 This is the :math:`\kappa` parameter of the VonMises distribution
-(a circularized Gaussian distribution) from which
+(a circularized normal distribution) from which
 movement directions are chosen when movement is random and isotropic 
 (rather than
 being determined by a :py:`_MovementSurface`; if a :py:`_MovementSurface`
@@ -2241,8 +2243,8 @@ default: 1000
 
 reset? P
 
-This indicates the total number of loci that the genomes in a
-:py:`Population` should have.
+This defines the total number of loci in the genomes in a
+:py:`Population`.
 
 
 **l_c**
@@ -2258,7 +2260,7 @@ default: :py:`[750, 250]`
 
 reset? P
 
-This indicates the lengths (in number of loci) of each of the chromosomes 
+This defines the lengths (in number of loci) of each of the chromosomes 
 in the genomes in a :py:`Population`.  Note that the sum of this :py:`list`
 must equal **L**, otherwise Geonomics will throw an Error. 
 Also note that Geonomics models genomes as single **L** x 2
@@ -2267,379 +2269,1203 @@ the genome where the recombination rate is 0.5;
 thus, for a model where recombination rates are often at or near 0.5, this
 parameter will have little meaning.
 
-.. code-block:: python
 
+**mu_neut**
+
+.. code-block:: python
 
                       #genome-wide per-base neutral mut rate (0 to disable)
                       'mu_neut':                  1e-9,
+
+:py:`float`
+
+default: 1e-9
+
+reset? P
+
+This defines the genome-wide per-base neutral mutation rate.
+This value can be set to 0 to disable neutral mutation.
+
+
+**mu_delet**
+
+.. code-block:: python
+
                       #genome-wide per-base deleterious mut rate (0 to disable)
                       'mu_delet':                 0,
-                      #whether to save mutation logs
-                      'mut_log':                  False,
+
+:py:`float`
+
+default: 0
+
+reset? P
+
+This defines the genome-wide per-base deleterious mutation rate.
+This value can be set to 0 to disable deleterious mutation. Note that all
+deleterious mutation will fall outside the loci that affect any :py:`Trait`\s
+a :py:`Population` may have, and will behave simply as globally
+deleterious mutations (i.e. mutations that reduce the mutated
+:py:`Individual`'s fitness regardless of that :py:`Individual`'s
+spatial location).
+
+
+**delet_alpha_distr_shape**
+
+.. code-block:: python
+
                       #shape of distr of deleterious effect sizes
-                      'delet_s_distr_shape':      0.2,
+                      'delet_alpha_distr_shape':      0.2,
+
+:py:`float`
+
+default: 0.2
+
+reset? P
+
+This defines the shape parameter of the gamma distribution from which
+the effect sizes of deleterious loci are drawn. (Values drawn will be
+truncated to the interval [0,1].)
+
+
+**delet_alpha_distr_scale**
+
+.. code-block:: python
+
                       #scale of distr of deleterious effect sizes
-                      'delet_s_distr_scale':      0.2,
+                      'delet_alpha_distr_scale':      0.2,
+
+:py:`float`
+
+default: 0.2
+
+reset? P
+
+This defines the scale parameter of the gamma distribution from which
+the effect sizes of deleterious loci are drawn. (Values drawn will be
+truncated to the interval [0,1].)
+
+
+**r_distr_alpha**
+
+.. code-block:: python
+
                       #alpha of distr of recomb rates
                       'r_distr_alpha':            0.5,
+
+:py:`float`
+
+default: 0.5
+
+reset? P
+
+This defines the alpha parameter of the beta distribution from which
+interlocus recombination rates are drawn. (Values drawn will be truncated to
+the interval [0, 0.5].)
+
+
+**r_distr_beta**
+
+.. code-block:: python
+
                       #beta of distr of recomb rates
-                      'r_distr_beta':             15e9,
+                      'r_distr_beta':            15e9,
+
+:py:`float`
+
+default: 15e9
+
+reset? P
+
+This defines the beta parameter of the beta distribution from which
+interlocus recombination rates are drawn. (Values drawn will be truncated to
+the interval [0, 0.5].)
+
+
+**dom**
+
+.. code-block:: python
+
                       #whether loci should be dominant (for allele '1')
                       'dom':                      False,
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This indicates whether loci should be treated as dominant (if True) 
+for the '1' allele  or as codominant (if False). Codominance is the default
+behavior, because it is assumed that Geonomics will often be used
+to model quantitative traits, for which this is a reasonable assumption.
+
+
+**pleiotropy**
+
+.. code-block:: python
+
                       #whether to allow pleiotropy
                       'pleiotropy':               False,
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This indicates whether pleiotropy should be allowed. If True, loci will be
+permitted to contribute to more than one :py:`Trait`.
+
+
+**recomb_rate_custom_fn**
+
+.. code-block:: python
+
                       #custom fn for drawing recomb rates
                       'recomb_rate_custom_fn':    None,
+
+{:py:`function`, :py:`None`}
+
+default: :py:`None`
+
+reset? P
+
+This parameter allows the user to provide a custom function according to which
+interlocus recombination rates will be assigned. If set to :py:`None`, the
+default behavior (i.e. recombination rates chosen from a beta distribution
+using **r_distr_alpha** and **r_distr_beta**) will be used.
+
+
+**n_recomb_paths_mem**
+
+.. code-block:: python
+
                       #number of recomb paths to hold in memory
-                      'recomb_lookup_array_size': int(1e3),
+                      'n_recomb_paths_mem': int(1e4),
+
+:py:`int`
+
+default: :py:`int(1e4)`
+
+reset? P
+
+This defines the maximum number of recombination paths for Genomics to hold in
+memory at one time. Geonomics models recombination by using the interlocus
+recombination rates to draw a large number of recombination 'paths'
+along the 2xL genome array (when the :py:`Model` is first built), and
+then shuffling and cycling through those recombination paths as 
+needed during :py:`Model` runs. Of the total number of paths created, some
+subset will be held in memory (the number of these is defined by
+this parameter), while the remainder will live in a temporary
+file (which is occasionally read in whenever the paths in memory are close to
+being used up). Thus, to avoid problems, the number provided to this parameter
+should be comfortably larger than the largest anticipated number of
+recombination paths that will be needed during a single mating event (i.e.
+larger than two times the largest antipicated number of offspring to be born
+to the :py:`Population` during one timestep).
+
+
+**n_recomb_paths_tot**
+
+.. code-block:: python
+
                       #total number of recomb paths to simulate
-                      'n_recomb_paths':           int(1e4),
-                        
+                      'n_recomb_paths':           int(1e5),
+
+This defines the total number of recombination paths that Geonomics will
+generate. Geonomics models recombination by using the interlocus
+recombination rates to draw a large number of recombination 'paths'
+along the 2xL genome array (when the :py:`Model` is first built), and
+then shuffling and cycling through those recombination paths as 
+needed during :py:`Model` runs. The larger the total number of these paths
+that is created, the more closely Geonomics will model truly
+free recombination and the more prceisely it will model the exact
+interlocus recombination rates defined in a :py:`Population`'s
+:py:`GenomicArchitecture`.
 
 
+**mut_log**
+
+.. code-block:: python
+
+                      #whether to save mutation logs
+                      'mut_log':                  None,
 
 
-                      'gen_arch_file':            None,
-                          #if not None, should point to a file stipulating a
-                              #custom genomic architecture (i.e. a CSV with loci
-                              #as rows and 'locus_num', 'p', 'dom', 'r', 'trait',
-                              #and 'alpha' as columns, such as is created by
-                              #main.make_parameters_file, when the custom_gen_arch
-                              #arugment is True)
-                      'mu_neut':                  1e-9,
-                          #genome-wide neutral mutation rate, per base per generation
-                              #(set to 0 to disable neutral mutation)
-                      'mu_delet':                 0,
-                          #genome-wide deleterious mutation rate, per base per generation
-                              #(set to 0 to disable deleterious mutation)
-                              #NOTE: these mutations will fall outside the loci involved in any traits
-                              #being simulated, and are simply treated as universally deleterious, with the same
-                              #negative influence on fitness regardless of spatial context
-                      'mut_log':                  False,
-                          #whether or not to store a mutation log; if true, will be saved as mut_log.txt
-                          #within each iteration's subdirectory
-                      'delet_s_distr_shape':      0.2,
-                      'delet_s_distr_scale':      0.2,
-                          #mean and standard deviation of the gamma distribution
-                          #parameterizig the per-allele effect size of 
-                          #deleterious mutations (std = 0 will fix all mutations
-                          #for the mean value)
-                      'r_distr_alpha':            0.5,
-                          #alpha for beta distribution of linkage values
-                              #NOTE: alpha = 14.999e9, beta = 15e9 has a VERY sharp peak on D = 0.4998333,
-                              #with no values exceeding equalling or exceeding 0.5 in 10e6 draws in R
-                      'r_distr_beta':             15e9,
-                          #beta for beta distribution of linkage values
-                      'dom':                      False,
-                          #whether or not loci should be dominant 
-                          #(if True, the 1 allele will be dominant at each locus;
-                          #if False, all loci will be codominant; defaults to False)
-                      'pleiotropy':               True,
-                          #allow pleiotropy? (i.e. allow same locus to affect value of more than one trait?) false
-                      'recomb_rate_custom_fn':    None,
-                          #if provided, must be a function that returns a single recombination rate value (r) when called
-                      'recomb_lookup_array_size': int(1e3),
-                          #the size of the recombination-path lookup array to have
-                              #read in at one time (needs to be comfortably larger than the anticipated totaly number of
-                              #recombination paths to be drawn at once, i.e. than 2 times the anticipated most number of births at once)
-                      'n_recomb_paths':           int(1e4),
-                          #the total number of distinct recombination paths to
-                              #generate at the outset, to approximate truly free recombination at the recombination rates specified
-                              #by the genomic architecture (hence the larger the value the less the likelihood of mis-approximation artifacts)
-  
-                      'traits': {
-        #########
-                          #trait 0#
-                          #########
-                          0: {
-                          #trait name; each trait must get a unique numeric or
-                          #string name (e.g. 0, 'trt0', 'bill_length'); trait
-                          #names default to serial integers from 0
-                              'scape_num':        2,
-                                  #the landscape numbers to be used for selection on this trait
-                              'phi':              0.1,
-                                  #phenotypic selection coefficient for this trait; can either be a
-                                      #numeric value, or can be an array of spatialized selection
-                                      #values (with dimensions equal to land.dims)
-                              'n_loci':           1,
-                                  #number of loci to be assigned to this trait
-                              'mu':      1e-9,
-                                  #mutation rate for this trait (if set to 0, or if genome['mutation'] == False, no mutation will occur)
-                                      #(set to 0 to disable mutation for this trait)
-                              'alpha_distr_mu' : 0,
-                              'alpha_distr_sigma' : 0.5,
-                                  #the mean and standard deviation of the normal distribution used to choose effect size
-                                      #(alpha) for this trait's loci
-                                      #NOTE: for mean = 0, std = 0.5, one average locus is enough to generate both optimum
-                                      #genotypes; for mean = 0, std = 0.025, 10 loci should generate both (on average, but depends of course on
-                                      #the random sample of alphas drawn); and so on linearly
-                              'gamma':            1,
-                                  #gamma exponent for the trait's fitness function (determines the shape of the
-                                  #curve of fitness as a function of absolute difference between an individual's
-                                  #phenotype and its environment; <1 = concave up, 1 = linear, >1 = convex up)
-                              'univ_adv':      False
-                                  #is the trait universally advantageous? if so, phenotypes closer to 1 will
-                                      #have higher fitness at all locations on the land
-                              }, # <END> trait 0
-        #########
-                          #trait 1#
-                          #########
-                          1: {
-                          #trait name; each trait must get a unique numeric or
-                          #string name (e.g. 0, 'trt0', 'bill_length'); trait
-                          #names default to serial integers from 0
-                              'scape_num':        2,
-                                  #the landscape numbers to be used for selection on this trait
-                              'phi':              0.1,
-                                  #phenotypic selection coefficient for this trait; can either be a
-                                      #numeric value, or can be an array of spatialized selection
-                                      #values (with dimensions equal to land.dims)
-                              'n_loci':           1,
-                                  #number of loci to be assigned to this trait
-                              'mu':      1e-9,
-                                  #mutation rate for this trait (if set to 0, or if genome['mutation'] == False, no mutation will occur)
-                                      #(set to 0 to disable mutation for this trait)
-                              'alpha_distr_mu' : 0,
-                              'alpha_distr_sigma' : 0.5,
-                                  #the mean and standard deviation of the normal distribution used to choose effect size
-                                      #(alpha) for this trait's loci
-                                      #NOTE: for mean = 0, std = 0.5, one average locus is enough to generate both optimum
-                                      #genotypes; for mean = 0, std = 0.025, 10 loci should generate both (on average, but depends of course on
-                                      #the random sample of alphas drawn); and so on linearly
-                              'gamma':            1,
-                                  #gamma exponent for the trait's fitness function (determines the shape of the
-                                  #curve of fitness as a function of absolute difference between an individual's
-                                  #phenotype and its environment; <1 = concave up, 1 = linear, >1 = convex up)
-                              'univ_adv':      False
-                                  #is the trait universally advantageous? if so, phenotypes closer to 1 will
-                                      #have higher fitness at all locations on the land
-                              }, # <END> trait 1
-  
-  
-      #### NOTE: Individual Traits' sections can be copy-and-pasted (and
-      #### assigned distinct keys and names), to create additional Traits.
-  
-  
-                          }, # <END> 'traits'
-  
-                      }, # <END> 'gen_arch'
-  
-  
-              ############################
-              #### pop num. 0: change ####
-              ############################
-  
-                  'change': {
-  
-                      'dem': {
-                          #(all population sizes are expressed relative to the carrying-capacity
-                              #raster at the time that the demographic change event begins (i.e. as
-                              #factors by which pop.K will be multiplied; thus they can also be thought
-                              #of as multipliers of the expected total population size (i.e. pop.K.sum())
-                              #and they will generally change the average population size by that multiple,
-                              #but of course not precisely, because population size is stochastic. If you
-                              #seek exact control of total population size, please seek a simpler simulation
-                              #model, perhaps a coalescent one.
-  
-                          0: {
-                              #can add an arbitrary number of demographic change events for
-                                  #each population, each event identified by a distinct integer
-                              'kind':             'custom',
-                                  #what kind of change event? ('monotonic', 'stochastic', 'cyclical', 'custom')
-                              'start':            200,
-                                  #at which timestep should the event start?
-                              'end':              1200,
-                                  #at which timestep should the event end?
-                              'rate':             .98,
-                                  #at what rate should the population change each timestep
-                                      #(positive for growth, negative for reduction)
-                              'interval':         11,
-                                  #at what interval should stochastic change take place (None defaults to every timestep)
-                              'dist':             'uniform',
-                                  #what distribution to draw stochastic population sizes from (valid values: 'uniform', 'normal')
-                              'size_target':      None,
-                                  #what is the target size of the demographic change event (defaults to None)
-                              'n_cycles':         20,
-                                  #how many cycles of cyclical change should occur during the event?
-                              'size_range':       (0.5, 1.5), 
-                                  #an iterable of the min and max population sizes to be used in stochastic or cyclical changes
-                              'timesteps':        [6,8],
-                                  #at which timesteps should custom changes take place?
-                              'sizes':            [2,0.25],
-                                  #what custom size-changes should occur at the above-stipulated timesteps?
-                              } # <END> event 0
-   
-  
-  
-  
-      #### NOTE: Individual demographic change events' sections can be
-      #### copy-and-pasted (and assigned distinct keys and names), to create
-      #### additional events.
-  
-  
-                          }, # <END> 'dem'
-  
-                      'parameters': {
-                          #other (i.e. non-demographic) population change events
-                          'b': {
-                              #the life-history parameters to be changed should be the keys in this dict,
-                                  #and values are dictionaries containing a list of timesteps
-                                  #at which to changed those parameters and a list of values
-                                  #to which to change them
-                              'timesteps':        None,
-                              'vals':           None
-                                  }
-  
-  
-      #### NOTE: Individual life-history paramter change events' sections can be
-      #### copy-and-pasted (and assigned distinct keys and names), to create
-      #### additional events.
-  
-  
-                              }, # <END> 'parameters'
-  
-                          } # <END> 'change'
-  
-                  }, # <END> pop num. 0
-  
-  
-  
-      #### NOTE: Individual Populations' sections can be copy-and-pasted (and
-      #### assigned distinct keys and names), to create additional Populations.
-  
-  
-              }, # <END> 'pops'
-  
-          }, # <END> 'comm'
-  
-  ###############
-  #### MODEL ####
-  ###############
-      'model': {
-          'time': {
-              #parameters to control the number of burn-in and main timesteps to
-              #run for each iterations
-              'T':            100,
-                  #total model runtime (in timesteps)
-              'burn_T':       30
-                  #minimum burn-in runtime (in timesteps; this is a mininimum because
-                      #burn-in will run for at least this long but until
-                      #stationarity detected, which will likely be longer)
-              }, # <END> 'timesteps'
-  
-          'its': {
-              #parameters to control how many iterations of the model to run,
-              #and whether or not to randomize the land and/or community
-              #objects in each model iteration
-              'n_its': 1,
-                  #how many iterations of the model should be run?
-              'rand_land':    False,
-                  #randomize the land for each new iteration?
-              'rand_comm':    False,
-                  #randomize the community for each new iteration?
-              'rand_burn':  False,
-                  #randomize the burn-in for each new iteration? (i.e. burn in
-                  #each time, or burn in once at creation and then use the same
-                  #burnt-in population for each iteration?)
-              }, # <END> 'iterations'
-  
-  
-          'data': {
-              #dictionary defining the data to be collected, the sampling
-              #strategy to use, the timesteps for collection, and other parameters
-              'sampling': {
-                  #args to be unpacked into sampling function (see docstring
-                      #of sample_data function in data module for details)
-                  'scheme':               'random',
-                      #valid: 'all', 'random', 'point', or 'transect'
-                  'n':                    50,
-                      #size of samples to be collected (in number of individuals)
-                  'points':               None,
-                      #the x,y points at which data should be sampled (expressed
-                          #as a list or tuple of length-2 lists or 2-tuples)
-                  'transect_endpoints':   None,
-                      #endpoints of the transect to be sampled (only needed if
-                          #scheme is 'transect), expressed as a pair of
-                          #ordered x,y pairs (in tuples or lists)
-                  'n_transect_points':    None,
-                      #the number of evenly spaced points along the transect
-                      #at which to sample (only needed if scheme is 'transect')
-                  'radius':               None,
-                      #radius around sampling points within which to sample
-                      #individuals (only needed is scheme is 'point' or
-                      #'transect')
-                  'when':                 None,
-                      #can be an integer (in which case data will be collected every
-                      #that many timesteps, plus at the end) or a list of specific
-                      #timesteps; a value of 0 or None will default to a single
-                      #data-collection step after the model has run
-                  'include_land':         False,
-                      #if True, will save the Landscape object each time other data is saved
-                      #(probably only useful if land is changing in some way not manually coded by the user)
-                  'include_fixed_sites':  False,
-                      #if True, and if genetic data is to be formatted as VCFs,
-                          #the VCFs will contain fixed sites, not just variants
-                          #(defaults to False)
-                  },
-              'format': {
-                  'gen_format':           ['vcf', 'fasta'],
-                      #format to use for saving genetic data;
-                          #currently valid values: 'vcf', 'fasta',
-                          #or a list containing both, if both
-                          #should be written
-                  'geo_vect_format':      'csv',
-                      #format to use for saving geographic points;
-                          #currently valid values: 'csv', 'shapefile', 'geojson'
-                  'geo_rast_format':      'geotiff',
-                      #format to use for saving landscape rasters (which will
-                          #only be saved if the 'include_land' parameter in the
-                          #sampling subdict is True);
-                          #currently valid values: 'geotiff', 'txt'
-                  },
-              }, #<END> 'data'
-  
-  
-          'stats': {
-              #dictionary defining which stats to be calculated, and parameters for
-                  #their calculation (including frequency, in timesteps, of collection)
-                  #valid stats include:
-                      # 'Nt'  : population census size
-                      # 'het' : heterozygosity
-                      # 'maf' : minor allele frequency
-                      # 'ld'  : linkage disequilibrium
-                      # 'mean_fit' : mean fitness
-              'Nt':       {'calc': True,
-                           'freq': 2,
-                          },
-              'het':      {'calc': True,
-                           'freq': 1,
-                           'mean': False,
-                          },
-              'maf':      {'calc': True,
-                           'freq': 5,
-                          },
-              'ld':       {'calc': True,
-                           'freq': 10,
-                          },
-              'mean_fit': {'calc': True,
-                           'freq': 3,
-                          },
-              }, # <END> 'stats'
-  
-  
-          'seed': {
-              #parameters to control whether and how to set the seed
-              'set':          True,
-                  #set the seed? (for reproducibility)
-              'num':          94618
-                  #value used to seed random number generators
-              }, # <END> 'seed'
-  
-          } # <END> 'model'
-  
-      } # <END> params
-  
+{:py:`str`, :py:`None`}
+
+default: :py:`None`
+
+reset? P
+
+This indicates the location of the mutation-log file where  Geonomics should
+save a record of each mutation that occurs for a :py:`Population`
+:py:`Population`, for each iteration. If :py:`None`, no mutation log
+will be created and written to.
+
+
+------------------------------------------------------------------------------
+
+""""""
+Traits
+""""""
+
+**trait_<n>**
+
+.. code-block:: python
  
+              #trait name (TRAIT NAMES MUST BE UNIQUE!) 
+              'trait_0' :   {
+
+{:py:`str`, :py:`int`}
+
+default: :py:`trait_<n>` 
+
+reset? P
+
+This parameter defines the name for each :py:`Trait`.
+(Note that unlike most parameters, this parameter is a :py:`dict` key, 
+the value for which is a :py:`dict`
+of parameters defining the :py:`Trait` being named.) As the capitalized
+reminder in the parameters states, each :py:`Trait`
+must have a unique name (so that a parameterized 
+:py:`Trait` isn't overwritten in the :py:`ParametersDict` by a
+second, identically-named :py:`Trait`; Geonomics
+checks for unique names and throws an Error if this condition is not met.
+:py:`Trait` names can, but needn't be, descriptive of what each 
+:py:`Trait` represents. Example valid values include: 0, 'trait0',
+'tmp_trait', 'bill length'. Names default to :py:`trait_<n>`,
+where n is a series of integers starting from 0 and counting the
+number of :py:`Trait`\s for this :py:`Population`.
+
+
+**layer**
+
+.. code-block:: python
+
+                              #trait-selection Layer name
+                              'layer':                'layer_0',
+
+:py:`str`
+
+default: :py:`'layer_0'`
+
+reset? P
+
+This indicates, by name, the :py:`Layer` that serves as the selective force
+acting on this :py:`Trait`. (For example, if this Trait is selected upon by
+annual mean temperature, then the name of the :py:`Layer` 
+representing annual mean temperature should be provided here.)
+
+
+**phi**
+
+.. code-block:: python
+
+                              #polygenic selection coefficient
+                              'phi':                  0.05,
+
+{:py:`float`, :py:`np.ndarray` of :py:`float`\s}
+
+default: 0.05
+
+reset? P
+
+This defines the polygenic selection coefficient on this :py:`Trait` (i.e
+the selection coefficient acting on the phenotypes, rather than the genotypes,
+of this :py:`Trait`). The effect of this value can be thought of as the
+reduction (from 1) in an :py:`Individual`'s survival probability when that
+:py:`Individual` is maximally unfit (i.e. when that :py:`Individual` has a
+phenotypic value of 1.0 but is located in a location with an environmental
+value of 0.0, or vice versa). When the value is a :py:`float` then the
+strength of selection will be the same for all locations on the
+:py:`Landscape`. When the value is an :py:`np.ndarray` of
+equal dimensions to the :py:`Landscape` then the strength of
+selection will vary across space, as indicated by the values in this array
+(what Geonomics refers to as a "spatially contingent" selection regime).
+
+
+**n_loci**
+
+.. code-block:: python
+
+                              #number of loci underlying trait
+                              'n_loci':               10,
+
+:py:`int`
+
+default: 10
+
+reset? P
+
+This defines the number of loci that should contribute to the phenotypes
+of this :py:`Trait`. These loci will be randomly drawn from across the
+genome.
+
+
+**mu**
+
+.. code-block:: python
+
+                              #mutation rate at loci underlying trait
+                              'mu':                   1e-9,
+
+:py:`float`
+
+default: 1e-9
+
+reset? P
+
+This defines the mutation rate for this :py:`Trait` (i.e. the rate at which
+mutations that affect the phenotypes of this :py:`Trait` will arise). Set to
+0 to disable mutation for this :py:`Trait`.
+
+
+**alpha_distr_mu**
+
+.. code-block:: python
+
+                              #mean of distr of effect sizes
+                              'alpha_distr_mu' :      0,
+:py:`float`
+
+default: 0
+
+reset? N
+
+This defines the mean of the normal distribution from which a :py:`Trait`'s
+new mutations' effect sizes are drawn. The user will likely want to keep this
+value set at 0 and adjust **alpha_distr_sigma**, because for multigenic 
+:py:`Trait`\s the baseline phenotypic value is 0.5 (the central value on a
+Geonomics :py:`Landscape`), so new mutations in a :py:`Trait` would then
+be equally likely to decrease or increase :py:`Individual`\s' phenotypes from
+that baseline.
+
+
+**alpha_distr_sigma**
+
+.. code-block:: python
+
+                              #variance of distr of effect size
+                              'alpha_distr_sigma':    0.5,
+
+:py:`float`
+
+default: 0.5
+
+reset? P
+
+This defines the standard deviation of the normal distribution from which
+a :py:`Trait`'s new mutations' effect sizes are drawn. The user will likely
+want to adjust this value and keep **alpha_distr_mu** set at 0, because 
+for multigenic :py:`Trait`\s the baseline phenotypic value is 0.5 
+(the central value on a Geonomics :py:`Landscape`), so new 
+mutations in a :py:`Trait` would then be equally likely to decrease 
+or increase :py:`Individual`\s' phenotypes from that baseline.
+
+
+**gamma**
+
+.. code-block:: python
+
+                              #curvature of fitness function
+                              'gamma':                1,
+
+{:py:`int`, :py:`float`}
+
+default: 1
+
+reset? N
+
+This defines the curvature of the fitness function (i.e.
+how fitness decreases as the absolute difference between an 
+:py:`Individual`'s optimal and actual phenotypes increases). The user
+will probably have no need to change this from the default value of 1
+(which causes fitness to decrease linearly around the optimal
+phenotypic value). Values < 1 will cause the fitness function to be
+concave up; values > 1 will cause it to be concave down.
+
+
+**univ_adv**
+
+.. code-block:: python
+
+                              #whether the trait is universally advantageous
+                              'univ_adv':             False
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This indicates whether whether selection on a :py:`Trait` should be
+universal (i.e. whether a phenotype of 1 should be optimal everywhere
+on the :py:`Landscape`). When set to True, selection of the :py:`Trait`
+will be directional on the entire :py:`Population`, regardless 
+of :py:`Individual`\s' spatial contexts. 
+
+
+------------------------------------------------------------------------------
+
+^^^^^^^^^^^^^^^^^
+Population change
+^^^^^^^^^^^^^^^^^
+
+
+""""""""""""""""""
+Demographic change
+""""""""""""""""""
+
+**kind**
+
+.. code-block:: python
+
+                          #kind of event {'monotonic', 'stochastic',
+                          #'cyclical', 'custom'}
+                          'kind':             'monotonic',
+
+{:py:`'monotonic'`, :py:`'stochastic'`, :py:`'cyclical'`, :py:`'custom'`}
+
+default: :py:`'monotonic'`
+
+reset? P
+
+This indicates what type of demographic change is being parameterized.
+Each event has a certain length (in timesteps; defined by the **start** and
+**end** parameters). Note that of the other parameters in this section, only
+those that are necessary to parameterize the type of change event indicated
+here will be used.
+
+In :py:`'monotonic'` change events, a :py:`Population`'s 
+carrying capacity raster (K) is multiplied by a constant factor 
+(**rate**) at each timestep during the event. 
+In :py:`'stochastic'` change events, K fluctuates
+around the baseline value (i.e. the K-raster at the time that the change event
+begins) at each required timestep during the event (where the sizes of the
+fluctuations are drawn from the distribution indicated by
+**distr**, the floor and ceiling on those sizes are set by
+**size_range**, and the required timesteps are determined by **interval**). 
+In :py:`'cyclical'` change events, K undergoes a number (indicated
+by **n_cycles**) of sinusoidal cycles between some minimum and maximum
+values (indicated by **size_range**). 
+In :py:`'custom'` change events, the baseline K is multiplied by a series
+of particular factors (defined by **sizes**) at a series of particular
+timesteps (defined by **timesteps**).
+
+
+**start**
+
+.. code-block:: python
+
+                          #starting timestep
+                          'start':            49,
+
+:py:`int`
+
+default: 49
+
+reset? P
+
+This indicates the timestep at which the demographic change event
+should start.
+
+
+**end**
+
+.. code-block:: python
+
+                          #ending timestep
+                          'end':            99,
+
+:py:`int`
+
+default: 99
+
+reset? P
+
+This indicates the timestep at which the demographic change event should end.
+
+
+**rate**
+
+.. code-block:: python
+
+                          #rate, for monotonic change
+                          'rate':             1.02,
+
+:py:`float`
+
+default: 1.02
+
+reset? P
+
+This indicates the rate at which a :py:`'monotonic'` change event should occur.
+At each timestep during the event, a new carrying capacity raster (K)
+will be calculated by multiplying the previous step's K by this factor.
+Thus, values should be expressed relative to 1.0 indicating no change.
+
+
+**interval**
+
+.. code-block:: python
+
+                          #interval of changes, for stochastic change
+                          'interval':         1,
+
+:py:`int`
+
+default: 1
+
+reset? P
+
+This indicates the interval at which fluctutations should occur during a
+:py:`'stochastic'` change event (i.e. the number of timesteps to wait
+between fluctuations).
+
+
+**distr**
+
+.. code-block:: python
+
+                          #distr, for stochastic change {'uniform', 'normal'}
+                          'distr':            'uniform',
+
+{:py:`'uniform'`, :py:`'normal'`}
+
+default: :py:`'uniform'`
+
+reset? P
+
+This indicates the distribution from which to draw the sizes of
+fluctuations in a :py:`'stochastic'` change event. Valid options are
+`'uniform'` and `'normal'`.
+
+
+**n_cycles**
+
+.. code-block:: python
+
+                          #num cycles, for cyclical change
+                          'n_cycles':         10,
+
+:py:`int`
+
+default: 10
+
+reset? P
+
+This indicates the number of cyclical fluctuations that should occur during
+a :py:`'cyclical'` change event.
+
+
+**size_range**
+
+.. code-block:: python
+
+                          #min & max sizes, for stochastic & cyclical change
+                          'size_range':       (0.5, 1.5),
+
+:py:`tuple` of :py:`float`\s
+
+default: :py:`(0.5, 1.5)`
+
+reset? P
+
+This defines the minimum and maximum sizes of fluctuations that can occur
+during :py:`'stochastic'` and :py:`'cyclical'` change events.
+
+
+**timesteps**
+
+.. code-block:: python
+
+                          #list of timesteps, for custom change
+                          'timesteps':        [50, 90, 95],
+
+:py:`list` of :py:`int`\s
+
+default: [50, 90, 95]
+
+reset? P
+
+This defines the series of particular timesteps at which fluctutations should
+occur during a :py:`'custom'` change event.
+
+
+**sizes**
+
+.. code-block:: python
+
+                          #list of sizes, for custom change
+                          'sizes':        [2, 5, 0.5],
+
+:py:`list` of :py:`float`\s
+
+default: [2, 5, 0.5]
+
+reset? P
+
+This defines the series of particular fluctutations that should occur 
+during a :py:`'custom'` change event.
+
+
+------------------------------------------------------------------------------
+
+"""""""""""""""""""
+Life-history change
+"""""""""""""""""""
+
+**<life_hist_param>**
+
+.. code-block:: python
+
+                          #life-history parameter to change
+                          '<life_hist_param>': {
+
+
+:py:`str`
+
+default: :py:`'<life_hist_param>'`
+
+reset? P
+
+This indicates the life-history parameter to be changed by this life-history
+change event. (Note that unlike most parameters, this parameter is 
+a :py:`dict` key, the value for which is a :py:`dict`
+of parameters controlling how the life-history parameter that is named
+will change.)
+
+
+**timesteps**
+
+.. code-block:: python
+
+                          #list of timesteps
+                          'timesteps':        [],
+
+:py:`list` of :py:`int`\s
+
+default: :py:`[]`
+
+reset? P
+
+This indicates the timesteps at which the life-history parameter being changed
+should change (to the values indicated by **vals**).
+
+
+**vals**
+
+.. code-block:: python
+
+                          #list of values
+                          'vals':        [],
+
+:py:`list` of :py:`float`\s
+
+default: :py:`[]`
+
+reset? P
+
+This indicates the values to which the life-history parameter being changed
+should change (at the timesteps indicated by **timesteps**).
+
+
+-------------------------------------------------------------------------------
+
+================
+Model parameters
+================
+
+----
+Main
+----
+
+**T**
+
+.. code-block:: python
+
+          #total Model runtime (in timesteps)
+          'T':            100,
+
+:py:`int`
+
+default: 100
+
+reset? Y
+
+This indicates the total number of timesteps for which the main portion of
+a :py:`Model` (i.e. the portion after the burn-in has completed) will be run
+during each iteration.
+
+
+**burn_T**
+
+.. code-block:: python
+
+          #min burn-in runtime (in timesteps)
+          'burn_T':       30,
+
+:py:`int`
+
+default: 30
+
+reset? P
+
+This indicates the minimum number of timesteps for which a :py:`Model`'s
+burn-in will run. (Note this is only a minimum because the test for
+burn-in completion includes a check that at least this many timesteps have
+elapsed, but also includes two statistical checks of stationarity of the
+size of each :py:`Population` in a :py:`Community`.)
+
+
+**seed**
+
+.. code-block:: python
+
+          #seed number
+          'num':          None,
+
+{:py:`int`, :py:`None`}
+
+default: :py:`None`
+
+reset? P
+       
+This indicates whether or not to set the seeds of the random number
+generators (by calling :py:`np.random.seed` and :py:`random.seed`)
+before building and running a :py:`Model`. If value is an integer, the seeds
+will be set to that value. If value is :py:`None`, seeds will not be set.
+
+
+-------------------------------------------------------------------------------
+
+----------
+Iterations
+----------
+
+**num_iterations**
+
+.. code-block:: python
+
+              #num iterations
+              'n_its': 3,
+
+:py:`int`
+
+default: 3
+
+reset? Y
+
+This indicates the number of iterations for which the :py:`Model`
+should be run. (Note that for each iteration a separate subdirectory of
+data and stats will be written, if your :py:`Model` has parameterized data
+and stats to be collected.)
+
+
+**rand_landscape**
+
+.. code-block:: python
+
+              #whether to randomize Landscape each iteration
+              'rand_landscape':    False,
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This indicates whether the :py:`Landscape` should be randomized for each
+iteration. If True, a new :py:`Landscape` will be generated at the start
+of each iteration. If False, the :py:`Landscape` from iteration 0 will be
+saved and reused for each subsequent iteration.
+
+
+**rand_community**
+
+.. code-block:: python
+
+              #whether to randomize Community each iteration
+              'rand_comm':    False,
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This indicates whether the :py:`Community` should be randomized for each
+iteration. If True, a new :py:`Community` will be generated at the start
+of each iteration. If False, the :py:`Community` from iteration 0 will be
+saved and reused for each subsequent iteration (and whether that
+:py:`Community` is saved before or after being burned in will depend on
+the value provided to the **repeat_burn** parameter).
+
+
+**repeat_burn**
+
+.. code-block:: python
+
+              #whether to burn in each iteration
+              'repeat_burn':  False,
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This indicates whether a reused :py:`Community` should be burned in
+separately for each iteration for which it is reused. If True, the
+:py:`Community` from iteration 0 will be saved as soon as its instantiated,
+but will have a new burn-in run for each iteration in which it is used. If
+False, the :py:`Community` from iteration 0 will be saved after its burn-in
+is complete, and then will only have the main portion of its :py:`Model` run
+separately during each iteration. (Note that if **rand_community** is set to True then
+the value of this parameter will not be used.)
+
+-------------------------------------------------------------------------------
+
+^^^^
+Data
+^^^^
+
+-------------------------------------------------------------------------------
+
+""""""""
+Sampling
+""""""""
+
+**scheme**
+
+.. code-block:: python
+
+                  #sampling scheme {'all', 'random', 'point', 'transect'}
+                  'scheme':               'random',
+
+{:py:`'all'`, :py:`'random'`, :py:`'point'`, :py:`'transect'`}
+
+default: :py:`'random'`
+
+reset? P
+
+This indicates the sampling scheme to use when collecting data from a
+:py:`Model`. Currently valid values include :py:`'all'`, 
+:py:`'random'`, :py:`'point'`, and :py:`'transect'`.
+
+With :py:`'all'`, data will be collected for all :py:`Individual`\s
+at each sampling timestep. With :py:`'random'`, data will be collected from a
+random sample of :py:`Individual`\s (of size indicated by parameter **n**) 
+from anywhere on the :py:`Landscape`.
+With :py:`'point'`, data will be collected from random samples of size **n**
+within a certain distance (**radius**) of each of a set of particular
+points (**points**). With :py:`'transect'`, a linear transect of some
+number of points (**n_transect_points**) between some endpoints
+(**transect_endpoints**) will be created, and then data will be collected
+from random samples of size **n** with a certain distance (**radius**)
+of each point along the transect.
+
+
+**n**
+
+.. code-block:: python
+
+                  #sample size at each point, for point & transect sampling
+                  'n':                    250,
+
+:py:`int`
+
+default: 250
+
+reset? P
+
+This indicates the total number of :py:`Individual`\s to sample each time
+data is collected (if **scheme** is :py:`'random'`), or the number of 
+:py:`Individual`\s to sample around each one of a set of points (if **scheme**
+is :py:`'point'` or :py:`'transect'`). This parameter will only be used if
+**scheme** is :py:`'random'`, :py:`'point'`, or :py:`'transect'`; otherwise
+it may be set to :py:`None`.
+
+
+**points**
+
+.. code-block:: python
+
+                  #coords of collection points, for point sampling
+                  'points':               None,
+
+{:py:`tuple` of 2-:py:`tuple`\s, :py:`None`}
+
+default: :py:`None`
+
+reset? P
+
+This indicates the points around which to sample :py:`Individual`\s for data
+collection. This parameter will only be used if **scheme** is :py:`'point'`;
+otherwise it may be set to :py:`None`.
+
+
+**transect_endpoints**
+
+.. code-block:: python
+
+                  #coords of transect endpoints, for transect sampling
+                  'transect_endpoints':   None,
+
+{2-:py:`tuple` of 2-:py:`tuple`\s, :py:`None`}
+
+default: :py:`None`
+
+reset? P
+
+This indicates the endpoints between which to create a transect, along which
+:py:`Individual`\s will be sampled for data collection. 
+This parameter will only be used if **scheme** is :py:`'transect'`; 
+otherwise it may be set to :py:`None`.
+
+
+**n_transect_points**
+
+.. code-block:: python
+
+                  #num points along transect, for transect sampling
+                  'n_transect_points':    None,
+
+{:py:`int`, :py:`None`}
+
+default: :py:`None`
+
+reset? P
+
+This indicates the number of points to create on the transect along which
+:py:`Individual`\s will be sampled for data collection. 
+This parameter will only be used if **scheme** is :py:`'transect'`; 
+otherwise it may be set to :py:`None`.
+
+
+**radius**
+
+.. code-block:: python
+
+                  #collection radius around points, for point & transect sampling
+                  'radius':               None,
+
+{:py:`float`, :py:`int`, :py:`None`}
+
+default: :py:`None`
+
+reset? P
+
+This indicates the radius around sampling points within which
+:py:`Individual`\s may be sampled for data collection. 
+This parameter will only be used if **scheme** is :py:`'point'` or 
+:py:`'transect'`; otherwise it may be set to :py:`None`.
+
+
+**when**
+
+.. code-block:: python
+
+                  #when to collect data
+                  'when':                 None,
+
+{:py:`int`, :py:`list` of :py:`int`\s, :py:`None`}
+
+default: :py:`None`
+
+reset? P
+
+This indicates the timesteps during main :py:`Model` iterations
+at which data should be collected (in addition to after the final timestep
+of each iteration, when data is always collected for any :py:`Model` for which
+data collection is parameterized). If value is a non-zero :py:`int`,
+it will be treated as a frequency at which data should be collected (e.g.
+a value of 5 will cause data to be collected every 5 timesteps). If value
+is a list of :py:`int`\s, they will be treated as the particular timesteps
+at which data should be collected. If value is 0 or :py:`None`, 
+data will be collected only after the final timestep.
+
+
+**include_landscape**
+
+.. code-block:: python
+
+                  #whether to save current Layers when data is collected
+                  'include_landscape':         False,
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This indicates whether to include the :py:`Landscape` :py:`Layer`\s among the
+data that is collected. If True, each :py:`Layer` will be written to a raster
+or array file (according to the format indicated by
+**geo_rast_format**) each time data is collected.
+
+
+**include_fixed_sites**
+
+.. code-block:: python
+
+                  #whether to include fixed loci in VCF files
+                  'include_fixed_sites':  False,
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This indicates whether fixed sites (i.e. loci which are fixed for either the
+0 or 1 allele) should be included in any VCF files that are written. Thus,
+this parameter is only relevant if :py:`'vcf'` is one of the genetic data
+formats indicated by **gen_format**.
+
+
+-------------------------------------------------------------------------------
+
+""""""
+Format
+""""""
+
+**gen_format**
+
+.. code-block:: python
+
+                  #format for genetic data {'vcf', 'fasta'}
+                  'gen_format':           ['vcf', 'fasta'],
+
+{:py:`'vcf'`, :py:`'fasta'`, :py:`['vcf', 'fasta']`}
+
+default: :py:`['vcf', 'fasta']`
+
+reset? P
+
+This indicates the format or formats to use for writing genetic data.
+data. Currently valid formats include :py:`'vcf'` and :py:`'fasta'` formats.
+Either or both formats may be specified; all formats that are specified will
+be written each time data is collected.
+
+
+**geo_vect_format**
+
+.. code-block:: python
+
+                  #format for vector geodata {'csv', 'shapefile', 'geojson'}
+                  'geo_vect_format':      'csv',
+
+{:py:`'csv'`, :py:`'shapefile'`, :py:`'geojson'`}
+
+default: :py:`'csv'`
+
+reset? P
+
+This indicates the format to use for writing geographic vector data (i.e.
+:py:`Individual`\s' point locations). 
+Currently valid formats include :py:`'csv'`, :py:`'shapefile'`,
+and :py:`'geojson'`. Any one format may be specified.
+
+
+**geo_rast_format**
+
+.. code-block:: python
+
+                  #format for raster geodata {'geotiff', 'txt'}
+                  'geo_rast_format':      'geotiff',
+
+{:py:`'geotiff'`, :py:`'txt'`}
+
+default: :py:`'geotiff'`
+
+reset? P
+
+This indicates the format to use for writing geographic raster data (i.e.
+:py:`Layer` arrays). Currently valid formats include :py:`'geotiff'`
+and :py:`'txt'`. Either format may be specified. Note that this parameter
+will only be used if the **include_landscape** parameter is set to True.
+
+
+-------------------------------------------------------------------------------
+
+^^^^^
+Stats
+^^^^^
+
+The stats parameters section has subsection for each statistc that Geonomics
+can calculate. (Currently valid statistics include:
+  - *'Nt'*: population size at timestep t
+  - *'het'*: heterozygosity
+  - *'maf'*: minor allele frequency
+  - *'mean_fit'*: mean fitness of a :py:`Population`
+  - *'ld'*: linkage disequilibrium
+  
+  There are only a few parameters, which are shared across all
+of those subsections, and each parameter always means the same thing despite
+which statistic it is parameterizing. Thus, hereafter we provide a single of
+each of those parameters are how it works, regardless of the statistic for
+which it used:
+
+
+**calc**
+
+.. code-block:: python
+
+                #whether to calculate
+                'calc':     True,
+
+
+:py:`bool`
+
+default: (varies by statistic)
+
+reset? P
+
+This indicates whether or not a given statistic should be calculated. Thus,
+only those statistics whose **calc** parameters are set to True will be
+calculated and saved when their :py:`Model` is run.
+
+
+**freq**
+
+.. code-block:: python
+
+                #calculation frequency (in timesteps)
+                'freq':     5,
+
+:py:`int`
+
+default: (varies by statistic)
+
+reset? P
+
+This indicates the frequency with which a given statistic should be calculated
+during each iteration (in timesteps). If set to 0, Geonomics will calculate
+and save this statistic for only the first and last timesteps
+of each iteration.
+
+
+**mean**
+
+.. code-block:: python
+
+                #whether to calculate as pop mean
+                'mean': False,
+
+:py:`bool`
+
+default: (varies by statistic, and only valid for certain statistics)
+
+reset? P
+
+For some statistics that produce a vector of values each timestep
+when they are collected (containing one value per :py:`Individual`),
+such as heterozygosity, this indicates
+whether those values should instead be meaned and saved as a
+single value for each timestep.
+                
 
 -------------------------------------------------------------------------------
  
