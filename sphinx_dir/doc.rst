@@ -456,20 +456,21 @@ but for some scenarios they may not be adequate, and for some parameters
 no "one-size-fits-most" option. Thus, it is important that the user
 have a basic acquaintance with the purpose and operation of these classes.
 
-----------------------
-:py:`_MovementSurface`
-----------------------
+----------------------------
+:py:`_DirectionalitySurface`
+----------------------------
 
-The :py:`_MovementSurface` class allows Geonomics
+The :py:`_DirectionalitySurface` class allows Geonomics
 to model a :py:`Population`'s 
 realistic movement across a spatially varying landscape. It does this by 
 creating an array of circular probability distributions (i.e. VonMises 
 distributions), one for each cell on the :py:`Landscape`, from which 
 :py:`Individual`\s choose their directions each time they move. To create the
-:py:`_MovementSurface` for a :py:`Population`,
+:py:`_DirectionalitySurface` for a :py:`Population`,
 the user must indicate the :py:`Layer` 
 that should be used to create it (i.e. the :py:`Layer` that represents 
-landscape permeability for that :py:`Population`). The :py:`_MovementSurface`'s 
+landscape permeability for that :py:`Population`). 
+The :py:`_DirectionalitySurface`'s 
 distributions can be **simple (i.e. unimodal)**, such that the 
 maximum value of the distribution at each cell will point toward the
 maximum value in the 8-cell neighborhood; this works best for permeability 
@@ -484,7 +485,7 @@ move into each of the 8 neighboring cells); this works best for non-monotonic,
 complex permeability :py:`Layer`\s (e.g. a DEM of a mountainous region that is 
 used as a permeability :py:`Layer`). 
 (The :py:`Landscape` is surrounded by a margin of 0-permeability 
-cells before the :py:`_MovementSurface` is calculated, such 
+cells before the :py:`_DirectionalitySurface` is calculated, such 
 that :py:`Landscape` edges are treated 
 as barriers to movement.) The class consists 
 principally of a 3d Numpy array (x by y by z, where x and y are the 
@@ -581,7 +582,7 @@ default values but can be customized in a :py:`Model`'s parameters file
 
 The alternative movement mechanism that is available is 
 **movement across a permeability surface**,
-using a :py:`_MovementSurface` object.
+using a :py:`_DirectionalitySurface` object.
 To parameterize a :py:`_MovemementSurface` for a :py:`Population`, the user 
 must create a template parameters file that includes the 
 necessary parameters section for the population (i.e. 
@@ -590,14 +591,14 @@ in the population's arguments to the :py:`gnx.make_parameters_file`
 function (see the docstring for that function for details and an example). 
 :py:`Individual`\s move to next locations determined by a random distance drawn 
 from a Wald distribution and a random direction drawn from the distribution 
-at the  :py:`_MovementSurface` cell in which which the :py:`Individual`\s 
-are currently located. For details about :py:`_MovementSurface` creation, see 
-section ':py:`_MovementSurface`' above, or the class' docstring.
+at the  :py:`_DirectionalitySurface` cell in which which the :py:`Individual`\s 
+are currently located. For details about :py:`_DirectionalitySurface` creation,
+see section ':py:`_DirectionalitySurface`' above, or the class' docstring.
 
 Dispersal is currently implemeneted identically to spatially random movement 
 (with the caveat that the an offspring's new location is determined 
-relative its parents' centroid). But the option to use a 
-:py:`_MovementSurface` for dispersal will be offered soon.
+relative its parents' midpoint). But the option to use a 
+:py:`_DirectionalitySurface` for dispersal will be offered soon.
 
 
 -------------------------------------------------------------------------------
@@ -622,7 +623,7 @@ offspring drawn from a Poisson distribution (with lambda set in the
 parameters file). For each offspring, sex is chosen probablistically 
 (a Bernoulli random draw with probability equal to the :py:`Population`'s 
 sex ratio), age set to 0, and location chosen by dispersal from 
-the parents' centroid (see section 'Movement and Dispersal'). For 
+the parents' midpoint (see section 'Movement and Dispersal'). For 
 :py:`Population`\s that have genomes, offspring genomes will be a 
 fusion of two recombinant genomes from each of the two parents (where 
 each recombinant is indexed out a parent's genome using a recombination 
@@ -813,8 +814,9 @@ of the :py:`Layer` that will exist after the event is complete, defined using
 the **end_rast** parameter); and the 
 interval at which intermediate changes will occur.  When the :py:`Model` is 
 created, the stepped series of intermediate :py:`Layers` (and 
-:py:`_MovementSurface` objects, if the :py:`Layer` that is changing serves 
-as the basis of a :py:`_MovementSurface` for any :py:`Population`) will be 
+:py:`_DirectionalitySurface` objects,
+if the :py:`Layer` that is changing serves as the basis for a 
+:py:`_DirectionalitySurface` for any :py:`Population`) will be 
 created and queued, so that they will swap out accordingly at the appropriate 
 timesteps.
 
@@ -1577,9 +1579,10 @@ in time. However, there is a potenitally significant memory trade-off here:
 The whole series of stepwise-changed arrays is computed when the
 :py:`Model` is created, then saved and used at the appropriate timestep
 during each :py:`Model` run (and if the :py:`Layer` that is changing is used
-by any :py:`Population` as a :py:`_MovementSurface` then each intermediate
-:py:`_MovementSurface` is also calculated when the :py:`Model` is first
-built. These objects take up memory, which may be limiting for larger
+by any :py:`Population` as a :py:`_DirectionalitySurface` then each 
+intermediate :py:`_DirectionalitySurface` is also calculated
+when the :py:`Model` is first built. 
+These objects take up memory, which may be limiting for larger
 :py:`Model`\s and/or :py:`Landscape` objects. This will probably not be a
 major issue, but is worth considering.
 
@@ -1971,7 +1974,8 @@ This is the :math:`\mu` parameter of the VonMises distribution
 (a circularized normal distribution) from which
 movement directions are chosen when movement is random and isotropic 
 (rather than
-being determined by a :py:`_MovementSurface`; if a :py:`_MovementSurface`
+being determined by a :py:`_DirectionalitySurface`;
+if a :py:`_DirectionalitySurface`
 is being usen this parameter is ignored). The :math:`\kappa` value
 that is fed into this same distribution (**direction_distr_kappa**)
 causes it to be very dispersed,
@@ -2001,7 +2005,8 @@ This is the :math:`\kappa` parameter of the VonMises distribution
 (a circularized normal distribution) from which
 movement directions are chosen when movement is random and isotropic 
 (rather than
-being determined by a :py:`_MovementSurface`; if a :py:`_MovementSurface`
+being determined by a :py:`_DirectionalitySurface`;
+if a :py:`_DirectionalitySurface`
 is being usen this parameter is ignored). The default value of 0 will  
 cause this distribution to be very dispersed, approximating a uniform
 distribution on the unit circle and rendering the :math:`\mu`
@@ -2093,9 +2098,9 @@ set to reflect a distribution of dispersal distances that is appropriate
 for your scenario.
 
 
-""""""""""""""""
-_MovementSurface
-""""""""""""""""
+"""""""""""""""""""""""""""""""
+Movement and Dispersal Surfaces
+"""""""""""""""""""""""""""""""
 
 **layer**
 
@@ -2112,12 +2117,12 @@ default: :py:`'layer_0'`
 reset? P
 
 This indicates, by name, the :py:`Layer` to be used as to construct the
-:py:`_MovementSurface` for a :py:`Population`. Note that this can also
+:py:`_DirectionalitySurface` for a :py:`Population`. Note that this can also
 be thought of as the :py:`Layer` that should serve as a
 :py:`Population`'s permeability raster (because :py:`Individual`\s moving
-on this :py:`_MovementSurface` toward the higher (if mixture distributions
-are used) or highest (if unimodl distributions are used)
-values in their neighborhoods). 
+on this :py:`_DirectionalitySurface` toward the higher
+(if mixture distributions are used) or highest
+(if unimodl distributions are used) values in their neighborhoods). 
 
 
 **mixture**
@@ -2133,16 +2138,16 @@ default: True
 
 reset? P
 
-This indicates whether the :py:`_MovementSurface` should be built using
+This indicates whether the :py:`_DirectionalitySurface` should be built using
 VonMises mixture distributions or unimodal VonMises distributions. 
-If True, each cell in the :py:`_MovementSurface` will have an approximate
+If True, each cell in the :py:`_DirectionalitySurface` will have an approximate
 circular distribution that is a
 weighted sum of 8 unimodal VonMises distributions (one per cell in the 8-cell
 neighborhood); each of those summed unimodal distributions will have as its 
 mode the direction of the neighboring cell on which it is based and as its 
 weight the relative permeability of the cell on which it is based 
 (relative to the full neighborhood). If False, each cell in the
-:py:`_MovementSurface` will have an approximated circular distribution 
+:py:`_DirectionalitySurface` will have an approximated circular distribution 
 that is a single
 VonMises distribution with its mode being the direction of the maximum-valued
 cell in the 8-cell neighborhood and its concentration determined by
@@ -2163,7 +2168,7 @@ default: 12
 reset? N
 
 This sets the concentration of the VonMises distributions used to build
-the approximated circular distributions in the :py:`_MovementSurface`.
+the approximated circular distributions in the :py:`_DirectionalitySurface`.
 The default value was chosen heuristically as one that provides a reasonable
 concentration in the direction of a unimodal VonMises distribution's mode 
 without causing VonMises mixture distributions built from an 
@@ -2173,7 +2178,7 @@ There will probably be little need to change the default value, but if
 interested then the user could create :py:`Model`\s with various values
 of this parameter and then use the :py:`Model.plot_movement_surface`
 method to explore the influence of the parameter on the resulting
-:py:`_MovementSurface`\s.
+:py:`_DirectionalitySurface`\s.
 
 
                    
