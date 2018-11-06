@@ -44,7 +44,7 @@ Provides
 ********
 
   1. :py:`Landscape`, :py:`GenomicArchitecture`, :py:`Trait`,
-     :py:`Individual`, :py:`Population`, and :py:`Community` classes
+     :py:`Individual`, :py:`Species`, and :py:`Community` classes
   2. A :py:`Model` class that builds objects of the aforementioned classes 
      according to the scenario stipulated in a parameters file,
      then uses them to run numerous simulation iterations
@@ -63,8 +63,8 @@ Intro
 Backward-time (i.e. coalescent) simulators abound.
 But they are inadequate for simulation of many scenarios of 
 interest, including: natural selection on traits with arbitrary genomic 
-architectures; spatially variable natural selection; simulation of populations
-distributed continuously and moving realistically across
+architectures; spatially variable natural selection; simulation of species or
+populations distributed continuously and moving realistically across
 complex landscapes; complex demographic change simultaneous with ongoing, 
 often non-stationary environmental change; and coevolutionary interactions 
 between multiple species or incipient species. Few existing forward-time 
@@ -90,17 +90,17 @@ default values in a pre-packaged script.
 Geonomics will allow you to:
 
   - create a :py:`Landscape` with any number of :py:`Layers` in it; 
-  - create any number of :py:`Population`\s living on that
+  - create any number of :py:`Species` living on that
     :py:`Landscape`, each of which is composed of a bunch of 
     independent :py:`Individual`\s, and each of which will have a bunch of
     parameters dsecribing what it's like and how it lives;
-  - optionally give the :py:`Individual`\s of any :py:`Population`\s
+  - optionally give the :py:`Individual`\s of any :py:`Species`
     genomes, which can optionally determine phenotypes for any number 
     of :py:`Trait`\s (all of this is controlled by the
     :py:`GenomicArchitecture` that you would create for
-    the :py:`Population`\s);
+    the :py:`Species`);
   - simulate any number of timsesteps of the evolution of those
-    :py:`Population`\s on that :py:`Landscape`, where each timestep can include
+    :py:`Species` on that :py:`Landscape`, where each timestep can include
     movement, mating, mortality (by density-dependence and optionally also by
     natural selection), and demographic, life-history, or
     environmental changes
@@ -243,8 +243,8 @@ the interval [0 <= e <= 1]. Each :py:`Layer` can be initialized from its own
 parameters subsection within the 'land' parameters section of a Geonomics
 parameters file. 
 
-For each :py:`Population` (see section ':py:`Individuals`
-and :py:`Populations`', below), the different :py:`Layer`
+For each :py:`Species` (see section ':py:`Individuals`
+and :py:`Species`', below), the different :py:`Layer`
 layers in the :py:`Landscape` can be used to model habitat 
 viability, habitat connectivity, or variables imposing spatially varying
 natural selection. :py:`Landscape` and :py:`Layer` objects
@@ -262,7 +262,7 @@ Genomes, :py:`GenomicArchitecture`, and :py:`Trait` objects
 ===========================================================
 
 :py:`Individual` objects (see section ':py:`Individuals`
-and :py:`Populations`', below) can optionally be assigned genomes.
+and :py:`Species`', below) can optionally be assigned genomes.
 If they are, each :py:`Individual`'s genome is modeled as a 
 2-by-L Numpy array (where 2 is the ploidy, currently fixed at
 diploidy, and L is genome length) containing 0s and 1s (because
@@ -272,7 +272,7 @@ The parameter L, as well as numerous other genomic parameters (including
 locus-wise starting frequencies of the 1 alleles; locus-wise dominance effects;
 locus-wise recombination rates; and genome-wide mutation rates for neutral, 
 globally deleterious, and adaptive loci), are controlled by the 
-:py:`GenomicArchitecture` object pertaining to the :py:`Population` to which an 
+:py:`GenomicArchitecture` object pertaining to the :py:`Species` to which an 
 :py:`Individual` belongs. (For the full and detailed list of attributes in a 
 :py:`GenomicArchitecture` object, see its class documentation, below.)
 The genomes of the initial :py:`Individual`\s 
@@ -280,16 +280,16 @@ in a simulation, as well as those of
 :py:`Individual`\s in subsequent generations, are either drawn
 or recombined, and are mutated, according to the values stipulated 
 by the :py:`GenomicArchitecture` of
-their :py:`Population`. The user can create a population with a 
+their :py:`Species`. The user can create a species with a 
 :py:`GenomicArchitecture` and with corresponding
 genomes by including a 'genome' subsection in that
-population's section of the Geonomics parameters file (and 
+species' section of the Geonomics parameters file (and 
 setting the section's various parameters to their desired values). 
 
 Geonomics can model :py:`Individual`\s' phenotypes.
 It does this by allowing the 
 user to create an arbitrary number of distinct :py:`Trait`\s
-for each :py:`Population`. Each trait is
+for each :py:`Species`. Each trait is
 represented by a :py:`Trait` object, which 
 maps genomic loci onto that trait, maps effect sizes ('alpha') onto those loci,
 and sets the trait's polygenic selection
@@ -332,20 +332,20 @@ dominance at a locus, as indicated by the following table of genotypes:
 see its class documentation, below.)
 
 Note that for maximal control over the :py:`GenomicArchitecture`
-of a :py:`Population`, the user can set the value of the 'gen_arch_file' 
+of a :py:`Species`, the user can set the value of the 'gen_arch_file' 
 parameter in the parameters file to the name of a separate CSV file 
 stipulating the locus numbers, starting 1-allele frequencies, dominance 
 effects, traits, and inter-locus recombination rates (as columns) of 
 all loci (rows) in the :py:`GenomicArchitecture`;
 these values will override any other values provided in the 'genome' 
-subsection of the population's parameters.
+subsection of the species' parameters.
 
 
 -------------------------------------------------------------------------------
 
-===============================================================
-:py:`Individual`, :py:`Population`, and :py:`Community` objects
-===============================================================
+============================================================
+:py:`Individual`, :py:`Species`, and :py:`Community` objects
+============================================================
 
 Being that Geonomics is an individual-based model, individuals serve as 
 the fundamental units (or agents) of all simulations. They are represented by
@@ -357,39 +357,40 @@ an x,y position (in continuous space; attributes 'x' and 'y'), and a
 :py:`Individual`'s current cell on each :py:`Layer`
 of the :py:`Landscape` on which the :py:`Individual` lives.
 
-The :py:`Population` class is an :py:`OrderedDict`
+The :py:`Species` class is an :py:`OrderedDict`
 (defined by the :py:`collections` 
 package) containing all :py:`Individaul`\s, (with 
-their 'idx' attributes as keys). If a :py:`Population`
+their 'idx' attributes as keys). If a :py:`Species`
 has a :py:`GenomicArchitecture` then the :py:`Individual`\s
-in the :py:`Population` will also each have genomes (attribute 'genome'),
+in the :py:`Species` will also each have genomes (attribute 'genome'),
 and the :py:`GenomicArchitecture` includes :py:`Trait`\s
 then each individual will also have a :py:`list` of 
 phenotype values (one per :py:`Trait`; attribute 'z') and a 
 single fitness value (attribute 'fit'). (These attributes all otherwise 
 default to :py:`None`.)
 
-Each :py:`Population` also has a number of other attributes of interest. Some 
+Each :py:`Species` also has a number of other attributes of interest. Some 
 of these are universal (i.e. they are created regardless of the 
-parameterization of the :py:`Model` to which a :py:`Population` inheres). These 
-include: the :py:`Population`'s name (attribute 'name'); its current density 
+parameterization of the :py:`Model` to which a :py:`Species` inheres). These 
+include: the :py:`Species`' name (attribute 'name'); its current density 
 raster (a Numpy array attribute called 'N'); and the number of births,
-number of deaths, and terminal population size of each timestep (which are 
+number of deaths, and terminal population size (i.e. total number of
+individuals in the :py:`Species`) of each timestep (which are 
 :py:`list` attributes called 'n_births', 'n_deaths', and 'Nt'). If the 
-:py:`Population` was parameterized with a
+:py:`Species` was parameterized with a
 :py:`GenomicArchitecture` then that will 
 be created as the 'gen_arch' attribute (otherwise this attribute will be 
 :py:`None`).
 
-All of the :py:`Population`\s in a :py:`Model`
+All of the :py:`Species` in a :py:`Model`
 are collected in the :py:`Model`'s 
 :py:`Community` object. The :py:`Community` class
 is simply an integer-keyed :py:`dict` 
-of :py:`Population`\s. For the time being, the :py:`Community` object allows a 
-Geonomics :py:`Model` to simulate multiple :py:`Population`\s simultaneously on 
+of :py:`Species`. For the time being, the :py:`Community` object allows a 
+Geonomics :py:`Model` to simulate multiple :py:`Species` simultaneously on 
 the same :py:`Landscape`, but otherwise affords no additional functionality
 of interest. However, its implementation will facilitate the potential 
-future development of methods for interaction between :py:`Population`\s. 
+future development of methods for interaction between :py:`Species`. 
 (e.g. to simulate coevolutionary, speciation, or hybridization scenarios).
 
 
@@ -402,7 +403,7 @@ future development of methods for interaction between :py:`Population`\s.
 Objects of the :py:`Model` class serve as the main interface between the user 
 and the Geonomics program. (While it is certainly possible for a user 
 to work directly with the :py:`Landscape`
-and :py:`Population` or :py:`Community` objects to 
+and :py:`Species` or :py:`Community` objects to 
 script their own custom models, the typical user should find that the 
 :py:`Model` object allows them accomplish their goals with minimal toil.)
 The main affordance of a :py:`Model` object is the :py:`Model.run` method, 
@@ -427,7 +428,7 @@ When a :py:`Model` is run, it will:
      determine that the burn-in is complete);
   2. Run the main model for the stipulated number of timesteps;
   3. Repeat this for the stipulated number of iterations (retaining or 
-     refreshing the first run's initial :py:`Landscape` and :py:`Population` 
+     refreshing the first run's initial :py:`Landscape` and :py:`Species` 
      objects as stipulated).
 
 The :py:`Model` object offers one other method, however, :py:`Model.walk`, 
@@ -456,21 +457,21 @@ but for some scenarios they may not be adequate, and for some parameters
 no "one-size-fits-most" option. Thus, it is important that the user
 have a basic acquaintance with the purpose and operation of these classes.
 
-----------------------------
-:py:`_DirectionalitySurface`
-----------------------------
+-------------------------
+:py:`_ConductanceSurface`
+-------------------------
 
-The :py:`_DirectionalitySurface` class allows Geonomics
-to model a :py:`Population`'s 
+The :py:`_ConductanceSurface` class allows Geonomics
+to model a :py:`Species`' 
 realistic movement across a spatially varying landscape. It does this by 
 creating an array of circular probability distributions (i.e. VonMises 
 distributions), one for each cell on the :py:`Landscape`, from which 
 :py:`Individual`\s choose their directions each time they move. To create the
-:py:`_DirectionalitySurface` for a :py:`Population`,
+:py:`_ConductanceSurface` for a :py:`Species`,
 the user must indicate the :py:`Layer` 
 that should be used to create it (i.e. the :py:`Layer` that represents 
-landscape permeability for that :py:`Population`). 
-The :py:`_DirectionalitySurface`'s 
+landscape permeability for that :py:`Species`). 
+The :py:`_ConductanceSurface`'s 
 distributions can be **simple (i.e. unimodal)**, such that the 
 maximum value of the distribution at each cell will point toward the
 maximum value in the 8-cell neighborhood; this works best for permeability 
@@ -485,7 +486,7 @@ move into each of the 8 neighboring cells); this works best for non-monotonic,
 complex permeability :py:`Layer`\s (e.g. a DEM of a mountainous region that is 
 used as a permeability :py:`Layer`). 
 (The :py:`Landscape` is surrounded by a margin of 0-permeability 
-cells before the :py:`_DirectionalitySurface` is calculated, such 
+cells before the :py:`_ConductanceSurface` is calculated, such 
 that :py:`Landscape` edges are treated 
 as barriers to movement.) The class consists 
 principally of a 3d Numpy array (x by y by z, where x and y are the 
@@ -497,7 +498,7 @@ used to approximate the distributions in each cell.
 -----------------------
 
 The :py:`_DensityGridStack` class implements an algorithm for rapid estimating 
-an array of the local density of a :py:`Population`. The density is estimated 
+an array of the local density of a :py:`Species`. The density is estimated 
 using a sliding window approach, with the window-width determining the 
 neighborhood size of the estimate. The resulting array has a spatial 
 resolution equivalent to that of the :py:`Landscape`, and is used in all
@@ -519,21 +520,21 @@ This class is used for all neighbor-searching operations (e.g. mate-search).
 The :py:`_RecombinationPaths` class contains a large (and customizable) 
 number of :py:`bitarray`\s, each of which indicates the genome-length 
 diploid chromatid numbers (0 or 1) for a
-recombinant gamete produced by an :py:`Individual` of a given :py:`Population` 
+recombinant gamete produced by an :py:`Individual` of a given :py:`Species` 
 (henceforth referred to as 'recombination paths'). These recombination 
 paths are generated using the genome-wide recombination rates specified by 
-the :py:`Population`'s :py:`GeonomicArchitecture`. They are generated during 
+the :py:`Species`' :py:`GeonomicArchitecture`. They are generated during 
 construction of the :py:`Model`, then drawn randomly as needed (i.e.
 each time an :py:`Individual` produces a gamete). This provides a 
 reasonable trade-off between realistic modelling of recombination and runtime.
 
-----------------------------------------------------
-:py:`_LandscapeChanger` and :py:`_PopulationChanger`
-----------------------------------------------------
+-------------------------------------------------
+:py:`_LandscapeChanger` and :py:`_SpeciesChanger`
+-------------------------------------------------
 
 These classes manage all of the landscape changes and demographic changes 
 that were parameterized for the :py:`Landscape` and
-:py:`Population` objects to which they inhere. 
+:py:`Species` objects to which they inhere. 
 The functions creating these changes are defined at the outset, 
 then queued and called at their scheduled timesteps.
 
@@ -569,7 +570,7 @@ Movement and Dispersal
 Movement is optional, such that turning off movement will allow the user 
 to simulate sessile organisms (which will reproduce and disperse, 
 but not move after dispersal; this distinction is of course irrelevant 
-for a :py:`Population` with a maximum age of 1). For :py:`Population`\s 
+for a :py:`Species` with a maximum age of 1). For :py:`Species` 
 with movement, :py:`Individual`\s can
 move by two distinct mechanisms. **Spatially random movement**
 is the default behavior; in this case, :py:`Individual`\s 
@@ -582,23 +583,23 @@ default values but can be customized in a :py:`Model`'s parameters file
 
 The alternative movement mechanism that is available is 
 **movement across a permeability surface**,
-using a :py:`_DirectionalitySurface` object.
-To parameterize a :py:`_MovemementSurface` for a :py:`Population`, the user 
+using a :py:`_ConductanceSurface` object.
+To parameterize a :py:`_MovemementSurface` for a :py:`Species`, the user 
 must create a template parameters file that includes the 
-necessary parameters section for the population (i.e. 
+necessary parameters section for the :py:`Species` (i.e. 
 the user must set 'movement' to :py:`True` and 'movement_surface' to :py:`True` 
-in the population's arguments to the :py:`gnx.make_parameters_file` 
+in the :py:`Species`' arguments to the :py:`gnx.make_parameters_file` 
 function (see the docstring for that function for details and an example). 
 :py:`Individual`\s move to next locations determined by a random distance drawn 
 from a Wald distribution and a random direction drawn from the distribution 
-at the  :py:`_DirectionalitySurface` cell in which which the :py:`Individual`\s 
-are currently located. For details about :py:`_DirectionalitySurface` creation,
-see section ':py:`_DirectionalitySurface`' above, or the class' docstring.
+at the  :py:`_ConductanceSurface` cell in which which the :py:`Individual`\s 
+are currently located. For details about :py:`_ConductanceSurface` creation,
+see section ':py:`_ConductanceSurface`' above, or the class' docstring.
 
 Dispersal is currently implemeneted identically to spatially random movement 
 (with the caveat that the an offspring's new location is determined 
 relative its parents' midpoint). But the option to use a 
-:py:`_DirectionalitySurface` for dispersal will be offered soon.
+:py:`_ConductanceSurface` for dispersal will be offered soon.
 
 
 -------------------------------------------------------------------------------
@@ -607,27 +608,27 @@ relative its parents' midpoint). But the option to use a
 Reproduction
 ============
 
-Each timestep, for each :py:`Population`, all pairs of individuals within 
+Each timestep, for each :py:`Species`, all pairs of individuals within 
 a certain distance of each other (i.e. the mating radius, 
 which is set in the parameters file) are identified.
-These pairs are subsetted if necessary (i.e. if the :py:`Population` 
+These pairs are subsetted if necessary (i.e. if the :py:`Species` 
 requires that :py:`Individual`\s be above a certain reproductive age, 
 or that they be of opposite sexes, in order to mate; these values 
 can also be changed from their defaults in the parameters file). 
 Remaining pairs mate probabilistically (according to a Bernoulli 
-random draw with probability equal to the :py:`Population`'s birth 
+random draw with probability equal to the :py:`Species`' birth 
 rate, which is also set in the parameters file).
 
 Pairs that are chosen to mate will produce a number of new 
 offspring drawn from a Poisson distribution (with lambda set in the 
 parameters file). For each offspring, sex is chosen probablistically 
-(a Bernoulli random draw with probability equal to the :py:`Population`'s 
+(a Bernoulli random draw with probability equal to the :py:`Species`' 
 sex ratio), age set to 0, and location chosen by dispersal from 
 the parents' midpoint (see section 'Movement and Dispersal'). For 
-:py:`Population`\s that have genomes, offspring genomes will be a 
+:py:`Species` that have genomes, offspring genomes will be a 
 fusion of two recombinant genomes from each of the two parents (where 
 each recombinant is indexed out a parent's genome using a recombination 
-path; see section ':py:`_RecombinationPaths`'). For :py:`Population`\s 
+path; see section ':py:`_RecombinationPaths`'). For :py:`Species` 
 with :py:`Trait`\s in their
 :py:`GenomicArchitecture`\s, offspring phenotypes are 
 determined at birth. Mutations are also drawn and introduced at this 
@@ -670,14 +671,14 @@ logistic growth equation (:math:`\frac{\mathrm{d}
 N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})`, 
 where the x,y subscripts refer to
 values for a given cell on the :py:`Landscape`).
-Each :py:`Population` has a carrying-capacity raster (a 2d Numpy array; 
+Each :py:`Species` has a carrying-capacity raster (a 2d Numpy array; 
 attribute 'K'), which is defined in the parameters file to be 
 one of the :py:`Layer`\s in the :py:`Landscape`.
 The comparison between this raster and 
 the population-density raster calculated at each timestep serves as the 
 basis for the spatialized logistic growth equation, because both 
 equations can be calculated cell-wise for the entire extent of the 
-:py:`Landscape` (using the :py:`Population`'s
+:py:`Landscape` (using the :py:`Species`'
 intrinsic growth rate, the attribute 
 'R', which is set in the parameters file).
 
@@ -713,7 +714,7 @@ the :py:`Individual` is located.
 **Universal** selection (which can be toggled using the 'univ_adv' 
 parameter with a :py:`Trait`'s section in the parameters file) occurs 
 when a phenotype of 1 is optimal everywhere on the :py:`Landscape`. In other 
-words, it represents directional selection on an entire :py:`Population`,
+words, it represents directional selection on an entire :py:`Species`,
 regardless of :py:`Individual`\s' spatial contexts. (Note that this can
 be thought of as operating the same as spatially divergent selection,
 but with the environmental variable driving natural selection being
@@ -790,9 +791,9 @@ are more or less analogous:
 
 -------------------------------------------------------------------------------
 
-=======================
-Population interactions
-=======================
+====================
+Species interactions
+====================
 
 This functionality is not yet included available. But the Community class was 
 created in advance recognition that this functionality could be desirable 
@@ -802,9 +803,9 @@ hybridization scenarios).
 
 -------------------------------------------------------------------------------
 
-===========================================
-:py:`Landscape` and :py:`Population` change
-===========================================
+========================================
+:py:`Landscape` and :py:`Species` change
+========================================
 
 For a given :py:`Layer`, any number of change events 
 can be planned. 
@@ -814,13 +815,13 @@ of the :py:`Layer` that will exist after the event is complete, defined using
 the **end_rast** parameter); and the 
 interval at which intermediate changes will occur.  When the :py:`Model` is 
 created, the stepped series of intermediate :py:`Layers` (and 
-:py:`_DirectionalitySurface` objects,
+:py:`_ConductanceSurface` objects,
 if the :py:`Layer` that is changing serves as the basis for a 
-:py:`_DirectionalitySurface` for any :py:`Population`) will be 
+:py:`_ConductanceSurface` for any :py:`Species`) will be 
 created and queued, so that they will swap out accordingly at the appropriate 
 timesteps.
 
-For a given :py:`Population`, any number of demographic change events can 
+For a given :py:`Species`, any number of demographic change events can 
 also be planned. In the parameters file, for each event, the user 
 stipulates the type of the event ('monotonic', 'cyclical', 'random', or 
 'custom') as well as the values of a number of associated 
@@ -830,7 +831,7 @@ planned and queued when the :py:`Model` is created, and will be
 executed at the appropriate timesteps.
 
 It is also possible to schedule any number of instantaneous changes 
-to some of the life-history parameters of a :py:`Population` (e.g. birth rate; 
+to some of the life-history parameters of a :py:`Species` (e.g. birth rate; 
 the lambda parameter of the Poisson distribution determining the number of 
 offspring of mating events). This functionality is currently minimalistic, 
 but will be more facilitated in future versions.
@@ -842,23 +843,23 @@ but will be more facilitated in future versions.
 Visualization
 *************
 
-Each :py:`Population` has a wide variety of visualization methods 
-(:py:`Population.plot`, :py:`Population.plot_fitness`, etc.),
+Each :py:`Species` has a wide variety of visualization methods 
+(:py:`Species.plot`, :py:`Species.plot_fitness`, etc.),
 which aim to help users design, run, explore, present,
 and explain their models' behavior and results.
-These methods can be called on a :py:`Population` at any time (e.g. as 
-soon as the :py:`Population` has been created, or after the model has
+These methods can be called on a :py:`Species` at any time (e.g. as 
+soon as the :py:`Species` has been created, or after the model has
 run for any number of timesteps); but it is worth mentioning that some 
 methods may be invalid depending on the point in model-time at 
-which they're called (e.g.  :py:`Population.plot_genotype`, 
-:py:`Population.plot_phenotype`, and :py:`Population.plot_fitness`
-cannot be run for Populations that have not yet been burned in,
+which they're called (e.g.  :py:`Species.plot_genotype`, 
+:py:`Species.plot_phenotype`, and :py:`Species.plot_fitness`
+cannot be run for Species that have not yet been burned in,
 as they will not yet have genomes assigned) or 
-the :py:`Population` on which they're called 
-(e.g. the aforementioned methods cannot create plots for a :py:`Population` 
+the :py:`Species` on which they're called 
+(e.g. the aforementioned methods cannot create plots for a :py:`Species` 
 that has no :py:`GenomicArchitecture`; and likewise, the 
-:py:`Population.plot_demographic_changes` method cannot be called for a 
-:py:`Population` for which demographic changes were not parameterized).
+:py:`Species.plot_demographic_changes` method cannot be called for a 
+:py:`Species` for which demographic changes were not parameterized).
 
 The :py:`Landscape` object and its :py:`Layer`\s also
 both have a :py:`plot` method.
@@ -874,10 +875,10 @@ In order to create and run a Geonomics :py:`Model`, you will need a valid
 Geonomics parameters file. No worry though -- this is very easy to create!
 To generate a new, template parameters file, you will simply call the
 :py:`gnx.make_parameters_file` function, feeding it the appropriate
-arguments (to indicate how many :py:`Population`\s and :py:`Layer`\s you
+arguments (to indicate how many :py:`Species` and :py:`Layer`\s you
 want to include in your :py:`Model`; which parameters sections you want
 included in the file, both for those
-:py:`Layer`\s and :py:`Population`\s and for
+:py:`Layer`\s and :py:`Species` and for
 other components of the :py:`Model`; and the path and filename for your new
 parameters file). Geonomics will then automatically create the file for you, 
 arranged as you requested and saved where you requested.
@@ -1579,8 +1580,8 @@ in time. However, there is a potenitally significant memory trade-off here:
 The whole series of stepwise-changed arrays is computed when the
 :py:`Model` is created, then saved and used at the appropriate timestep
 during each :py:`Model` run (and if the :py:`Layer` that is changing is used
-by any :py:`Population` as a :py:`_DirectionalitySurface` then each 
-intermediate :py:`_DirectionalitySurface` is also calculated
+by any :py:`Species` as a :py:`_ConductanceSurface` then each 
+intermediate :py:`_ConductanceSurface` is also calculated
 when the :py:`Model` is first built. 
 These objects take up memory, which may be limiting for larger
 :py:`Model`\s and/or :py:`Landscape` objects. This will probably not be a
@@ -1591,40 +1592,40 @@ major issue, but is worth considering.
 Community parameters
 ====================
 
------------
-Populations
------------
+-------
+Species
+-------
 
 
 ------------------------------------------------------------------------------
 
-**pop_<n>**
+**spp_<n>**
 
 .. code-block:: python
  
-              #pop name (POPULATION NAMES MUST BE UNIQUE!) 
-              'pop_0' :   {
+              #spp name (SPECIES NAMES MUST BE UNIQUE!) 
+              'spp_0' :   {
 
 {:py:`str`, :py:`int`}
 
-default: :py:`pop_<n>` 
+default: :py:`spp_<n>` 
 
 reset? P
 
-This parameter defines the name for each :py:`Population`.
+This parameter defines the name for each :py:`Species`.
 (Note that unlike most parameters, this parameter is 
 a :py:`dict` key, the value for which is a :py:`dict`
-of parameters defining the :py:`Population` being named.) As the capitalized
-reminder in the parameters states, each :py:`Population`
+of parameters defining the :py:`Species` being named.) As the capitalized
+reminder in the parameters states, each :py:`Species`
 must have a unique name (so that a parameterized 
-:py:`Population` isn't overwritten in the :py:`ParametersDict` by a
-second, identically-named :py:`Population`; Geonomics
+:py:`Species` isn't overwritten in the :py:`ParametersDict` by a
+second, identically-named :py:`Species`; Geonomics
 checks for unique names and throws an Error if this condition is not met.
-:py:`Population` names can, but needn't be, descriptive of what each 
-:py:`Population` represents. Example valid values include: 0, 'pop0',
+:py:`Species` names can, but needn't be, descriptive of what each 
+:py:`Species` represents. Example valid values include: 0, 'spp0',
 'high-dispersal', 'C. fasciata'. Names default to 
-:py:`pop_<n>`, where n is a series of
-integers starting from 0 and counting the number of :py:`Population`\s.
+:py:`spp_<n>`, where n is a series of
+integers starting from 0 and counting the number of :py:`Species`.
 
 ^^^^
 Init
@@ -1637,7 +1638,7 @@ Init
 .. code-block:: python
   
                   'init': {
-                      #starting population size
+                      #starting number of individs
                       'N':                250,
 
 :py:`int`
@@ -1646,8 +1647,8 @@ default: 250
 
 reset? P
 
-This defines the starting size of this :py:`Population`. Importantly, this
-may or may not be near the stationary size of the :py:`Population` after
+This defines the starting size of this :py:`Species`. Importantly, this
+may or may not be near the stationary size of the :py:`Species` after
 the :py:`Model` has burned in, because that size will depend on the
 carrying-capacity raster (set by the **K** parameter), and on
 the dynamics of specific a :py:`Model` (because of the interaction of
@@ -1670,11 +1671,12 @@ default: 'layer_0'
 reset? P
 
 This indicates, by name, the :py:`Layer` to be used as the
-carrying-capacity raster for a :py:`Population`. The values of this
+carrying-capacity raster for a :py:`Species`. The values of this
 :py:`Layer` should express the carrying capacity at each cell, in number
 of :py:`Individual`\s. Note that the sum of the values of this :py:`Layer`
 can serve as a rough estimate of the expected stationary 
-:py:`Population` size; however, observed stationary size could vary
+number of individuals of a :py:`Species`; 
+however, observed stationary size could vary
 substantially depending on various other :py:`Model` parameters (e.g. birth
 and death rates and mean number of offspring per mating event) as well
 as on stochastic events (e.g. failure to colonize, or survive in, all
@@ -1701,9 +1703,9 @@ default: 0
 
 reset? P
 
-This defines the age at which :py:`Individual`\s in the :py:`Population`
+This defines the age at which :py:`Individual`\s in the :py:`Species`
 can begin to reproduce. If the value provided is a 2-tuple of different
-numbers (and the :py:`Population` uses separate sexes), then the first
+numbers (and the :py:`Species` uses separate sexes), then the first
 number will be used as females' reproductive age, the second as males'.
 If the value is 0, or :py:`None`, :py:`Individual`\s are capable
 of reproduction from time of time.
@@ -1768,7 +1770,7 @@ of a Bernoulli draw of that offspring's sex).
 
 .. code-block:: python
 
-                      #pop intrinsic growth rate
+                      #intrinsic growth rate
                       'R':                    0.5,
 
 :py:`float`
@@ -1777,7 +1779,7 @@ default: 0.5
 
 reset? P
 
-This defines a :py:`Population`'s intrinsic growth rate, which is used
+This defines a :py:`Species`' intrinsic growth rate, which is used
 as the 'R' value in the spatialized logistic growth equation that
 regulates population density (:math:`\frac{\mathrm{d}
 N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})`).
@@ -1789,7 +1791,7 @@ N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})`).
 
 .. code-block:: python
                        
-                      #pop instrinsic birth rate (MUST BE 0<=b<=1)
+                      #intrinsic birth rate (MUST BE 0<=b<=1)
                       'b':                    0.2,
 
 :py:`float` in interval [0, 1]
@@ -1798,7 +1800,7 @@ default: 0.2
 
 reset? P
 
-This defines a :py:`Population`'s intrinsic birth rate, which is
+This defines a :py:`Species`' intrinsic birth rate, which is
 implemented as the probability that an identified potential mating
 pair successfully produces offspring. Because this is a probability, as
 the capitalized reminder in the parameters file mentions, this value must
@@ -1869,7 +1871,7 @@ default: 1
 reset? P
 
 This defines the maximum age an individual can achieve before being
-forcibly culled from the population. Defaults to 1 (which will create
+forcibly culled from the :py:`Species`. Defaults to 1 (which will create
 a Wright-Fisher-like simulation, with discrete generations). Can be set
 to any other age, or can be set to :py:`None` (in which case no maxmimum
 age is enforced).
@@ -1936,7 +1938,7 @@ default: None
 reset? N
 
 This defines the width of the window used by the :py:`_DensityGridStack`
-to estimate a raster of local :py:`Population` densities. The user should
+to estimate a raster of local :py:`Species` densities. The user should
 feel free to set different values for this parameter (which could be
 especially helpful when calling :py:`Model.plot_density` to inspect the
 resulting surfaces calculated at different window widths, if trying
@@ -1974,8 +1976,8 @@ This is the :math:`\mu` parameter of the VonMises distribution
 (a circularized normal distribution) from which
 movement directions are chosen when movement is random and isotropic 
 (rather than
-being determined by a :py:`_DirectionalitySurface`;
-if a :py:`_DirectionalitySurface`
+being determined by a :py:`_ConductanceSurface`;
+if a :py:`_ConductanceSurface`
 is being usen this parameter is ignored). The :math:`\kappa` value
 that is fed into this same distribution (**direction_distr_kappa**)
 causes it to be very dispersed,
@@ -2005,8 +2007,8 @@ This is the :math:`\kappa` parameter of the VonMises distribution
 (a circularized normal distribution) from which
 movement directions are chosen when movement is random and isotropic 
 (rather than
-being determined by a :py:`_DirectionalitySurface`;
-if a :py:`_DirectionalitySurface`
+being determined by a :py:`_ConductanceSurface`;
+if a :py:`_ConductanceSurface`
 is being usen this parameter is ignored). The default value of 0 will  
 cause this distribution to be very dispersed, approximating a uniform
 distribution on the unit circle and rendering the :math:`\mu`
@@ -2098,9 +2100,9 @@ set to reflect a distribution of dispersal distances that is appropriate
 for your scenario.
 
 
-"""""""""""""""""""""""""""""""
-Movement and Dispersal Surfaces
-"""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""
+Movement and Dispersal _ConductanceSurfaces
+"""""""""""""""""""""""""""""""""""""""""""
 
 **layer**
 
@@ -2117,10 +2119,10 @@ default: :py:`'layer_0'`
 reset? P
 
 This indicates, by name, the :py:`Layer` to be used as to construct the
-:py:`_DirectionalitySurface` for a :py:`Population`. Note that this can also
+:py:`_ConductanceSurface` for a :py:`Species`. Note that this can also
 be thought of as the :py:`Layer` that should serve as a
-:py:`Population`'s permeability raster (because :py:`Individual`\s moving
-on this :py:`_DirectionalitySurface` toward the higher
+:py:`Species`' permeability raster (because :py:`Individual`\s moving
+on this :py:`_ConductanceSurface` toward the higher
 (if mixture distributions are used) or highest
 (if unimodl distributions are used) values in their neighborhoods). 
 
@@ -2138,16 +2140,16 @@ default: True
 
 reset? P
 
-This indicates whether the :py:`_DirectionalitySurface` should be built using
+This indicates whether the :py:`_ConductanceSurface` should be built using
 VonMises mixture distributions or unimodal VonMises distributions. 
-If True, each cell in the :py:`_DirectionalitySurface` will have an approximate
+If True, each cell in the :py:`_ConductanceSurface` will have an approximate
 circular distribution that is a
 weighted sum of 8 unimodal VonMises distributions (one per cell in the 8-cell
 neighborhood); each of those summed unimodal distributions will have as its 
 mode the direction of the neighboring cell on which it is based and as its 
 weight the relative permeability of the cell on which it is based 
 (relative to the full neighborhood). If False, each cell in the
-:py:`_DirectionalitySurface` will have an approximated circular distribution 
+:py:`_ConductanceSurface` will have an approximated circular distribution 
 that is a single
 VonMises distribution with its mode being the direction of the maximum-valued
 cell in the 8-cell neighborhood and its concentration determined by
@@ -2168,7 +2170,7 @@ default: 12
 reset? N
 
 This sets the concentration of the VonMises distributions used to build
-the approximated circular distributions in the :py:`_DirectionalitySurface`.
+the approximated circular distributions in the :py:`_ConductanceSurface`.
 The default value was chosen heuristically as one that provides a reasonable
 concentration in the direction of a unimodal VonMises distribution's mode 
 without causing VonMises mixture distributions built from an 
@@ -2178,8 +2180,36 @@ There will probably be little need to change the default value, but if
 interested then the user could create :py:`Model`\s with various values
 of this parameter and then use the :py:`Model.plot_movement_surface`
 method to explore the influence of the parameter on the resulting
-:py:`_DirectionalitySurface`\s.
+:py:`_ConductanceSurface`\s.
 
+
+**approx_len**
+
+.. code-block:: python
+
+                         #length of approximation vectors for distrs
+                         'approx_len':       5000,
+
+{:py:`int`}
+
+default: 5000 
+
+reset? P
+
+This determines the length of the vector of values used to approximate each
+distribution on the :py:`_ConductanceSurface` (i.e. the size of the z-axis
+of the :py:`np.ndarray` used to hold all the distribution-approximations, where
+the x and y axes have the same dimensions as the :py:`Landscape`). The default
+value of 5000 is fine for many cases, but may need to be
+reduced depending on the :py:`Landscape` dimensions (because for a larger
+:py:`Landscape`, say 1000x1000 cells, it would create a 
+:py:`_ConductanceSurface` that is roughly 4Gb,
+and if the :py:`Layer` on which the :py:`_ConductanceSurface` is based will be
+undergoing landscape changes then numerous versions of an object of this size
+would need to be generated when the :py:`Model` is built and held in memory).
+The value to use for this parameter will depend on the size of the
+:py:`Landscape`, the exact scenario being simulated, and the memory of the
+machine on which the :py:`Model` is to be run.
 
                    
 ------------------------------------------------------------------------------
@@ -2198,14 +2228,14 @@ _GenomicArchitecture
 
 {:py:`str`, :py:`None`}
 
-default: {:py:`None`, :py:`'<your_model_name>_pop-<n>_gen_arch.csv'`
+default: {:py:`None`, :py:`'<your_model_name>_spp-<n>_gen_arch.csv'`
 
 reset? P
 
 This arguments indicates whether a custom genomic architecture file should
-be used to create a :py:`Population`'s :py:`GenomicArchitecture`, and if so,
+be used to create a :py:`Species`' :py:`GenomicArchitecture`, and if so,
 where that file is located. If the value is :py:`None`, no file will be
-used and the values of this :py:`Population`'s other genomic
+used and the values of this :py:`Species`' other genomic
 architecture parameters in the parameters file will be used to create
 the :py:`GenomicArchitecture`. If the value is a :py:`str` pointing to a
 custom genomic-architecture file 
@@ -2213,10 +2243,10 @@ custom genomic-architecture file
 'p', 'dom', 'r', 'trait', and 'alpha' as columns stipulating the starting
 allele frequencies, dominance values, inter-locus recombination rates,
 trait names, and effect sizes of all loci). Geonomics will create an empty
-file of this format for each :py:`Population` for which the 
+file of this format for each :py:`Species` for which the 
 'custom_genomic_architecture' argument is provided the value True when
 :py:`gnx.make_parameters_file` is called (which will be saved as
-'<your_model_name>_pop-<n>_gen_arch.csv'). 
+'<your_model_name>_spp-<n>_gen_arch.csv'). 
 
 Note that when Geonomics reads in a custom genomic architecture file
 to create a :py:`Model`, it will check
@@ -2241,7 +2271,7 @@ default: 1000
 reset? P
 
 This defines the total number of loci in the genomes in a
-:py:`Population`.
+:py:`Species`.
 
 
 **l_c**
@@ -2258,7 +2288,7 @@ default: :py:`[750, 250]`
 reset? P
 
 This defines the lengths (in number of loci) of each of the chromosomes 
-in the genomes in a :py:`Population`.  Note that the sum of this :py:`list`
+in the genomes in a :py:`Species`.  Note that the sum of this :py:`list`
 must equal **L**, otherwise Geonomics will throw an Error. 
 Also note that Geonomics models genomes as single **L** x 2
 arrays, where separate chromosomes are delineated by points along
@@ -2300,7 +2330,7 @@ reset? P
 This defines the genome-wide per-base deleterious mutation rate.
 This value can be set to 0 to disable deleterious mutation. Note that all
 deleterious mutation will fall outside the loci that affect any :py:`Trait`\s
-a :py:`Population` may have, and will behave simply as globally
+a :py:`Species` may have, and will behave simply as globally
 deleterious mutations (i.e. mutations that reduce the mutated
 :py:`Individual`'s fitness regardless of that :py:`Individual`'s
 spatial location).
@@ -2459,7 +2489,7 @@ being used up). Thus, to avoid problems, the number provided to this parameter
 should be comfortably larger than the largest anticipated number of
 recombination paths that will be needed during a single mating event (i.e.
 larger than two times the largest antipicated number of offspring to be born
-to the :py:`Population` during one timestep).
+to the :py:`Species` during one timestep).
 
 
 **n_recomb_paths_tot**
@@ -2477,7 +2507,7 @@ then shuffling and cycling through those recombination paths as
 needed during :py:`Model` runs. The larger the total number of these paths
 that is created, the more closely Geonomics will model truly
 free recombination and the more prceisely it will model the exact
-interlocus recombination rates defined in a :py:`Population`'s
+interlocus recombination rates defined in a :py:`Species`'
 :py:`GenomicArchitecture`.
 
 
@@ -2496,8 +2526,8 @@ default: :py:`None`
 reset? P
 
 This indicates the location of the mutation-log file where  Geonomics should
-save a record of each mutation that occurs for a :py:`Population`
-:py:`Population`, for each iteration. If :py:`None`, no mutation log
+save a record of each mutation that occurs for a :py:`Species`
+:py:`Species`, for each iteration. If :py:`None`, no mutation log
 will be created and written to.
 
 
@@ -2533,7 +2563,7 @@ checks for unique names and throws an Error if this condition is not met.
 :py:`Trait` represents. Example valid values include: 0, 'trait0',
 'tmp_trait', 'bill length'. Names default to :py:`trait_<n>`,
 where n is a series of integers starting from 0 and counting the
-number of :py:`Trait`\s for this :py:`Population`.
+number of :py:`Trait`\s for this :py:`Species`.
 
 
 **layer**
@@ -2699,15 +2729,15 @@ reset? P
 This indicates whether whether selection on a :py:`Trait` should be
 universal (i.e. whether a phenotype of 1 should be optimal everywhere
 on the :py:`Landscape`). When set to True, selection of the :py:`Trait`
-will be directional on the entire :py:`Population`, regardless 
+will be directional on the entire :py:`Species`, regardless 
 of :py:`Individual`\s' spatial contexts. 
 
 
 ------------------------------------------------------------------------------
 
-^^^^^^^^^^^^^^^^^
-Population change
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
+Species change
+^^^^^^^^^^^^^^
 
 
 """"""""""""""""""
@@ -2734,7 +2764,7 @@ Each event has a certain length (in timesteps; defined by the **start** and
 those that are necessary to parameterize the type of change event indicated
 here will be used.
 
-In :py:`'monotonic'` change events, a :py:`Population`'s 
+In :py:`'monotonic'` change events, a :py:`Species`' 
 carrying capacity raster (K) is multiplied by a constant factor 
 (**rate**) at each timestep during the event. 
 In :py:`'stochastic'` change events, K fluctuates
@@ -3013,7 +3043,7 @@ This indicates the minimum number of timesteps for which a :py:`Model`'s
 burn-in will run. (Note this is only a minimum because the test for
 burn-in completion includes a check that at least this many timesteps have
 elapsed, but also includes two statistical checks of stationarity of the
-size of each :py:`Population` in a :py:`Community`.)
+size of each :py:`Species` in a :py:`Community`.)
 
 
 **seed**
@@ -3393,10 +3423,10 @@ Stats
 
 The stats parameters section has subsection for each statistc that Geonomics
 can calculate. (Currently valid statistics include:
-  - *'Nt'*: population size at timestep t
+  - *'Nt'*: number of individuals at timestep t
   - *'het'*: heterozygosity
   - *'maf'*: minor allele frequency
-  - *'mean_fit'*: mean fitness of a :py:`Population`
+  - *'mean_fit'*: mean fitness of a :py:`Species`
   - *'ld'*: linkage disequilibrium
   
   There are only a few parameters, which are shared across all
@@ -3448,7 +3478,7 @@ of each iteration.
 
 .. code-block:: python
 
-                #whether to calculate as pop mean
+                #whether to mean across sampled individs
                 'mean': False,
 
 :py:`bool`
@@ -3515,19 +3545,19 @@ scapes : {int, list of dicts}, optional
 
         This will add one section of Layer parameters, with the
         contents indicated, for each dict in this list.
-populations : {int, list of dicts}, optional
-    Number (and optionally, types) of Population-parameter sections to
+species : {int, list of dicts}, optional
+    Number (and optionally, types) of Species-parameter sections to
     include in the parameters file that is generated. Defaults to 1. Valid
     values and their associated behaviors are:
 
     int:
-        Add sections for the stipulated number of Populations, each with
+        Add sections for the stipulated number of Species, each with
         default settings:
 
           - parameters for movement without a MovementSurface
           - parameters for a GenomicArchitecture with 0 Traits (i.e. with
             only neutral loci)
-          - no PopulationChanger parameters
+          - no SpeciesChanger parameters
 
     [dict, ..., dict]:
         Each dict should contain at least one argument from among the
@@ -3540,7 +3570,7 @@ populations : {int, list of dicts}, optional
         'demographic_change':              int,
         'parameter_change':                bool
         }
-        This will add one section of Population parameters, customized
+        This will add one section of Species parameters, customized
         as indicated, for each dict in the list.
 
 data : bool, optional
@@ -3615,7 +3645,7 @@ file, and then call the Model.run method to run the model (setting the
 TODO: PUT TYPICAL MODEL OUTPUT HERE, EVEN THOUGH IT'S ONLY PRINTED?
 
 We can use some of the function's arguments, to create a parameters
-file for a model with 3 Layers and 1 Population (all with the default
+file for a model with 3 Layers and 1 Species (all with the default
 components for their sections of the parameters file) and with a section
 for parameterizing data collection.
 
@@ -3627,14 +3657,14 @@ we can create a parameters file for a model scenario with:
     - 2 Layers (one being an nlmpy Layer that will not change over model
       time, the other being a raster read in from a GIS file and being
       subject to change over model time);
-    - 2 Populations (the first having genomes, 2 Traits, and movement
+    - 2 Species (the first having genomes, 2 Traits, and movement
       that is dictated by a MovementSurface; the second not having
       genomes but having a MovementSurface as well, and undergoing
       demographic change)
     - data-collection;
     - stats-collection;
 
-We can save this to a file named "2-pop_2-trait_model.py" in our current
+We can save this to a file named "2-spp_2-trait_model.py" in our current
 working directory.
 
 >>> gnx.make_parameters_file(
@@ -3645,14 +3675,14 @@ working directory.
 >>>         {'type': 'gis',                                 #scape 2 
 >>>          'change': True}
 >>>         ],
->>>     #list of 2 dicts, each containing the values for each Population's
+>>>     #list of 2 dicts, each containing the values for each Species'
 >>>     #parameters section
->>>     populations = [
->>>         {'genomes': True,                               #pop 1
+>>>     species = [
+>>>         {'genomes': True,                               #spp 1
 >>>          'n_traits': 2,
 >>>          'movement': True,
 >>>          'movement_surface': True},
->>>         {'genomes': False,                              #pop 2
+>>>         {'genomes': False,                              #spp 2
 >>>          'movement': True,
 >>>          'movement_surface': True,
 >>>          'demographic_change': True}
@@ -3660,7 +3690,7 @@ working directory.
 >>>     #arguments to the data and stats parameters
 >>>     data = True, stats = True, 
 >>>     #destination to which to write the resulting parameter file
->>>     filepath = '2-pop_2-trait_model.py')
+>>>     filepath = '2-spp_2-trait_model.py')
 
 
 
@@ -3673,7 +3703,7 @@ working directory.
 Create a new ParametersDict object.
 
 Read the Geonomics parameters file saved at the location indicated by
-'filepath', check its validity (i.e. that all the Layers and Populations
+'filepath', check its validity (i.e. that all the Layers and Species
 parameterized in that file have been given distinct names), then use the
 file to instantiate a ParametersDict object.
 
@@ -3696,7 +3726,7 @@ dict notation or using dot notation with the keys).
 Raises
 ------
 AssertionError
-    If either the Layers or the Populations parameterized in the parameters
+    If either the Layers or the Species parameterized in the parameters
     file have not all been given distinct names
 
 --------
@@ -3781,7 +3811,7 @@ produced by calling gnx.make_parameters_file without any arguments).
 <class 'sim.model.Model'>
 Model name:                                     GEONOMICS_params_13-10-2018_15:54:03
 Layers:                                         0: '0'
-Populations:                                    0: '0'
+Species:                                        0: '0'
 Number of iterations:                           1
 Number of burn-in timesteps (minimum):          30
 Number of main timesteps:                       100
@@ -3798,7 +3828,7 @@ directory.
 Model name:                                     null_model
 Layers:                                         0: 'tmp'
                                                 1: 'ppt'
-Populations:                                    0: 'C. fasciata'
+Species:                                        0: 'C. fasciata'
 Number of iterations:                           2500
 Number of burn-in timesteps (mininum):          100
 Number of main timesteps:                       1000
