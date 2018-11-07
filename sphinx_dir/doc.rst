@@ -498,11 +498,33 @@ used to approximate the distributions in each cell.
 -----------------------
 
 The :py:`_DensityGridStack` class implements an algorithm for rapid estimating 
-an array of the local density of a :py:`Species`. The density is estimated 
+an array of the local density of a :py:`Species`. The resulting array has a 
+spatial resolution equivalent to that of the :py:`Landscape`,
+and is used in all density-dependent operations (i.e. for controlling 
+population dynamics). The density is estimated 
 using a sliding window approach, with the window-width determining the 
-neighborhood size of the estimate. The resulting array has a spatial 
-resolution equivalent to that of the :py:`Landscape`, and is used in all
-density-dependent operations.
+neighborhood size of the estimate (thus essentially behaving like a smoothing
+parameter on the density raster that is estimated, with larger window widths
+producing smoother, more homogeneous rasters). The window width can be
+controlled by setting the 'density_grid_window_width' parameter in the 
+'mortality' section of the :py:`Species` parameters, in a parameters file;
+however, if the default value (:py:`None`) is left then the window width will
+default to 1/20th of the width of the :py:`Landscape`. 
+Note that setting the window width to a value less than ~1/20th of the
+:py:`Landscape` width is likely to result
+in dramatic increases in runtime, so this is generally advised against (but
+may be necessary, depending on the user's interests). The following plot
+show the estimated density rasters for a 1000x1000-cell :py:`Landscape` with
+a population of 50,000 individuals, using various window widths:
+
+.. image:: ./DensityGridStack_ww_100.jpg
+   :align: center
+
+And this plot shows how :py:`_DensityGridStack` creation (plot titled 'make')
+and runtime ('calc')scale with window-width for that :py:`Landscape`:
+
+.. image:: ./DensityGridStack_compute_times.pdf
+   :align: center
 
 -------------
 :py:`_KDTree`
@@ -843,26 +865,37 @@ but will be more facilitated in future versions.
 Visualization
 *************
 
-Each :py:`Species` has a wide variety of visualization methods 
-(:py:`Species.plot`, :py:`Species.plot_fitness`, etc.),
+Each :py:`Model` object has a variety of visualization methods 
+(:py:`Model.plot`, :py:`Model.plot_fitness`, etc.),
 which aim to help users design, run, explore, present,
-and explain their models' behavior and results.
-These methods can be called on a :py:`Species` at any time (e.g. as 
-soon as the :py:`Species` has been created, or after the model has
+and explain their :py:`Models`' behavior and results.
+These methods can be called at any time (e.g. as 
+soon as the :py:`Model` has been created, or after it has
 run for any number of timesteps); but it is worth mentioning that some 
 methods may be invalid depending on the point in model-time at 
-which they're called (e.g.  :py:`Species.plot_genotype`, 
-:py:`Species.plot_phenotype`, and :py:`Species.plot_fitness`
-cannot be run for Species that have not yet been burned in,
-as they will not yet have genomes assigned) or 
-the :py:`Species` on which they're called 
+which they're called (e.g. :py:`Model.plot_genotype`, 
+:py:`Model.plot_phenotype`, and :py:`Model.plot_fitness`
+cannot be run for :py:`Models` that have not yet been burned in,
+as they will not yet have genomes assigned), or on
+the :py:`Species` for which they're called 
 (e.g. the aforementioned methods cannot create plots for a :py:`Species` 
 that has no :py:`GenomicArchitecture`; and likewise, the 
 :py:`Species.plot_demographic_changes` method cannot be called for a 
 :py:`Species` for which demographic changes were not parameterized).
 
-The :py:`Landscape` object and its :py:`Layer`\s also
-both have a :py:`plot` method.
+Below is a list of the visualization methods available, with example
+output for each (generated from the default Geonomics :py:`Model`):
+
+
+:: VIZ FUNCTION
+
+:: PLOT
+  
+:: VIZ FUNCTION
+
+:: PLOT
+
+:: ...
 
 
 -------------------------------------------------------------------------------
@@ -2244,7 +2277,7 @@ custom genomic-architecture file
 allele frequencies, dominance values, inter-locus recombination rates,
 trait names, and effect sizes of all loci). Geonomics will create an empty
 file of this format for each :py:`Species` for which the 
-'custom_genomic_architecture' argument is provided the value True when
+'genomes' argument is given the value 'custom' when
 :py:`gnx.make_parameters_file` is called (which will be saved as
 '<your_model_name>_spp-<n>_gen_arch.csv'). 
 
@@ -3564,14 +3597,20 @@ species : {int, list of dicts}, optional
         following:
         {'movement':                       bool,
         'movement_surface':                bool,
-        'genomes':                         bool,
+        'genomes':                         {bool, 'custom'},
         'n_traits':                        int,
-        'custom_genomic_architecture':     bool,
         'demographic_change':              int,
         'parameter_change':                bool
         }
         This will add one section of Species parameters, customized
-        as indicated, for each dict in the list.
+        as indicated, for each dict in the list. (Note that if the
+        'genomes' argument is True or 'custom', a section for
+        parameterization of the genomic architecture will be added,
+        but if it is 'custom' then a template custom genomic architecture
+        file will also be created (a CSV file), which can be filled in
+        to stipulate the locus-wise values for starting allele frequency,
+        recombination rate, dominance, associated traits, and effect
+        sizes.)
 
 data : bool, optional
     Whether to include a Data-parameter section in the parameters file that

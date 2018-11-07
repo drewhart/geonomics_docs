@@ -66,7 +66,7 @@
 <blockquote>
 <div><ol class="arabic simple">
 <li><code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>,
-<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> classes</li>
+<code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> classes</li>
 <li>A <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> class that builds objects of the aforementioned classes
 according to the scenario stipulated in a parameters file,
 then uses them to run numerous simulation iterations</li>
@@ -86,8 +86,8 @@ present, and explain their models’ behavior and results</li>
 <p>Backward-time (i.e. coalescent) simulators abound.
 But they are inadequate for simulation of many scenarios of
 interest, including: natural selection on traits with arbitrary genomic
-architectures; spatially variable natural selection; simulation of populations
-distributed continuously and moving realistically across
+architectures; spatially variable natural selection; simulation of species or
+populations distributed continuously and moving realistically across
 complex landscapes; complex demographic change simultaneous with ongoing,
 often non-stationary environmental change; and coevolutionary interactions
 between multiple species or incipient species. Few existing forward-time
@@ -112,17 +112,17 @@ default values in a pre-packaged script.</p>
 <blockquote>
 <div><ul class="simple">
 <li>create a <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> with any number of <code class="code py python docutils literal"><span class="name"><span class="pre">Layers</span></span></code> in it;</li>
-<li>create any number of <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s living on that
+<li>create any number of <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> living on that
 <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, each of which is composed of a bunch of
 independent <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s, and each of which will have a bunch of
 parameters dsecribing what it’s like and how it lives;</li>
-<li>optionally give the <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s of any <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s
+<li>optionally give the <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s of any <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 genomes, which can optionally determine phenotypes for any number
 of <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s (all of this is controlled by the
 <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> that you would create for
-the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s);</li>
+the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>);</li>
 <li>simulate any number of timsesteps of the evolution of those
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s on that <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, where each timestep can include
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> on that <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, where each timestep can include
 movement, mating, mortality (by density-dependence and optionally also by
 natural selection), and demographic, life-history, or
 environmental changes</li>
@@ -244,8 +244,8 @@ object, and with the values of its environmental variable ‘e’ constrained to
 the interval [0 &lt;= e &lt;= 1]. Each <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> can be initialized from its own
 parameters subsection within the ‘land’ parameters section of a Geonomics
 parameters file.</p>
-<p>For each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> (see section ‘<code class="code py python docutils literal"><span class="name"><span class="pre">Individuals</span></span></code>
-and <code class="code py python docutils literal"><span class="name"><span class="pre">Populations</span></span></code>’, below), the different <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>
+<p>For each <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> (see section ‘<code class="code py python docutils literal"><span class="name"><span class="pre">Individuals</span></span></code>
+and <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’, below), the different <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>
 layers in the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> can be used to model habitat
 viability, habitat connectivity, or variables imposing spatially varying
 natural selection. <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> and <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> objects
@@ -259,7 +259,7 @@ real-world GIS rasters.</p>
 <div class="section" id="genomes-genomicarchitecture-and-trait-objects">
 <h4>Genomes, <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> objects<a class="headerlink" href="#genomes-genomicarchitecture-and-trait-objects" title="Permalink to this headline">¶</a></h4>
 <p><code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> objects (see section ‘<code class="code py python docutils literal"><span class="name"><span class="pre">Individuals</span></span></code>
-and <code class="code py python docutils literal"><span class="name"><span class="pre">Populations</span></span></code>’, below) can optionally be assigned genomes.
+and <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’, below) can optionally be assigned genomes.
 If they are, each <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>’s genome is modeled as a
 2-by-L Numpy array (where 2 is the ploidy, currently fixed at
 diploidy, and L is genome length) containing 0s and 1s (because
@@ -268,7 +268,7 @@ Geonomics strictly models biallelic SNPs, i.e SNPs with ‘0’- and ‘1’-all
 locus-wise starting frequencies of the 1 alleles; locus-wise dominance effects;
 locus-wise recombination rates; and genome-wide mutation rates for neutral,
 globally deleterious, and adaptive loci), are controlled by the
-<code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> object pertaining to the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> to which an
+<code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> object pertaining to the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> to which an
 <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> belongs. (For the full and detailed list of attributes in a
 <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> object, see its class documentation, below.)
 The genomes of the initial <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s
@@ -276,15 +276,15 @@ in a simulation, as well as those of
 <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s in subsequent generations, are either drawn
 or recombined, and are mutated, according to the values stipulated
 by the <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> of
-their <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>. The user can create a population with a
+their <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>. The user can create a species with a
 <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> and with corresponding
 genomes by including a ‘genome’ subsection in that
-population’s section of the Geonomics parameters file (and
+species’ section of the Geonomics parameters file (and
 setting the section’s various parameters to their desired values).</p>
 <p>Geonomics can model <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s’ phenotypes.
 It does this by allowing the
 user to create an arbitrary number of distinct <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s
-for each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>. Each trait is
+for each <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>. Each trait is
 represented by a <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> object, which
 maps genomic loci onto that trait, maps effect sizes (‘alpha’) onto those loci,
 and sets the trait’s polygenic selection
@@ -337,17 +337,17 @@ dominance at a locus, as indicated by the following table of genotypes:</p>
 <p>(For the full and detailed list of attributes in a <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> object,
 see its class documentation, below.)</p>
 <p>Note that for maximal control over the <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>
-of a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, the user can set the value of the ‘gen_arch_file’
+of a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>, the user can set the value of the ‘gen_arch_file’
 parameter in the parameters file to the name of a separate CSV file
 stipulating the locus numbers, starting 1-allele frequencies, dominance
 effects, traits, and inter-locus recombination rates (as columns) of
 all loci (rows) in the <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>;
 these values will override any other values provided in the ‘genome’
-subsection of the population’s parameters.</p>
+subsection of the species’ parameters.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="individual-population-and-community-objects">
-<h4><code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> objects<a class="headerlink" href="#individual-population-and-community-objects" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="individual-species-and-community-objects">
+<h4><code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> objects<a class="headerlink" href="#individual-species-and-community-objects" title="Permalink to this headline">¶</a></h4>
 <p>Being that Geonomics is an individual-based model, individuals serve as
 the fundamental units (or agents) of all simulations. They are represented by
 objects of the <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> class.
@@ -357,37 +357,38 @@ an x,y position (in continuous space; attributes ‘x’ and ‘y’), and a
 <code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code> of environment values (attribute ‘e’), extracted from the
 <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>’s current cell on each <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>
 of the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> on which the <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> lives.</p>
-<p>The <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> class is an <code class="code py python docutils literal"><span class="name"><span class="pre">OrderedDict</span></span></code>
+<p>The <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> class is an <code class="code py python docutils literal"><span class="name"><span class="pre">OrderedDict</span></span></code>
 (defined by the <code class="code py python docutils literal"><span class="name"><span class="pre">collections</span></span></code>
 package) containing all <code class="code py python docutils literal"><span class="name"><span class="pre">Individaul</span></span></code>s, (with
-their ‘idx’ attributes as keys). If a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
+their ‘idx’ attributes as keys). If a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 has a <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> then the <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s
-in the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> will also each have genomes (attribute ‘genome’),
+in the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> will also each have genomes (attribute ‘genome’),
 and the <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> includes <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s
 then each individual will also have a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code> of
 phenotype values (one per <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>; attribute ‘z’) and a
 single fitness value (attribute ‘fit’). (These attributes all otherwise
 default to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>.)</p>
-<p>Each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> also has a number of other attributes of interest. Some
+<p>Each <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> also has a number of other attributes of interest. Some
 of these are universal (i.e. they are created regardless of the
-parameterization of the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> to which a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> inheres). These
-include: the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s name (attribute ‘name’); its current density
+parameterization of the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> to which a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> inheres). These
+include: the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’ name (attribute ‘name’); its current density
 raster (a Numpy array attribute called ‘N’); and the number of births,
-number of deaths, and terminal population size of each timestep (which are
+number of deaths, and terminal population size (i.e. total number of
+individuals in the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>) of each timestep (which are
 <code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code> attributes called ‘n_births’, ‘n_deaths’, and ‘Nt’). If the
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> was parameterized with a
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> was parameterized with a
 <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code> then that will
 be created as the ‘gen_arch’ attribute (otherwise this attribute will be
 <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>).</p>
-<p>All of the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s in a <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>
+<p>All of the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> in a <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>
 are collected in the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>’s
 <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> object. The <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> class
 is simply an integer-keyed <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code>
-of <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s. For the time being, the <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> object allows a
-Geonomics <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> to simulate multiple <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s simultaneously on
+of <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>. For the time being, the <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> object allows a
+Geonomics <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> to simulate multiple <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> simultaneously on
 the same <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, but otherwise affords no additional functionality
 of interest. However, its implementation will facilitate the potential
-future development of methods for interaction between <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s.
+future development of methods for interaction between <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>.
 (e.g. to simulate coevolutionary, speciation, or hybridization scenarios).</p>
 </div>
 <hr class="docutils" />
@@ -396,7 +397,7 @@ future development of methods for interaction between <code class="code py pytho
 <p>Objects of the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> class serve as the main interface between the user
 and the Geonomics program. (While it is certainly possible for a user
 to work directly with the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>
-and <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> or <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> objects to
+and <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> or <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code> objects to
 script their own custom models, the typical user should find that the
 <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> object allows them accomplish their goals with minimal toil.)
 The main affordance of a <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> object is the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">run</span></span></code> method,
@@ -424,7 +425,7 @@ parameters file and the built-in stationarity statistics
 determine that the burn-in is complete);</li>
 <li>Run the main model for the stipulated number of timesteps;</li>
 <li>Repeat this for the stipulated number of iterations (retaining or
-refreshing the first run’s initial <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> and <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
+refreshing the first run’s initial <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> and <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 objects as stipulated).</li>
 </ol>
 </div></blockquote>
@@ -449,18 +450,19 @@ but for some scenarios they may not be adequate, and for some parameters
 (e.g. the window-width used by the _DensityGridStack; see below), there is
 no “one-size-fits-most” option. Thus, it is important that the user
 have a basic acquaintance with the purpose and operation of these classes.</p>
-<div class="section" id="movementsurface">
-<h5><code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code><a class="headerlink" href="#movementsurface" title="Permalink to this headline">¶</a></h5>
-<p>The <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> class allows Geonomics
-to model a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s
+<div class="section" id="conductancesurface">
+<h5><code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code><a class="headerlink" href="#conductancesurface" title="Permalink to this headline">¶</a></h5>
+<p>The <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> class allows Geonomics
+to model a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’
 realistic movement across a spatially varying landscape. It does this by
 creating an array of circular probability distributions (i.e. VonMises
 distributions), one for each cell on the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, from which
 <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s choose their directions each time they move. To create the
-<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> for a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>,
+<code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> for a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>,
 the user must indicate the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>
 that should be used to create it (i.e. the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> that represents
-landscape permeability for that <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>). The <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>’s
+landscape permeability for that <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>).
+The <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code>’s
 distributions can be <strong>simple (i.e. unimodal)</strong>, such that the
 maximum value of the distribution at each cell will point toward the
 maximum value in the 8-cell neighborhood; this works best for permeability
@@ -475,7 +477,7 @@ move into each of the 8 neighboring cells); this works best for non-monotonic,
 complex permeability <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>s (e.g. a DEM of a mountainous region that is
 used as a permeability <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>).
 (The <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> is surrounded by a margin of 0-permeability
-cells before the <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> is calculated, such
+cells before the <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> is calculated, such
 that <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> edges are treated
 as barriers to movement.) The class consists
 principally of a 3d Numpy array (x by y by z, where x and y are the
@@ -485,7 +487,7 @@ used to approximate the distributions in each cell.</p>
 <div class="section" id="densitygridstack">
 <h5><code class="code py python docutils literal"><span class="name"><span class="pre">_DensityGridStack</span></span></code><a class="headerlink" href="#densitygridstack" title="Permalink to this headline">¶</a></h5>
 <p>The <code class="code py python docutils literal"><span class="name"><span class="pre">_DensityGridStack</span></span></code> class implements an algorithm for rapid estimating
-an array of the local density of a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>. The density is estimated
+an array of the local density of a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>. The density is estimated
 using a sliding window approach, with the window-width determining the
 neighborhood size of the estimate. The resulting array has a spatial
 resolution equivalent to that of the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, and is used in all
@@ -503,19 +505,19 @@ This class is used for all neighbor-searching operations (e.g. mate-search).</p>
 <p>The <code class="code py python docutils literal"><span class="name"><span class="pre">_RecombinationPaths</span></span></code> class contains a large (and customizable)
 number of <code class="code py python docutils literal"><span class="name"><span class="pre">bitarray</span></span></code>s, each of which indicates the genome-length
 diploid chromatid numbers (0 or 1) for a
-recombinant gamete produced by an <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> of a given <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
+recombinant gamete produced by an <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> of a given <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 (henceforth referred to as ‘recombination paths’). These recombination
 paths are generated using the genome-wide recombination rates specified by
-the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s <code class="code py python docutils literal"><span class="name"><span class="pre">GeonomicArchitecture</span></span></code>. They are generated during
+the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’ <code class="code py python docutils literal"><span class="name"><span class="pre">GeonomicArchitecture</span></span></code>. They are generated during
 construction of the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>, then drawn randomly as needed (i.e.
 each time an <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code> produces a gamete). This provides a
 reasonable trade-off between realistic modelling of recombination and runtime.</p>
 </div>
-<div class="section" id="landscapechanger-and-populationchanger">
-<h5><code class="code py python docutils literal"><span class="name"><span class="pre">_LandscapeChanger</span></span></code> and <code class="code py python docutils literal"><span class="name"><span class="pre">_PopulationChanger</span></span></code><a class="headerlink" href="#landscapechanger-and-populationchanger" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="landscapechanger-and-specieschanger">
+<h5><code class="code py python docutils literal"><span class="name"><span class="pre">_LandscapeChanger</span></span></code> and <code class="code py python docutils literal"><span class="name"><span class="pre">_SpeciesChanger</span></span></code><a class="headerlink" href="#landscapechanger-and-specieschanger" title="Permalink to this headline">¶</a></h5>
 <p>These classes manage all of the landscape changes and demographic changes
 that were parameterized for the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> and
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> objects to which they inhere.
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> objects to which they inhere.
 The functions creating these changes are defined at the outset,
 then queued and called at their scheduled timesteps.</p>
 </div>
@@ -544,7 +546,7 @@ the exception of this sentence).</p>
 <p>Movement is optional, such that turning off movement will allow the user
 to simulate sessile organisms (which will reproduce and disperse,
 but not move after dispersal; this distinction is of course irrelevant
-for a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> with a maximum age of 1). For <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s
+for a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> with a maximum age of 1). For <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 with movement, <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s can
 move by two distinct mechanisms. <strong>Spatially random movement</strong>
 is the default behavior; in this case, <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s
@@ -556,46 +558,46 @@ default values but can be customized in a <code class="code py python docutils l
 (see section ‘Parameters’, below).</p>
 <p>The alternative movement mechanism that is available is
 <strong>movement across a permeability surface</strong>,
-using a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> object.
-To parameterize a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovemementSurface</span></span></code> for a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, the user
+using a <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> object.
+To parameterize a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovemementSurface</span></span></code> for a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>, the user
 must create a template parameters file that includes the
-necessary parameters section for the population (i.e.
+necessary parameters section for the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> (i.e.
 the user must set ‘movement’ to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">True</span></span></code> and ‘movement_surface’ to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">True</span></span></code>
-in the population’s arguments to the <code class="code py python docutils literal"><span class="name"><span class="pre">gnx</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">make_parameters_file</span></span></code>
+in the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’ arguments to the <code class="code py python docutils literal"><span class="name"><span class="pre">gnx</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">make_parameters_file</span></span></code>
 function (see the docstring for that function for details and an example).
 <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s move to next locations determined by a random distance drawn
 from a Wald distribution and a random direction drawn from the distribution
-at the  <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> cell in which which the <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s
-are currently located. For details about <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> creation, see
-section ‘<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>’ above, or the class’ docstring.</p>
+at the  <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> cell in which which the <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s
+are currently located. For details about <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> creation,
+see section ‘<code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code>’ above, or the class’ docstring.</p>
 <p>Dispersal is currently implemeneted identically to spatially random movement
 (with the caveat that the an offspring’s new location is determined
-relative its parents’ centroid). But the option to use a
-<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> for dispersal will be offered soon.</p>
+relative its parents’ midpoint). But the option to use a
+<code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> for dispersal will be offered soon.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="reproduction">
 <h4>Reproduction<a class="headerlink" href="#reproduction" title="Permalink to this headline">¶</a></h4>
-<p>Each timestep, for each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, all pairs of individuals within
+<p>Each timestep, for each <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>, all pairs of individuals within
 a certain distance of each other (i.e. the mating radius,
 which is set in the parameters file) are identified.
-These pairs are subsetted if necessary (i.e. if the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
+These pairs are subsetted if necessary (i.e. if the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 requires that <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s be above a certain reproductive age,
 or that they be of opposite sexes, in order to mate; these values
 can also be changed from their defaults in the parameters file).
 Remaining pairs mate probabilistically (according to a Bernoulli
-random draw with probability equal to the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s birth
+random draw with probability equal to the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’ birth
 rate, which is also set in the parameters file).</p>
 <p>Pairs that are chosen to mate will produce a number of new
 offspring drawn from a Poisson distribution (with lambda set in the
 parameters file). For each offspring, sex is chosen probablistically
-(a Bernoulli random draw with probability equal to the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s
+(a Bernoulli random draw with probability equal to the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’
 sex ratio), age set to 0, and location chosen by dispersal from
-the parents’ centroid (see section ‘Movement and Dispersal’). For
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s that have genomes, offspring genomes will be a
+the parents’ midpoint (see section ‘Movement and Dispersal’). For
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> that have genomes, offspring genomes will be a
 fusion of two recombinant genomes from each of the two parents (where
 each recombinant is indexed out a parent’s genome using a recombination
-path; see section ‘<code class="code py python docutils literal"><span class="name"><span class="pre">_RecombinationPaths</span></span></code>’). For <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s
+path; see section ‘<code class="code py python docutils literal"><span class="name"><span class="pre">_RecombinationPaths</span></span></code>’). For <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 with <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s in their
 <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>s, offspring phenotypes are
 determined at birth. Mutations are also drawn and introduced at this
@@ -629,14 +631,14 @@ logistic growth equation (<span class="math">\(\frac{\mathrm{d}
 N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})\)</span>,
 where the x,y subscripts refer to
 values for a given cell on the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>).
-Each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> has a carrying-capacity raster (a 2d Numpy array;
+Each <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> has a carrying-capacity raster (a 2d Numpy array;
 attribute ‘K’), which is defined in the parameters file to be
 one of the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>s in the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>.
 The comparison between this raster and
 the population-density raster calculated at each timestep serves as the
 basis for the spatialized logistic growth equation, because both
 equations can be calculated cell-wise for the entire extent of the
-<code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> (using the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s
+<code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> (using the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’
 intrinsic growth rate, the attribute
 ‘R’, which is set in the parameters file).</p>
 <p>The logistic equation returns an array of instantaneous population growth
@@ -666,7 +668,7 @@ the <code class="code py python docutils literal"><span class="name"><span class
 <p><strong>Universal</strong> selection (which can be toggled using the ‘univ_adv’
 parameter with a <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>’s section in the parameters file) occurs
 when a phenotype of 1 is optimal everywhere on the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>. In other
-words, it represents directional selection on an entire <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>,
+words, it represents directional selection on an entire <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>,
 regardless of <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s’ spatial contexts. (Note that this can
 be thought of as operating the same as spatially divergent selection,
 but with the environmental variable driving natural selection being
@@ -735,16 +737,16 @@ but as a deleterious mutation in another).</li>
 </ul>
 </div>
 <hr class="docutils" />
-<div class="section" id="population-interactions">
-<h4>Population interactions<a class="headerlink" href="#population-interactions" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="species-interactions">
+<h4>Species interactions<a class="headerlink" href="#species-interactions" title="Permalink to this headline">¶</a></h4>
 <p>This functionality is not yet included available. But the Community class was
 created in advance recognition that this functionality could be desirable
 for future versions (e.g. to simulate coevolutionary, speciation, or
 hybridization scenarios).</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="landscape-and-population-change">
-<h4><code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> and <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> change<a class="headerlink" href="#landscape-and-population-change" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="landscape-and-species-change">
+<h4><code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> and <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> change<a class="headerlink" href="#landscape-and-species-change" title="Permalink to this headline">¶</a></h4>
 <p>For a given <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>, any number of change events
 can be planned.
 In the parameters file, for each event, the user stipulates the initial
@@ -753,11 +755,12 @@ of the <code class="code py python docutils literal"><span class="name"><span cl
 the <strong>end_rast</strong> parameter); and the
 interval at which intermediate changes will occur.  When the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is
 created, the stepped series of intermediate <code class="code py python docutils literal"><span class="name"><span class="pre">Layers</span></span></code> (and
-<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> objects, if the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> that is changing serves
-as the basis of a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> for any <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>) will be
+<code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> objects,
+if the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> that is changing serves as the basis for a
+<code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> for any <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>) will be
 created and queued, so that they will swap out accordingly at the appropriate
 timesteps.</p>
-<p>For a given <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, any number of demographic change events can
+<p>For a given <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>, any number of demographic change events can
 also be planned. In the parameters file, for each event, the user
 stipulates the type of the event (‘monotonic’, ‘cyclical’, ‘random’, or
 ‘custom’) as well as the values of a number of associated
@@ -766,7 +769,7 @@ As with <code class="code py python docutils literal"><span class="name"><span c
 planned and queued when the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is created, and will be
 executed at the appropriate timesteps.</p>
 <p>It is also possible to schedule any number of instantaneous changes
-to some of the life-history parameters of a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> (e.g. birth rate;
+to some of the life-history parameters of a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> (e.g. birth rate;
 the lambda parameter of the Poisson distribution determining the number of
 offspring of mating events). This functionality is currently minimalistic,
 but will be more facilitated in future versions.</p>
@@ -775,25 +778,30 @@ but will be more facilitated in future versions.</p>
 <hr class="docutils" />
 <div class="section" id="visualization">
 <h3>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h3>
-<p>Each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> has a wide variety of visualization methods
-(<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_fitness</span></span></code>, etc.),
+<p>Each <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> object has a variety of visualization methods
+(<code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_fitness</span></span></code>, etc.),
 which aim to help users design, run, explore, present,
-and explain their models’ behavior and results.
-These methods can be called on a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> at any time (e.g. as
-soon as the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> has been created, or after the model has
+and explain their <code class="code py python docutils literal"><span class="name"><span class="pre">Models</span></span></code>’ behavior and results.
+These methods can be called at any time (e.g. as
+soon as the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> has been created, or after it has
 run for any number of timesteps); but it is worth mentioning that some
 methods may be invalid depending on the point in model-time at
-which they’re called (e.g.  <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_genotype</span></span></code>,
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_phenotype</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_fitness</span></span></code>
-cannot be run for Populations that have not yet been burned in,
-as they will not yet have genomes assigned) or
-the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> on which they’re called
-(e.g. the aforementioned methods cannot create plots for a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
+which they’re called (e.g. <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_genotype</span></span></code>,
+<code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_phenotype</span></span></code>, and <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_fitness</span></span></code>
+cannot be run for <code class="code py python docutils literal"><span class="name"><span class="pre">Models</span></span></code> that have not yet been burned in,
+as they will not yet have genomes assigned), or on
+the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> for which they’re called
+(e.g. the aforementioned methods cannot create plots for a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 that has no <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>; and likewise, the
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_demographic_changes</span></span></code> method cannot be called for a
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> for which demographic changes were not parameterized).</p>
-<p>The <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> object and its <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>s also
-both have a <code class="code py python docutils literal"><span class="name"><span class="pre">plot</span></span></code> method.</p>
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_demographic_changes</span></span></code> method cannot be called for a
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> for which demographic changes were not parameterized).</p>
+<p>Below is a list of the visualization methods available, with example
+output for each (generated from the default Geonomics <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>):</p>
+<p>:: VIZ FUNCTION</p>
+<p>:: PLOT</p>
+<p>:: VIZ FUNCTION</p>
+<p>:: PLOT</p>
+<p>:: …</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="parameters">
@@ -802,10 +810,10 @@ both have a <code class="code py python docutils literal"><span class="name"><sp
 Geonomics parameters file. No worry though – this is very easy to create!
 To generate a new, template parameters file, you will simply call the
 <code class="code py python docutils literal"><span class="name"><span class="pre">gnx</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">make_parameters_file</span></span></code> function, feeding it the appropriate
-arguments (to indicate how many <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s and <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>s you
+arguments (to indicate how many <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> and <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>s you
 want to include in your <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>; which parameters sections you want
 included in the file, both for those
-<code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>s and <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s and for
+<code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>s and <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> and for
 other components of the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>; and the path and filename for your new
 parameters file). Geonomics will then automatically create the file for you,
 arranged as you requested and saved where you requested.</p>
@@ -1318,9 +1326,10 @@ in time. However, there is a potenitally significant memory trade-off here:
 The whole series of stepwise-changed arrays is computed when the
 <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is created, then saved and used at the appropriate timestep
 during each <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> run (and if the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> that is changing is used
-by any <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> as a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> then each intermediate
-<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> is also calculated when the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is first
-built. These objects take up memory, which may be limiting for larger
+by any <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> as a <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> then each
+intermediate <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> is also calculated
+when the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is first built.
+These objects take up memory, which may be limiting for larger
 <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>s and/or <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> objects. This will probably not be a
 major issue, but is worth considering.</p>
 </div>
@@ -1328,45 +1337,45 @@ major issue, but is worth considering.</p>
 </div>
 <div class="section" id="community-parameters">
 <h4>Community parameters<a class="headerlink" href="#community-parameters" title="Permalink to this headline">¶</a></h4>
-<div class="section" id="populations">
-<h5>Populations<a class="headerlink" href="#populations" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="species">
+<h5>Species<a class="headerlink" href="#species" title="Permalink to this headline">¶</a></h5>
 <hr class="docutils" />
-<p><strong>pop_&lt;n&gt;</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#pop name (POPULATION NAMES MUST BE UNIQUE!)</span>
-<span class="s1">&#39;pop_0&#39;</span> <span class="p">:</span>   <span class="p">{</span>
+<p><strong>spp_&lt;n&gt;</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#spp name (SPECIES NAMES MUST BE UNIQUE!)</span>
+<span class="s1">&#39;spp_0&#39;</span> <span class="p">:</span>   <span class="p">{</span>
 </pre></div>
 </div>
 <p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code>, <code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>}</p>
-<p>default: <code class="code py python docutils literal"><span class="name"><span class="pre">pop_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code></p>
+<p>default: <code class="code py python docutils literal"><span class="name"><span class="pre">spp_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code></p>
 <p>reset? P</p>
-<p>This parameter defines the name for each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>.
+<p>This parameter defines the name for each <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>.
 (Note that unlike most parameters, this parameter is
 a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code> key, the value for which is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">dict</span></span></code>
-of parameters defining the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> being named.) As the capitalized
-reminder in the parameters states, each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
+of parameters defining the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> being named.) As the capitalized
+reminder in the parameters states, each <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 must have a unique name (so that a parameterized
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> isn’t overwritten in the <code class="code py python docutils literal"><span class="name"><span class="pre">ParametersDict</span></span></code> by a
-second, identically-named <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>; Geonomics
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> isn’t overwritten in the <code class="code py python docutils literal"><span class="name"><span class="pre">ParametersDict</span></span></code> by a
+second, identically-named <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>; Geonomics
 checks for unique names and throws an Error if this condition is not met.
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> names can, but needn’t be, descriptive of what each
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> represents. Example valid values include: 0, ‘pop0’,
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> names can, but needn’t be, descriptive of what each
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> represents. Example valid values include: 0, ‘spp0’,
 ‘high-dispersal’, ‘C. fasciata’. Names default to
-<code class="code py python docutils literal"><span class="name"><span class="pre">pop_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code>, where n is a series of
-integers starting from 0 and counting the number of <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>s.</p>
+<code class="code py python docutils literal"><span class="name"><span class="pre">spp_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code>, where n is a series of
+integers starting from 0 and counting the number of <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>.</p>
 <div class="section" id="id1">
 <h6>Init<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h6>
 <hr class="docutils" />
 <p><strong>N</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;init&#39;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="c1">#starting population size</span>
+    <span class="c1">#starting number of individs</span>
     <span class="s1">&#39;N&#39;</span><span class="p">:</span>                <span class="mi">250</span><span class="p">,</span>
 </pre></div>
 </div>
 <p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code></p>
 <p>default: 250</p>
 <p>reset? P</p>
-<p>This defines the starting size of this <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>. Importantly, this
-may or may not be near the stationary size of the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> after
+<p>This defines the starting size of this <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>. Importantly, this
+may or may not be near the stationary size of the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> after
 the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> has burned in, because that size will depend on the
 carrying-capacity raster (set by the <strong>K</strong> parameter), and on
 the dynamics of specific a <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> (because of the interaction of
@@ -1381,11 +1390,12 @@ its various parameters).</p>
 <p>default: ‘layer_0’</p>
 <p>reset? P</p>
 <p>This indicates, by name, the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> to be used as the
-carrying-capacity raster for a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>. The values of this
+carrying-capacity raster for a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>. The values of this
 <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> should express the carrying capacity at each cell, in number
 of <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s. Note that the sum of the values of this <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code>
 can serve as a rough estimate of the expected stationary
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> size; however, observed stationary size could vary
+number of individuals of a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>;
+however, observed stationary size could vary
 substantially depending on various other <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> parameters (e.g. birth
 and death rates and mean number of offspring per mating event) as well
 as on stochastic events (e.g. failure to colonize, or survive in, all
@@ -1403,9 +1413,9 @@ habitable portions of the <code class="code py python docutils literal"><span cl
 <p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>, <code class="code py python docutils literal"><span class="punctuation"><span class="pre">(</span></span><span class="name builtin"><span class="pre">int</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="name builtin"><span class="pre">int</span></span><span class="punctuation"><span class="pre">)</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
 <p>default: 0</p>
 <p>reset? P</p>
-<p>This defines the age at which <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s in the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
+<p>This defines the age at which <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s in the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
 can begin to reproduce. If the value provided is a 2-tuple of different
-numbers (and the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> uses separate sexes), then the first
+numbers (and the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> uses separate sexes), then the first
 number will be used as females’ reproductive age, the second as males’.
 If the value is 0, or <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s are capable
 of reproduction from time of time.</p>
@@ -1441,27 +1451,27 @@ of a Bernoulli draw of that offspring’s sex).</p>
 <p>#NOTE: I WILL PROBABLY GET RID OF THIS PARAMETER…</p>
 <hr class="docutils" />
 <p><strong>R</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#pop intrinsic growth rate</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#intrinsic growth rate</span>
 <span class="s1">&#39;R&#39;</span><span class="p">:</span>                    <span class="mf">0.5</span><span class="p">,</span>
 </pre></div>
 </div>
 <p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code></p>
 <p>default: 0.5</p>
 <p>reset? P</p>
-<p>This defines a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s intrinsic growth rate, which is used
+<p>This defines a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’ intrinsic growth rate, which is used
 as the ‘R’ value in the spatialized logistic growth equation that
 regulates population density (<span class="math">\(\frac{\mathrm{d}
 N_{x,y}}{\mathrm{d}t}=rN_{x,y}(1-\frac{N_{x,y}}{K_{x,y}})\)</span>).</p>
 <hr class="docutils" />
 <p><strong>b</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#pop instrinsic birth rate (MUST BE 0&lt;=b&lt;=1)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#intrinsic birth rate (MUST BE 0&lt;=b&lt;=1)</span>
 <span class="s1">&#39;b&#39;</span><span class="p">:</span>                    <span class="mf">0.2</span><span class="p">,</span>
 </pre></div>
 </div>
 <p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">float</span></span></code> in interval [0, 1]</p>
 <p>default: 0.2</p>
 <p>reset? P</p>
-<p>This defines a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s intrinsic birth rate, which is
+<p>This defines a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’ intrinsic birth rate, which is
 implemented as the probability that an identified potential mating
 pair successfully produces offspring. Because this is a probability, as
 the capitalized reminder in the parameters file mentions, this value must
@@ -1506,7 +1516,7 @@ This radius is provided to queries run on the <code class="code py python docuti
 <p>default: 1</p>
 <p>reset? P</p>
 <p>This defines the maximum age an individual can achieve before being
-forcibly culled from the population. Defaults to 1 (which will create
+forcibly culled from the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>. Defaults to 1 (which will create
 a Wright-Fisher-like simulation, with discrete generations). Can be set
 to any other age, or can be set to <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code> (in which case no maxmimum
 age is enforced).</p>
@@ -1549,7 +1559,7 @@ inclusive interval [0, 1].</p>
 <p>default: None</p>
 <p>reset? N</p>
 <p>This defines the width of the window used by the <code class="code py python docutils literal"><span class="name"><span class="pre">_DensityGridStack</span></span></code>
-to estimate a raster of local <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> densities. The user should
+to estimate a raster of local <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> densities. The user should
 feel free to set different values for this parameter (which could be
 especially helpful when calling <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_density</span></span></code> to inspect the
 resulting surfaces calculated at different window widths, if trying
@@ -1578,7 +1588,8 @@ others the user may wish to control this.</p>
 (a circularized normal distribution) from which
 movement directions are chosen when movement is random and isotropic
 (rather than
-being determined by a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>; if a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>
+being determined by a <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code>;
+if a <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code>
 is being usen this parameter is ignored). The <span class="math">\(\kappa\)</span> value
 that is fed into this same distribution (<strong>direction_distr_kappa</strong>)
 causes it to be very dispersed,
@@ -1601,7 +1612,8 @@ to change these parameters.</p>
 (a circularized normal distribution) from which
 movement directions are chosen when movement is random and isotropic
 (rather than
-being determined by a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>; if a <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>
+being determined by a <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code>;
+if a <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code>
 is being usen this parameter is ignored). The default value of 0 will
 cause this distribution to be very dispersed, approximating a uniform
 distribution on the unit circle and rendering the <span class="math">\(\mu\)</span>
@@ -1663,8 +1675,8 @@ dispersal distances, expressed in units of raster-cells. This parameter and
 <strong>distance_distr_mu</strong> (the Wald distribution’s <span class="math">\(mu\)</span>) should be
 set to reflect a distribution of dispersal distances that is appropriate
 for your scenario.</p>
-<div class="section" id="id3">
-<h7>_MovementSurface<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h7>
+<div class="section" id="movement-and-dispersal-conductancesurfaces">
+<h7>Movement and Dispersal _ConductanceSurfaces<a class="headerlink" href="#movement-and-dispersal-conductancesurfaces" title="Permalink to this headline">¶</a></h7>
 <p><strong>layer</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="s1">&#39;move_surf&#39;</span>     <span class="p">:</span> <span class="p">{</span>
     <span class="c1">#move-surf Layer name</span>
@@ -1675,12 +1687,12 @@ for your scenario.</p>
 <p>default: <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘layer_0’</span></span></code></p>
 <p>reset? P</p>
 <p>This indicates, by name, the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> to be used as to construct the
-<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> for a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>. Note that this can also
+<code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> for a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>. Note that this can also
 be thought of as the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> that should serve as a
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s permeability raster (because <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s moving
-on this <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> toward the higher (if mixture distributions
-are used) or highest (if unimodl distributions are used)
-values in their neighborhoods).</p>
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’ permeability raster (because <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s moving
+on this <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> toward the higher
+(if mixture distributions are used) or highest
+(if unimodl distributions are used) values in their neighborhoods).</p>
 <p><strong>mixture</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to use mixture distrs</span>
 <span class="s1">&#39;mixture&#39;</span><span class="p">:</span>              <span class="bp">True</span><span class="p">,</span>
@@ -1689,16 +1701,16 @@ values in their neighborhoods).</p>
 <p><code class="code py python docutils literal"><span class="name builtin"><span class="pre">bool</span></span></code></p>
 <p>default: True</p>
 <p>reset? P</p>
-<p>This indicates whether the <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> should be built using
+<p>This indicates whether the <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> should be built using
 VonMises mixture distributions or unimodal VonMises distributions.
-If True, each cell in the <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> will have an approximate
+If True, each cell in the <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> will have an approximate
 circular distribution that is a
 weighted sum of 8 unimodal VonMises distributions (one per cell in the 8-cell
 neighborhood); each of those summed unimodal distributions will have as its
 mode the direction of the neighboring cell on which it is based and as its
 weight the relative permeability of the cell on which it is based
 (relative to the full neighborhood). If False, each cell in the
-<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code> will have an approximated circular distribution
+<code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> will have an approximated circular distribution
 that is a single
 VonMises distribution with its mode being the direction of the maximum-valued
 cell in the 8-cell neighborhood and its concentration determined by
@@ -1712,7 +1724,7 @@ cell in the 8-cell neighborhood and its concentration determined by
 <p>default: 12</p>
 <p>reset? N</p>
 <p>This sets the concentration of the VonMises distributions used to build
-the approximated circular distributions in the <code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>.
+the approximated circular distributions in the <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code>.
 The default value was chosen heuristically as one that provides a reasonable
 concentration in the direction of a unimodal VonMises distribution’s mode
 without causing VonMises mixture distributions built from an
@@ -1722,7 +1734,29 @@ There will probably be little need to change the default value, but if
 interested then the user could create <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>s with various values
 of this parameter and then use the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">plot_movement_surface</span></span></code>
 method to explore the influence of the parameter on the resulting
-<code class="code py python docutils literal"><span class="name"><span class="pre">_MovementSurface</span></span></code>s.</p>
+<code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code>s.</p>
+<p><strong>approx_len</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#length of approximation vectors for distrs</span>
+<span class="s1">&#39;approx_len&#39;</span><span class="p">:</span>       <span class="mi">5000</span><span class="p">,</span>
+</pre></div>
+</div>
+<p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">int</span></span></code>}</p>
+<p>default: 5000</p>
+<p>reset? P</p>
+<p>This determines the length of the vector of values used to approximate each
+distribution on the <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> (i.e. the size of the z-axis
+of the <code class="code py python docutils literal"><span class="name"><span class="pre">np</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">ndarray</span></span></code> used to hold all the distribution-approximations, where
+the x and y axes have the same dimensions as the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>). The default
+value of 5000 is fine for many cases, but may need to be
+reduced depending on the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code> dimensions (because for a larger
+<code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, say 1000x1000 cells, it would create a
+<code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> that is roughly 4Gb,
+and if the <code class="code py python docutils literal"><span class="name"><span class="pre">Layer</span></span></code> on which the <code class="code py python docutils literal"><span class="name"><span class="pre">_ConductanceSurface</span></span></code> is based will be
+undergoing landscape changes then numerous versions of an object of this size
+would need to be generated when the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is built and held in memory).
+The value to use for this parameter will depend on the size of the
+<code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>, the exact scenario being simulated, and the memory of the
+machine on which the <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> is to be run.</p>
 </div>
 </div>
 <hr class="docutils" />
@@ -1735,12 +1769,12 @@ method to explore the influence of the parameter on the resulting
 </pre></div>
 </div>
 <p>{<code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code>, <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>}</p>
-<p>default: {<code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘&lt;your_model_name&gt;_pop-&lt;n&gt;_gen_arch.csv’</span></span></code></p>
+<p>default: {<code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘&lt;your_model_name&gt;_spp-&lt;n&gt;_gen_arch.csv’</span></span></code></p>
 <p>reset? P</p>
 <p>This arguments indicates whether a custom genomic architecture file should
-be used to create a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>, and if so,
+be used to create a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’ <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>, and if so,
 where that file is located. If the value is <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, no file will be
-used and the values of this <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s other genomic
+used and the values of this <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’ other genomic
 architecture parameters in the parameters file will be used to create
 the <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>. If the value is a <code class="code py python docutils literal"><span class="name builtin"><span class="pre">str</span></span></code> pointing to a
 custom genomic-architecture file
@@ -1748,10 +1782,10 @@ custom genomic-architecture file
 ‘p’, ‘dom’, ‘r’, ‘trait’, and ‘alpha’ as columns stipulating the starting
 allele frequencies, dominance values, inter-locus recombination rates,
 trait names, and effect sizes of all loci). Geonomics will create an empty
-file of this format for each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> for which the
+file of this format for each <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> for which the
 ‘custom_genomic_architecture’ argument is provided the value True when
 <code class="code py python docutils literal"><span class="name"><span class="pre">gnx</span></span><span class="operator"><span class="pre">.</span></span><span class="name"><span class="pre">make_parameters_file</span></span></code> is called (which will be saved as
-‘&lt;your_model_name&gt;_pop-&lt;n&gt;_gen_arch.csv’).</p>
+‘&lt;your_model_name&gt;_spp-&lt;n&gt;_gen_arch.csv’).</p>
 <p>Note that when Geonomics reads in a custom genomic architecture file
 to create a <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code>, it will check
 that the length (i.e. number of rows) in this file is equal to the length
@@ -1768,7 +1802,7 @@ Geonomics throws an Error.</p>
 <p>default: 1000</p>
 <p>reset? P</p>
 <p>This defines the total number of loci in the genomes in a
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>.</p>
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>.</p>
 <p><strong>l_c</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#num of chromosomes</span>
 <span class="s1">&#39;l_c&#39;</span><span class="p">:</span>                      <span class="p">[</span><span class="mi">750</span><span class="p">,</span> <span class="mi">250</span><span class="p">],</span>
@@ -1778,7 +1812,7 @@ Geonomics throws an Error.</p>
 <p>default: <code class="code py python docutils literal"><span class="punctuation"><span class="pre">[</span></span><span class="literal number integer"><span class="pre">750</span></span><span class="punctuation"><span class="pre">,</span></span> <span class="literal number integer"><span class="pre">250</span></span><span class="punctuation"><span class="pre">]</span></span></code></p>
 <p>reset? P</p>
 <p>This defines the lengths (in number of loci) of each of the chromosomes
-in the genomes in a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>.  Note that the sum of this <code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code>
+in the genomes in a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>.  Note that the sum of this <code class="code py python docutils literal"><span class="name builtin"><span class="pre">list</span></span></code>
 must equal <strong>L</strong>, otherwise Geonomics will throw an Error.
 Also note that Geonomics models genomes as single <strong>L</strong> x 2
 arrays, where separate chromosomes are delineated by points along
@@ -1806,7 +1840,7 @@ This value can be set to 0 to disable neutral mutation.</p>
 <p>This defines the genome-wide per-base deleterious mutation rate.
 This value can be set to 0 to disable deleterious mutation. Note that all
 deleterious mutation will fall outside the loci that affect any <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s
-a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> may have, and will behave simply as globally
+a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> may have, and will behave simply as globally
 deleterious mutations (i.e. mutations that reduce the mutated
 <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>’s fitness regardless of that <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>’s
 spatial location).</p>
@@ -1909,7 +1943,7 @@ being used up). Thus, to avoid problems, the number provided to this parameter
 should be comfortably larger than the largest anticipated number of
 recombination paths that will be needed during a single mating event (i.e.
 larger than two times the largest antipicated number of offspring to be born
-to the <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> during one timestep).</p>
+to the <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> during one timestep).</p>
 <p><strong>n_recomb_paths_tot</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#total number of recomb paths to simulate</span>
 <span class="s1">&#39;n_recomb_paths&#39;</span><span class="p">:</span>           <span class="nb">int</span><span class="p">(</span><span class="mf">1e5</span><span class="p">),</span>
@@ -1923,7 +1957,7 @@ then shuffling and cycling through those recombination paths as
 needed during <code class="code py python docutils literal"><span class="name"><span class="pre">Model</span></span></code> runs. The larger the total number of these paths
 that is created, the more closely Geonomics will model truly
 free recombination and the more prceisely it will model the exact
-interlocus recombination rates defined in a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s
+interlocus recombination rates defined in a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’
 <code class="code py python docutils literal"><span class="name"><span class="pre">GenomicArchitecture</span></span></code>.</p>
 <p><strong>mut_log</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to save mutation logs</span>
@@ -1934,8 +1968,8 @@ interlocus recombination rates defined in a <code class="code py python docutils
 <p>default: <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code></p>
 <p>reset? P</p>
 <p>This indicates the location of the mutation-log file where  Geonomics should
-save a record of each mutation that occurs for a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>
-<code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, for each iteration. If <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, no mutation log
+save a record of each mutation that occurs for a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>
+<code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>, for each iteration. If <code class="code py python docutils literal"><span class="name builtin pseudo"><span class="pre">None</span></span></code>, no mutation log
 will be created and written to.</p>
 <hr class="docutils" />
 <div class="section" id="traits">
@@ -1961,7 +1995,7 @@ checks for unique names and throws an Error if this condition is not met.
 <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> represents. Example valid values include: 0, ‘trait0’,
 ‘tmp_trait’, ‘bill length’. Names default to <code class="code py python docutils literal"><span class="name"><span class="pre">trait_</span></span><span class="operator"><span class="pre">&lt;</span></span><span class="name"><span class="pre">n</span></span><span class="operator"><span class="pre">&gt;</span></span></code>,
 where n is a series of integers starting from 0 and counting the
-number of <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s for this <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>.</p>
+number of <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>s for this <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>.</p>
 <p><strong>layer</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#trait-selection Layer name</span>
 <span class="s1">&#39;layer&#39;</span><span class="p">:</span>                <span class="s1">&#39;layer_0&#39;</span><span class="p">,</span>
@@ -2072,13 +2106,13 @@ concave up; values &gt; 1 will cause it to be concave down.</p>
 <p>This indicates whether whether selection on a <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code> should be
 universal (i.e. whether a phenotype of 1 should be optimal everywhere
 on the <code class="code py python docutils literal"><span class="name"><span class="pre">Landscape</span></span></code>). When set to True, selection of the <code class="code py python docutils literal"><span class="name"><span class="pre">Trait</span></span></code>
-will be directional on the entire <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>, regardless
+will be directional on the entire <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>, regardless
 of <code class="code py python docutils literal"><span class="name"><span class="pre">Individual</span></span></code>s’ spatial contexts.</p>
 </div>
 </div>
 <hr class="docutils" />
-<div class="section" id="population-change">
-<h6>Population change<a class="headerlink" href="#population-change" title="Permalink to this headline">¶</a></h6>
+<div class="section" id="species-change">
+<h6>Species change<a class="headerlink" href="#species-change" title="Permalink to this headline">¶</a></h6>
 <div class="section" id="demographic-change">
 <h7>Demographic change<a class="headerlink" href="#demographic-change" title="Permalink to this headline">¶</a></h7>
 <p><strong>kind</strong></p>
@@ -2095,7 +2129,7 @@ Each event has a certain length (in timesteps; defined by the <strong>start</str
 <strong>end</strong> parameters). Note that of the other parameters in this section, only
 those that are necessary to parameterize the type of change event indicated
 here will be used.</p>
-<p>In <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘monotonic’</span></span></code> change events, a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code>’s
+<p>In <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘monotonic’</span></span></code> change events, a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code>’
 carrying capacity raster (K) is multiplied by a constant factor
 (<strong>rate</strong>) at each timestep during the event.
 In <code class="code py python docutils literal"><span class="literal string single"><span class="pre">‘stochastic’</span></span></code> change events, K fluctuates
@@ -2247,8 +2281,8 @@ should change (at the timesteps indicated by <strong>timesteps</strong>).</p>
 <hr class="docutils" />
 <div class="section" id="model-parameters">
 <h4>Model parameters<a class="headerlink" href="#model-parameters" title="Permalink to this headline">¶</a></h4>
-<div class="section" id="id4">
-<h5>Main<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id3">
+<h5>Main<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
 <p><strong>T</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#total Model runtime (in timesteps)</span>
 <span class="s1">&#39;T&#39;</span><span class="p">:</span>            <span class="mi">100</span><span class="p">,</span>
@@ -2272,7 +2306,7 @@ during each iteration.</p>
 burn-in will run. (Note this is only a minimum because the test for
 burn-in completion includes a check that at least this many timesteps have
 elapsed, but also includes two statistical checks of stationarity of the
-size of each <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code> in a <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code>.)</p>
+size of each <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code> in a <code class="code py python docutils literal"><span class="name"><span class="pre">Community</span></span></code>.)</p>
 <p><strong>seed</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#seed number</span>
 <span class="s1">&#39;num&#39;</span><span class="p">:</span>          <span class="bp">None</span><span class="p">,</span>
@@ -2522,10 +2556,10 @@ will only be used if the <strong>include_landscape</strong> parameter is set to 
 can calculate. (Currently valid statistics include:</p>
 <blockquote>
 <div><ul class="simple">
-<li><em>‘Nt’</em>: population size at timestep t</li>
+<li><em>‘Nt’</em>: number of individuals at timestep t</li>
 <li><em>‘het’</em>: heterozygosity</li>
 <li><em>‘maf’</em>: minor allele frequency</li>
-<li><em>‘mean_fit’</em>: mean fitness of a <code class="code py python docutils literal"><span class="name"><span class="pre">Population</span></span></code></li>
+<li><em>‘mean_fit’</em>: mean fitness of a <code class="code py python docutils literal"><span class="name"><span class="pre">Species</span></span></code></li>
 <li><em>‘ld’</em>: linkage disequilibrium</li>
 </ul>
 <p>There are only a few parameters, which are shared across all</p>
@@ -2558,7 +2592,7 @@ during each iteration (in timesteps). If set to 0, Geonomics will calculate
 and save this statistic for only the first and last timesteps
 of each iteration.</p>
 <p><strong>mean</strong></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to calculate as pop mean</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#whether to mean across sampled individs</span>
 <span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
 </pre></div>
 </div>
@@ -2585,8 +2619,8 @@ numbers and types of sections indicated by the parameters fed to this
 function. It can often be used ‘out of the box’ to make a new Model
 object, but typically it will be edited by the user to stipulate
 the scenario being simulated, then used to instantiate a Model.</p>
-<div class="section" id="id5">
-<h5>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id4">
+<h5>Parameters<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>filepath <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
 <dd>Where to write the resulting parameters file, in /path/to/filename.py
@@ -2620,20 +2654,20 @@ contents indicated, for each dict in this list.</p>
 </dd>
 </dl>
 </dd>
-<dt>populations <span class="classifier-delimiter">:</span> <span class="classifier">{int, list of dicts}, optional</span></dt>
-<dd><p class="first">Number (and optionally, types) of Population-parameter sections to
+<dt>species <span class="classifier-delimiter">:</span> <span class="classifier">{int, list of dicts}, optional</span></dt>
+<dd><p class="first">Number (and optionally, types) of Species-parameter sections to
 include in the parameters file that is generated. Defaults to 1. Valid
 values and their associated behaviors are:</p>
 <dl class="last docutils">
 <dt>int:</dt>
-<dd><p class="first">Add sections for the stipulated number of Populations, each with
+<dd><p class="first">Add sections for the stipulated number of Species, each with
 default settings:</p>
 <blockquote class="last">
 <div><ul class="simple">
 <li>parameters for movement without a MovementSurface</li>
 <li>parameters for a GenomicArchitecture with 0 Traits (i.e. with
 only neutral loci)</li>
-<li>no PopulationChanger parameters</li>
+<li>no SpeciesChanger parameters</li>
 </ul>
 </div></blockquote>
 </dd>
@@ -2648,7 +2682,7 @@ following:
 ‘demographic_change’:              int,
 ‘parameter_change’:                bool
 }
-This will add one section of Population parameters, customized
+This will add one section of Species parameters, customized
 as indicated, for each dict in the list.</dd>
 </dl>
 </dd>
@@ -2726,7 +2760,7 @@ file, and then call the Model.run method to run the model (setting the
 </pre></div>
 </div>
 <p>We can use some of the function’s arguments, to create a parameters
-file for a model with 3 Layers and 1 Population (all with the default
+file for a model with 3 Layers and 1 Species (all with the default
 components for their sections of the parameters file) and with a section
 for parameterizing data collection.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gnx</span><span class="o">.</span><span class="n">make_parameters_file</span><span class="p">(</span><span class="n">scapes</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
@@ -2739,7 +2773,7 @@ we can create a parameters file for a model scenario with:</p>
 <li>2 Layers (one being an nlmpy Layer that will not change over model
 time, the other being a raster read in from a GIS file and being
 subject to change over model time);</li>
-<li>2 Populations (the first having genomes, 2 Traits, and movement
+<li>2 Species (the first having genomes, 2 Traits, and movement
 that is dictated by a MovementSurface; the second not having
 genomes but having a MovementSurface as well, and undergoing
 demographic change)</li>
@@ -2747,7 +2781,7 @@ demographic change)</li>
 <li>stats-collection;</li>
 </ul>
 </div></blockquote>
-<p>We can save this to a file named “2-pop_2-trait_model.py” in our current
+<p>We can save this to a file named “2-spp_2-trait_model.py” in our current
 working directory.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gnx</span><span class="o">.</span><span class="n">make_parameters_file</span><span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#list of 2 dicts, each containing the values for each Layer&#39;s</span>
@@ -2757,14 +2791,14 @@ working directory.</p>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;gis&#39;</span><span class="p">,</span>                                 <span class="c1">#scape 2</span>
 <span class="gp">&gt;&gt;&gt; </span>         <span class="s1">&#39;change&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span>        <span class="p">],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#list of 2 dicts, each containing the values for each Population&#39;s</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#list of 2 dicts, each containing the values for each Species&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#parameters section</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">populations</span> <span class="o">=</span> <span class="p">[</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="p">{</span><span class="s1">&#39;genomes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>                               <span class="c1">#pop 1</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">species</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="p">{</span><span class="s1">&#39;genomes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>                               <span class="c1">#spp 1</span>
 <span class="gp">&gt;&gt;&gt; </span>         <span class="s1">&#39;n_traits&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>         <span class="s1">&#39;movement&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>         <span class="s1">&#39;movement_surface&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="p">{</span><span class="s1">&#39;genomes&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>                              <span class="c1">#pop 2</span>
+<span class="gp">&gt;&gt;&gt; </span>        <span class="p">{</span><span class="s1">&#39;genomes&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>                              <span class="c1">#spp 2</span>
 <span class="gp">&gt;&gt;&gt; </span>         <span class="s1">&#39;movement&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>         <span class="s1">&#39;movement_surface&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>         <span class="s1">&#39;demographic_change&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
@@ -2772,7 +2806,7 @@ working directory.</p>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#arguments to the data and stats parameters</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="n">data</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">stats</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="c1">#destination to which to write the resulting parameter file</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;2-pop_2-trait_model.py&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">filepath</span> <span class="o">=</span> <span class="s1">&#39;2-spp_2-trait_model.py&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2781,19 +2815,19 @@ working directory.</p>
 <h4><code class="code py python docutils literal"><span class="name"><span class="pre">read_parameters_file</span></span></code><a class="headerlink" href="#read-parameters-file" title="Permalink to this headline">¶</a></h4>
 <p>Create a new ParametersDict object.</p>
 <p>Read the Geonomics parameters file saved at the location indicated by
-‘filepath’, check its validity (i.e. that all the Layers and Populations
+‘filepath’, check its validity (i.e. that all the Layers and Species
 parameterized in that file have been given distinct names), then use the
 file to instantiate a ParametersDict object.</p>
-<div class="section" id="id6">
-<h5>Parameters<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id5">
+<h5>Parameters<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>filepath <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
 <dd>String indicating the location of the Geonomics parameters file that
 should be made into a ParametersDict object.</dd>
 </dl>
 </div>
-<div class="section" id="id7">
-<h5>Returns<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id6">
+<h5>Returns<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h5>
 <p>An object of the ParametersDict class (a dict of nested dicts, all
 of which have key-value pairs whose values can be accessed using typical
 dict notation or using dot notation with the keys).</p>
@@ -2802,17 +2836,17 @@ dict notation or using dot notation with the keys).</p>
 <h5>Raises<a class="headerlink" href="#raises" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>AssertionError</dt>
-<dd>If either the Layers or the Populations parameterized in the parameters
+<dd>If either the Layers or the Species parameterized in the parameters
 file have not all been given distinct names</dd>
 </dl>
 </div>
-<div class="section" id="id8">
-<h5>See Also<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id7">
+<h5>See Also<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h5>
 <p>sim.params.read
 sim.params.ParametersDict</p>
 </div>
-<div class="section" id="id9">
-<h5>Examples<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id8">
+<h5>Examples<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h5>
 <p>Read a parameters file called “null_model.py” (located in the current
 working directory).</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gnx</span><span class="o">.</span><span class="n">read_parameters_file</span><span class="p">(</span><span class="s1">&#39;null_model.py&#39;</span><span class="p">)</span>
@@ -2828,8 +2862,8 @@ working directory).</p>
 <p>Use either a ParametersDict object or the path to a valid Geonomics
 parameters file (whichever is provided to the ‘parameters’ argument) to
 create a new Model object.</p>
-<div class="section" id="id10">
-<h5>Parameters<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id9">
+<h5>Parameters<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>parameters <span class="classifier-delimiter">:</span> <span class="classifier">{ParametersDict, str}, optional</span></dt>
 <dd>The parameters to be used to make the Model object.
@@ -2845,15 +2879,15 @@ file to make a ParametersDict object, then will use that object to
 make the Model.</dd>
 </dl>
 </div>
-<div class="section" id="id11">
-<h5>Returns<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id10">
+<h5>Returns<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>out <span class="classifier-delimiter">:</span> <span class="classifier">Model</span></dt>
 <dd>An object of the Model class</dd>
 </dl>
 </div>
-<div class="section" id="id12">
-<h5>Raises<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id11">
+<h5>Raises<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h5>
 <dl class="docutils">
 <dt>ValueError</dt>
 <dd>If the <cite>parameters</cite> argument was not provided and a single, valid
@@ -2868,13 +2902,13 @@ from the parameters file being used, cannot be successfully made into a
 Model</dd>
 </dl>
 </div>
-<div class="section" id="id13">
-<h5>See Also<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id12">
+<h5>See Also<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h5>
 <p>gnx.read_parameters_file
 sim.model.Model</p>
 </div>
-<div class="section" id="id14">
-<h5>Examples<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h5>
+<div class="section" id="id13">
+<h5>Examples<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h5>
 <p>Make a Model from a single, valid “GEONOMICS_params_&lt;…&gt;.py” file that can
 be found in the current working directory (such as a file that would be
 produced by calling gnx.make_parameters_file without any arguments).</p>
@@ -2882,7 +2916,7 @@ produced by calling gnx.make_parameters_file without any arguments).</p>
 <span class="go">&lt;class &#39;sim.model.Model&#39;&gt;</span>
 <span class="go">Model name:                                     GEONOMICS_params_13-10-2018_15:54:03</span>
 <span class="go">Layers:                                         0: &#39;0&#39;</span>
-<span class="go">Populations:                                    0: &#39;0&#39;</span>
+<span class="go">Species:                                        0: &#39;0&#39;</span>
 <span class="go">Number of iterations:                           1</span>
 <span class="go">Number of burn-in timesteps (minimum):          30</span>
 <span class="go">Number of main timesteps:                       100</span>
@@ -2898,7 +2932,7 @@ directory.</p>
 <span class="go">Model name:                                     null_model</span>
 <span class="go">Layers:                                         0: &#39;tmp&#39;</span>
 <span class="go">                                                1: &#39;ppt&#39;</span>
-<span class="go">Populations:                                    0: &#39;C. fasciata&#39;</span>
+<span class="go">Species:                                        0: &#39;C. fasciata&#39;</span>
 <span class="go">Number of iterations:                           2500</span>
 <span class="go">Number of burn-in timesteps (mininum):          100</span>
 <span class="go">Number of main timesteps:                       1000</span>
