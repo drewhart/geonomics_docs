@@ -955,7 +955,7 @@ When you then open that file, you will see the following:
       #### main ####
       ##############
           'main': {
-              # dimensions of the Landscape
+              # x,y (a.k.a. i,j) dimensions of the Landscape
               'dim':                      (20,20),
 
      #.
@@ -1991,13 +1991,34 @@ Movement
 
 ------------------------------------------------------------------------------
 
+**move**
+
+.. code-block:: python
+
+                     #whether or not the species is mobile
+                     'move':                    True,
+
+:py: `bool`
+
+default: True
+
+reset? P
+
+This determines whether the :py: `Species` being parameterized is mobile
+(i.e. whether its individuals should move). A :py:`Species` without movement
+will still undergo dispersal of offspring, but after dispersing
+those offspring will remain fixed in location until death.
+
+
+------------------------------------------------------------------------------
+
 **direction_distr_mu**
 
 .. code-block:: python
  
                 'movement': {
                      #mode of distr of movement direction
-                     'direction_distr_mu':     1,
+                     'direction_distr_mu':      1,
 
 {:py:`int`, :py;`float`}
 
@@ -2022,6 +2043,8 @@ drawn for movement.  If random, isotropic
 movement is what you aim to model then there is probably little reason 
 to change these parameters.
 
+
+------------------------------------------------------------------------------
 
 **direction_distr_kappa**
 
@@ -2052,6 +2075,8 @@ more concentrated around :math:`\mu`, making the value fed to
 movement is what you aim to model then there is probably little reason 
 to change these parameters.
 
+------------------------------------------------------------------------------
+
 
 **distance_distr_mu**
 
@@ -2071,6 +2096,8 @@ movement distances, expressed in units of raster-cells. This parameter and
 **distance_distr_sigma** (the Wald distribution's :math:`sigma`) should be
 set to reflect a distribution of movement distances that is appropriate
 for your scenario.
+
+------------------------------------------------------------------------------
 
 
 **distance_distr_sigma**
@@ -2092,6 +2119,8 @@ movement distances, expressed in units of raster-cells. This parameter and
 set to reflect a distribution of movement distances that is appropriate
 for your scenario.
 
+------------------------------------------------------------------------------
+
 
 **dispersal_distr_mu**
 
@@ -2112,6 +2141,8 @@ dispersal distances, expressed in units of raster-cells. This parameter and
 set to reflect a distribution of dispersal distances that is appropriate
 for your scenario.
 
+
+------------------------------------------------------------------------------
 
 **dispersal_distr_sigma**
 
@@ -2137,6 +2168,8 @@ for your scenario.
 Movement and Dispersal _ConductanceSurfaces
 """""""""""""""""""""""""""""""""""""""""""
 
+------------------------------------------------------------------------------
+
 **layer**
 
 .. code-block:: python
@@ -2159,6 +2192,8 @@ on this :py:`_ConductanceSurface` toward the higher
 (if mixture distributions are used) or highest
 (if unimodl distributions are used) values in their neighborhoods). 
 
+
+------------------------------------------------------------------------------
 
 **mixture**
 
@@ -2189,6 +2224,8 @@ cell in the 8-cell neighborhood and its concentration determined by
 **vm_distr_kappa**.
 
 
+------------------------------------------------------------------------------
+
 **vm_distr_kappa**
 
 .. code-block:: python
@@ -2215,6 +2252,8 @@ of this parameter and then use the :py:`Model.plot_movement_surface`
 method to explore the influence of the parameter on the resulting
 :py:`_ConductanceSurface`\s.
 
+
+------------------------------------------------------------------------------
 
 **approx_len**
 
@@ -2245,11 +2284,12 @@ The value to use for this parameter will depend on the size of the
 machine on which the :py:`Model` is to be run.
 
                    
-------------------------------------------------------------------------------
 
 ^^^^^^^^^^^^^^^^^^^^
 _GenomicArchitecture
 ^^^^^^^^^^^^^^^^^^^^
+
+------------------------------------------------------------------------------
 
 **gen_arch_file**
 
@@ -2290,6 +2330,8 @@ assortment during gametogenesis). If either of these checks fails,
 Geonomics throws an Error.
 
 
+------------------------------------------------------------------------------
+
 **L**
 
 .. code-block:: python
@@ -2306,6 +2348,8 @@ reset? P
 This defines the total number of loci in the genomes in a
 :py:`Species`.
 
+
+------------------------------------------------------------------------------
 
 **l_c**
 
@@ -2330,6 +2374,8 @@ thus, for a model where recombination rates are often at or near 0.5, this
 parameter will have little meaning.
 
 
+------------------------------------------------------------------------------
+
 **mu_neut**
 
 .. code-block:: python
@@ -2346,6 +2392,8 @@ reset? P
 This defines the genome-wide per-base neutral mutation rate.
 This value can be set to 0 to disable neutral mutation.
 
+
+------------------------------------------------------------------------------
 
 **mu_delet**
 
@@ -2369,6 +2417,8 @@ deleterious mutations (i.e. mutations that reduce the mutated
 spatial location).
 
 
+------------------------------------------------------------------------------
+
 **delet_alpha_distr_shape**
 
 .. code-block:: python
@@ -2386,6 +2436,8 @@ This defines the shape parameter of the gamma distribution from which
 the effect sizes of deleterious loci are drawn. (Values drawn will be
 truncated to the interval [0,1].)
 
+
+------------------------------------------------------------------------------
 
 **delet_alpha_distr_scale**
 
@@ -2405,6 +2457,8 @@ the effect sizes of deleterious loci are drawn. (Values drawn will be
 truncated to the interval [0,1].)
 
 
+------------------------------------------------------------------------------
+
 **r_distr_alpha**
 
 .. code-block:: python
@@ -2423,6 +2477,8 @@ interlocus recombination rates are drawn. (Values drawn will be truncated to
 the interval [0, 0.5].)
 
 
+------------------------------------------------------------------------------
+
 **r_distr_beta**
 
 .. code-block:: python
@@ -2440,6 +2496,8 @@ This defines the beta parameter of the beta distribution from which
 interlocus recombination rates are drawn. (Values drawn will be truncated to
 the interval [0, 0.5].)
 
+
+------------------------------------------------------------------------------
 
 **dom**
 
@@ -2460,6 +2518,8 @@ behavior, because it is assumed that Geonomics will often be used
 to model quantitative traits, for which this is a reasonable assumption.
 
 
+------------------------------------------------------------------------------
+
 **pleiotropy**
 
 .. code-block:: python
@@ -2476,6 +2536,8 @@ reset? P
 This indicates whether pleiotropy should be allowed. If True, loci will be
 permitted to contribute to more than one :py:`Trait`.
 
+
+------------------------------------------------------------------------------
 
 **recomb_rate_custom_fn**
 
@@ -2495,6 +2557,8 @@ interlocus recombination rates will be assigned. If set to :py:`None`, the
 default behavior (i.e. recombination rates chosen from a beta distribution
 using **r_distr_alpha** and **r_distr_beta**) will be used.
 
+
+------------------------------------------------------------------------------
 
 **n_recomb_paths_mem**
 
@@ -2525,6 +2589,8 @@ larger than two times the largest antipicated number of offspring to be born
 to the :py:`Species` during one timestep).
 
 
+------------------------------------------------------------------------------
+
 **n_recomb_paths_tot**
 
 .. code-block:: python
@@ -2543,6 +2609,8 @@ free recombination and the more prceisely it will model the exact
 interlocus recombination rates defined in a :py:`Species`'
 :py:`GenomicArchitecture`.
 
+
+------------------------------------------------------------------------------
 
 **mut_log**
 
@@ -2564,11 +2632,12 @@ save a record of each mutation that occurs for a :py:`Species`
 will be created and written to.
 
 
-------------------------------------------------------------------------------
 
 """"""
 Traits
 """"""
+
+------------------------------------------------------------------------------
 
 **trait_<n>**
 
@@ -2599,6 +2668,8 @@ where n is a series of integers starting from 0 and counting the
 number of :py:`Trait`\s for this :py:`Species`.
 
 
+------------------------------------------------------------------------------
+
 **layer**
 
 .. code-block:: python
@@ -2617,6 +2688,8 @@ acting on this :py:`Trait`. (For example, if this Trait is selected upon by
 annual mean temperature, then the name of the :py:`Layer` 
 representing annual mean temperature should be provided here.)
 
+
+------------------------------------------------------------------------------
 
 **phi**
 
@@ -2645,6 +2718,8 @@ selection will vary across space, as indicated by the values in this array
 (what Geonomics refers to as a "spatially contingent" selection regime).
 
 
+------------------------------------------------------------------------------
+
 **n_loci**
 
 .. code-block:: python
@@ -2663,6 +2738,8 @@ of this :py:`Trait`. These loci will be randomly drawn from across the
 genome.
 
 
+------------------------------------------------------------------------------
+
 **mu**
 
 .. code-block:: python
@@ -2680,6 +2757,8 @@ This defines the mutation rate for this :py:`Trait` (i.e. the rate at which
 mutations that affect the phenotypes of this :py:`Trait` will arise). Set to
 0 to disable mutation for this :py:`Trait`.
 
+
+------------------------------------------------------------------------------
 
 **alpha_distr_mu**
 
@@ -2701,6 +2780,8 @@ Geonomics :py:`Landscape`), so new mutations in a :py:`Trait` would then
 be equally likely to decrease or increase :py:`Individual`\s' phenotypes from
 that baseline.
 
+
+------------------------------------------------------------------------------
 
 **alpha_distr_sigma**
 
@@ -2724,6 +2805,8 @@ mutations in a :py:`Trait` would then be equally likely to decrease
 or increase :py:`Individual`\s' phenotypes from that baseline.
 
 
+------------------------------------------------------------------------------
+
 **gamma**
 
 .. code-block:: python
@@ -2746,6 +2829,8 @@ phenotypic value). Values < 1 will cause the fitness function to be
 concave up; values > 1 will cause it to be concave down.
 
 
+------------------------------------------------------------------------------
+
 **univ_adv**
 
 .. code-block:: python
@@ -2766,8 +2851,6 @@ will be directional on the entire :py:`Species`, regardless
 of :py:`Individual`\s' spatial contexts. 
 
 
-------------------------------------------------------------------------------
-
 ^^^^^^^^^^^^^^
 Species change
 ^^^^^^^^^^^^^^
@@ -2776,6 +2859,8 @@ Species change
 """"""""""""""""""
 Demographic change
 """"""""""""""""""
+
+------------------------------------------------------------------------------
 
 **kind**
 
@@ -2814,6 +2899,8 @@ of particular factors (defined by **sizes**) at a series of particular
 timesteps (defined by **timesteps**).
 
 
+------------------------------------------------------------------------------
+
 **start**
 
 .. code-block:: python
@@ -2831,6 +2918,8 @@ This indicates the timestep at which the demographic change event
 should start.
 
 
+------------------------------------------------------------------------------
+
 **end**
 
 .. code-block:: python
@@ -2846,6 +2935,8 @@ reset? P
 
 This indicates the timestep at which the demographic change event should end.
 
+
+------------------------------------------------------------------------------
 
 **rate**
 
@@ -2866,6 +2957,8 @@ will be calculated by multiplying the previous step's K by this factor.
 Thus, values should be expressed relative to 1.0 indicating no change.
 
 
+------------------------------------------------------------------------------
+
 **interval**
 
 .. code-block:: python
@@ -2883,6 +2976,8 @@ This indicates the interval at which fluctutations should occur during a
 :py:`'stochastic'` change event (i.e. the number of timesteps to wait
 between fluctuations).
 
+
+------------------------------------------------------------------------------
 
 **distr**
 
@@ -2902,6 +2997,8 @@ fluctuations in a :py:`'stochastic'` change event. Valid options are
 `'uniform'` and `'normal'`.
 
 
+------------------------------------------------------------------------------
+
 **n_cycles**
 
 .. code-block:: python
@@ -2918,6 +3015,8 @@ reset? P
 This indicates the number of cyclical fluctuations that should occur during
 a :py:`'cyclical'` change event.
 
+
+------------------------------------------------------------------------------
 
 **size_range**
 
@@ -2936,6 +3035,8 @@ This defines the minimum and maximum sizes of fluctuations that can occur
 during :py:`'stochastic'` and :py:`'cyclical'` change events.
 
 
+------------------------------------------------------------------------------
+
 **timesteps**
 
 .. code-block:: python
@@ -2952,6 +3053,8 @@ reset? P
 This defines the series of particular timesteps at which fluctutations should
 occur during a :py:`'custom'` change event.
 
+
+------------------------------------------------------------------------------
 
 **sizes**
 
@@ -2970,11 +3073,12 @@ This defines the series of particular fluctutations that should occur
 during a :py:`'custom'` change event.
 
 
-------------------------------------------------------------------------------
 
 """""""""""""""""""
 Life-history change
 """""""""""""""""""
+
+------------------------------------------------------------------------------
 
 **<life_hist_param>**
 
@@ -2997,6 +3101,8 @@ of parameters controlling how the life-history parameter that is named
 will change.)
 
 
+------------------------------------------------------------------------------
+
 **timesteps**
 
 .. code-block:: python
@@ -3013,6 +3119,8 @@ reset? P
 This indicates the timesteps at which the life-history parameter being changed
 should change (to the values indicated by **vals**).
 
+
+------------------------------------------------------------------------------
 
 **vals**
 
@@ -3031,8 +3139,6 @@ This indicates the values to which the life-history parameter being changed
 should change (at the timesteps indicated by **timesteps**).
 
 
--------------------------------------------------------------------------------
-
 ================
 Model parameters
 ================
@@ -3040,6 +3146,9 @@ Model parameters
 ----
 Main
 ----
+
+
+-------------------------------------------------------------------------------
 
 **T**
 
@@ -3058,6 +3167,8 @@ This indicates the total number of timesteps for which the main portion of
 a :py:`Model` (i.e. the portion after the burn-in has completed) will be run
 during each iteration.
 
+
+------------------------------------------------------------------------------
 
 **burn_T**
 
@@ -3079,6 +3190,8 @@ elapsed, but also includes two statistical checks of stationarity of the
 size of each :py:`Species` in a :py:`Community`.)
 
 
+------------------------------------------------------------------------------
+
 **seed**
 
 .. code-block:: python
@@ -3098,11 +3211,11 @@ before building and running a :py:`Model`. If value is an integer, the seeds
 will be set to that value. If value is :py:`None`, seeds will not be set.
 
 
--------------------------------------------------------------------------------
-
 ----------
 Iterations
 ----------
+
+-------------------------------------------------------------------------------
 
 **num_iterations**
 
@@ -3123,6 +3236,8 @@ data and stats will be written, if your :py:`Model` has parameterized data
 and stats to be collected.)
 
 
+------------------------------------------------------------------------------
+
 **rand_landscape**
 
 .. code-block:: python
@@ -3141,6 +3256,8 @@ iteration. If True, a new :py:`Landscape` will be generated at the start
 of each iteration. If False, the :py:`Landscape` from iteration 0 will be
 saved and reused for each subsequent iteration.
 
+
+------------------------------------------------------------------------------
 
 **rand_community**
 
@@ -3162,6 +3279,8 @@ saved and reused for each subsequent iteration (and whether that
 :py:`Community` is saved before or after being burned in will depend on
 the value provided to the **repeat_burn** parameter).
 
+
+------------------------------------------------------------------------------
 
 **repeat_burn**
 
@@ -3185,17 +3304,16 @@ is complete, and then will only have the main portion of its :py:`Model` run
 separately during each iteration. (Note that if **rand_community** is set to True then
 the value of this parameter will not be used.)
 
--------------------------------------------------------------------------------
 
 ^^^^
 Data
 ^^^^
 
--------------------------------------------------------------------------------
-
 """"""""
 Sampling
 """"""""
+
+-------------------------------------------------------------------------------
 
 **scheme**
 
@@ -3227,6 +3345,8 @@ from random samples of size **n** with a certain distance (**radius**)
 of each point along the transect.
 
 
+------------------------------------------------------------------------------
+
 **n**
 
 .. code-block:: python
@@ -3248,6 +3368,8 @@ is :py:`'point'` or :py:`'transect'`). This parameter will only be used if
 it may be set to :py:`None`.
 
 
+------------------------------------------------------------------------------
+
 **points**
 
 .. code-block:: python
@@ -3265,6 +3387,8 @@ This indicates the points around which to sample :py:`Individual`\s for data
 collection. This parameter will only be used if **scheme** is :py:`'point'`;
 otherwise it may be set to :py:`None`.
 
+
+------------------------------------------------------------------------------
 
 **transect_endpoints**
 
@@ -3285,6 +3409,8 @@ This parameter will only be used if **scheme** is :py:`'transect'`;
 otherwise it may be set to :py:`None`.
 
 
+------------------------------------------------------------------------------
+
 **n_transect_points**
 
 .. code-block:: python
@@ -3304,6 +3430,8 @@ This parameter will only be used if **scheme** is :py:`'transect'`;
 otherwise it may be set to :py:`None`.
 
 
+------------------------------------------------------------------------------
+
 **radius**
 
 .. code-block:: python
@@ -3322,6 +3450,8 @@ This indicates the radius around sampling points within which
 This parameter will only be used if **scheme** is :py:`'point'` or 
 :py:`'transect'`; otherwise it may be set to :py:`None`.
 
+
+------------------------------------------------------------------------------
 
 **when**
 
@@ -3347,6 +3477,8 @@ at which data should be collected. If value is 0 or :py:`None`,
 data will be collected only after the final timestep.
 
 
+------------------------------------------------------------------------------
+
 **include_landscape**
 
 .. code-block:: python
@@ -3365,6 +3497,8 @@ data that is collected. If True, each :py:`Layer` will be written to a raster
 or array file (according to the format indicated by
 **geo_rast_format**) each time data is collected.
 
+
+------------------------------------------------------------------------------
 
 **include_fixed_sites**
 
@@ -3385,11 +3519,12 @@ this parameter is only relevant if :py:`'vcf'` is one of the genetic data
 formats indicated by **gen_format**.
 
 
--------------------------------------------------------------------------------
 
 """"""
 Format
 """"""
+
+-------------------------------------------------------------------------------
 
 **gen_format**
 
@@ -3410,6 +3545,8 @@ Either or both formats may be specified; all formats that are specified will
 be written each time data is collected.
 
 
+------------------------------------------------------------------------------
+
 **geo_vect_format**
 
 .. code-block:: python
@@ -3428,6 +3565,8 @@ This indicates the format to use for writing geographic vector data (i.e.
 Currently valid formats include :py:`'csv'`, :py:`'shapefile'`,
 and :py:`'geojson'`. Any one format may be specified.
 
+
+------------------------------------------------------------------------------
 
 **geo_rast_format**
 
@@ -3448,11 +3587,11 @@ and :py:`'txt'`. Either format may be specified. Note that this parameter
 will only be used if the **include_landscape** parameter is set to True.
 
 
--------------------------------------------------------------------------------
-
 ^^^^^
 Stats
 ^^^^^
+
+-------------------------------------------------------------------------------
 
 The stats parameters section has subsection for each statistc that Geonomics
 can calculate. (Currently valid statistics include:
@@ -3468,6 +3607,8 @@ which statistic it is parameterizing. Thus, hereafter we provide a single of
 each of those parameters are how it works, regardless of the statistic for
 which it used:
 
+
+------------------------------------------------------------------------------
 
 **calc**
 
@@ -3488,6 +3629,8 @@ only those statistics whose **calc** parameters are set to True will be
 calculated and saved when their :py:`Model` is run.
 
 
+------------------------------------------------------------------------------
+
 **freq**
 
 .. code-block:: python
@@ -3506,6 +3649,8 @@ during each iteration (in timesteps). If set to 0, Geonomics will calculate
 and save this statistic for only the first and last timesteps
 of each iteration.
 
+
+------------------------------------------------------------------------------
 
 **mean**
 
@@ -3526,9 +3671,11 @@ such as heterozygosity, this indicates
 whether those values should instead be meaned and saved as a
 single value for each timestep.
                 
+ 
 
 -------------------------------------------------------------------------------
- 
+
+
 *****************************
 Class and function docstrings
 *****************************
@@ -3536,6 +3683,7 @@ Class and function docstrings
 ==============================
 :py:`gnx.make_parameters_file`
 ==============================
+
 
 Create a new parameters file.
 
