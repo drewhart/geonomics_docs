@@ -489,8 +489,9 @@ used as a permeability :py:`Layer`).
 cells before the :py:`_ConductanceSurface` is calculated, such 
 that :py:`Landscape` edges are treated 
 as barriers to movement.) The class consists 
-principally of a 3d Numpy array (x by y by z, where x and y are the 
-dimensions of the :py:`Landscape` and z is the length of the vector of values 
+principally of a 3d Numpy array (y by x by z, where y and x (a.k.a i and j, 
+or latitude and longitude) are the dimensions of the 
+:py:`Landscape` and z is the length of the vector of values 
 used to approximate the distributions in each cell.
 
 -----------------------
@@ -955,7 +956,7 @@ When you then open that file, you will see the following:
       #### main ####
       ##############
           'main': {
-              # x,y (a.k.a. i,j) dimensions of the Landscape
+              # y,x (a.k.a. i,j) dimensions of the Landscape
               'dim':                      (20,20),
 
      #.
@@ -1046,7 +1047,7 @@ Main
 
 .. code-block:: python
 
-              # dimensions of the Landscape
+              # y,x (a.k.a. i,j) dimensions of the Landscape
               'dim':                      (20,20),
 
 :py:`tuple`
@@ -1055,7 +1056,7 @@ default: :py:`(20,20)`
 
 reset: P
   
-  This defines the x and y dimensions of the :py:`Landscape`,
+  This defines the y,x dimensions of the :py:`Landscape`,
   in units of cells. As you might imagine, these values are used 
   for a wide variety of basic operations throughout Geonomics. Change the
   default value to the dimensions of the landscape you wish to simulate on.
@@ -1067,7 +1068,7 @@ reset: P
 
 .. code-block:: python
 
-              # resolution of the Landscape
+              # y,x resolution of the Landscape
               'res':                      (1,1),
 
 :py:`tuple`
@@ -1076,8 +1077,9 @@ default: :py:`(1,1)`
 
 reset: N
 
-  This defines the :py:`Landscape` resolution (or cell-size) in the x and y
-  dimensions. This information is only used if GIS rasters of :py:`Landscape` 
+  This defines the :py:`Landscape` resolution (or cell-size) in the y,x
+  dimensions (matching the convention of the **dim** parameter).
+  This information is only used if GIS rasters of :py:`Landscape` 
   layers are to be written out as GIS raster files (as parameterized in the
   'Data' parameters). Defaults to the meaningless value (1,1), and this value
   generally needn't be changed in your parameters file, because it will 
@@ -1092,7 +1094,7 @@ reset: N
 
 .. code-block:: python
 
-              # upper-left corner of the Landscape
+              # x,y upper-left corner of the Landscape
               'ulc':                      (0,0),
 
 :py:`tuple`
@@ -1101,7 +1103,7 @@ default: :py:`(0,0)`
 
 reset: N
 
-  This defines the upper-left corner (ULC) of the 
+  This defines the x,y upper-left corner (ULC) of the 
   :py:`Landscape` (in the units of
   some real-world coordinate reference system, e.g. decimal degrees, or
   meters). This information is only used if GIS rasters of 
@@ -1330,7 +1332,8 @@ containing a 2d :py:`np.ndarray`, or any GIS raster file that can be read
 by :py:`osgeo.gdal.Open`. In all cases, the raster-array read in from the
 file must have dimensions equal to the stipulated dimensions of the
 :py:`Landscape` (as defined in the **dims** parameter, above); otherwise,
-Geonomics will throw an Error.
+Geonomics will throw an Error. Defaults to a dummy filename that must be
+changed.
 
 
 ------------------------------------------------------------------------------
@@ -1520,31 +1523,37 @@ Change
 
 ------------------------------------------------------------------------------
 
-**end_rast**
+**change_rast**
 
 .. code-block:: python
 
                   #land-change event for this Layer
                   'change': {
-                      #end raster for event (DIM MUST EQUAL DIM OF LAND!)
-                      'end_rast':         np.zeros((20,20)),
+                      #array of file for final raster of event, or directory
+                      #of files for each stepwise change in event
+                      'change_rast':         '/PATH/TO/FILE.EXT',
 
 {2d :py:`np.ndarray`, :py:`str`}
 
-default: :py:`np.zeros((20,20))`
+default: :py:`'/PATH/TO/FILE.EXT'`
 
 reset? Y
 
-This defines the end raster for a :py:`Landscape`-change event (i.e. the array 
-this :py:`Layer` will change into over the course of the event). As the
-capitalized reminder in the parameters file mentions, this raster must of
-course have the same dimensions as the `Landscape` to which the `Layer` belongs;
-otherwise, Genomics will throw an Error. Defaults a placeholder array
-of zeros, so should be parameterized to meet your needs. Valid values are
-a 2-d :py:`np.ndarray` object (stipulating the raster itself), or a :py:`str`
-pointing to a file containing the raster (where valid files can be a '.txt'
-file holding a 2-d :py:`np.ndarray` or any GIS raster files that can be
-read by :py:`osgeo.gdal.Open`).
+This defines either the final raster of the :py:`Landscape` change event
+(with valid values being a :py:`numpy.ndarray` or a string pointing
+to a valid raster file, i.e. a file that can be read by :py:`osgeo.gdal.Open`);
+or the stepwise series of changes to be made over the course of the
+:py:`Landscape` change event (with the valid value being a string
+pointing to a directory full of valid raster files).
+Note that whether an array, a raster, or multiple rasters
+are input, their dimensions must be equal to the dimensions of the :py:`Layer`
+that is being changed (and hence to the :py:`Landscape` to which it belongs).
+Also note that if a directory of stepwise-change rasters is provided, the
+rasters' filenames must begin with the integer timesteps at which they
+should be used during the change event, followed by underscores. (For example,
+files with the filenames '50_mat_2001.tif', '60_mat_2011.tif',
+'65_mat_2011.tif' would be used at timesteps 50, 60, and 65 during a model.)
+Defaults to a dummy file name that must be changed.
 
 
 ------------------------------------------------------------------------------
@@ -1554,17 +1563,16 @@ read by :py:`osgeo.gdal.Open`).
 .. code-block:: python
 
                    #starting timestep of event
-                   'start_t':          49,
+                   'start_t':          50,
 
 :py:`int`
 
-default: 49
+default: 50
 
 reset? P
 
-This indicates the timestep on which the :py:`Landscape`-change event
-will begin. Defaults to 49, but should be set to suit your
-specific scenario.
+This indicates the first timestep of the :py:`Landscape`-change event. 
+Defaults to 50, but should be set to suit your specific scenario.
 
 
 ------------------------------------------------------------------------------
@@ -1574,17 +1582,18 @@ specific scenario.
 .. code-block:: python
 
                    #ending timestep of event
-                   'end_t':          99,
+                   'end_t':          100,
 
 :py:`int`
 
-default: 99
+default: 100
 
 reset? P
 
-This indicates the timestep on which the :py:`Landscape`-change event
-will finish. Defaults to 99, but should be set to suit your
-specific scenario.
+This indicates the timestep __after__ the last timestep of the
+:py:`Landscape`-change event (because, Pythonically, the time interval
+stipulated is start-inclusive, stop-exclusive).
+Defaults to 100, but should be set to suit your specific scenario.
 
 
 ------------------------------------------------------------------------------
@@ -1705,8 +1714,10 @@ reset? P
 
 This indicates, by name, the :py:`Layer` to be used as the
 carrying-capacity raster for a :py:`Species`. The values of this
-:py:`Layer` should express the carrying capacity at each cell, in number
-of :py:`Individual`\s. Note that the sum of the values of this :py:`Layer`
+:py:`Layer`, multiplied by **K_factor**, should express
+the carrying capacity at each cell, in number
+of :py:`Individual`\s. Note that the sum of the values of the product of
+this :py:`Layer` and **K_factor**
 can serve as a rough estimate of the expected stationary 
 number of individuals of a :py:`Species`; 
 however, observed stationary size could vary
@@ -1714,6 +1725,28 @@ substantially depending on various other :py:`Model` parameters (e.g. birth
 and death rates and mean number of offspring per mating event) as well
 as on stochastic events (e.g. failure to colonize, or survive in, all
 habitable portions of the :py:`Landscape`).
+
+
+------------------------------------------------------------------------------
+
+**K_factor**
+
+.. code-block:: python
+
+                      #multiplicative factor for carrying-capacity layer
+                      'K_factor':         1,
+
+{:py:`int`, :py:`float`}
+
+default: 1
+
+reset? P
+
+This defines the factor by which the raster of the :py:`Layer` indicated
+by **K_layer** will be multiplied to create a :py:`Species`' carrying-
+capacity raster. Because :py:`Layer`\s' rasters are constrained to [0,1],
+this allows the user to stipulate that cells have carrying capacities in
+excess of 1.
 
 
 ^^^^^^
@@ -1980,9 +2013,10 @@ particular simulation scenario). But be aware that choosing particularly
 small window widths (in our experience, windows smaller than ~1/20th of
 the larger :py:`Landscape` dimension) will cause dramatic increases in the 
 run-time of the density calculation (which runs twice per timestep).
-Defaults to :py:`None`, which internally will be set to 1/10th of the
-larger :py:`Landscape` dimension; for many purposes this will work, but for
-others the user may wish to control this.
+Defaults to :py:`None`, which will internally be set to the integer
+nearest to 1/10th of the larger :py:`Landscape` dimension; 
+for many purposes this will work, but in some cases
+the user may wish to control this.
 
 
 ^^^^^^^^
@@ -2271,7 +2305,7 @@ reset? P
 This determines the length of the vector of values used to approximate each
 distribution on the :py:`_ConductanceSurface` (i.e. the size of the z-axis
 of the :py:`np.ndarray` used to hold all the distribution-approximations, where
-the x and y axes have the same dimensions as the :py:`Landscape`). The default
+the y and x axes have the same dimensions as the :py:`Landscape`). The default
 value of 5000 is fine for many cases, but may need to be
 reduced depending on the :py:`Landscape` dimensions (because for a larger
 :py:`Landscape`, say 1000x1000 cells, it would create a 
@@ -2296,7 +2330,7 @@ _GenomicArchitecture
 .. code-block:: python
 
                   'gen_arch': {
-                      #/path/to/file.csv defining custom genomic arch
+                      #file defining custom genomic arch
                       'gen_arch_file':            None,
 
 {:py:`str`, :py:`None`}
@@ -2906,11 +2940,11 @@ timesteps (defined by **timesteps**).
 .. code-block:: python
 
                           #starting timestep
-                          'start':            49,
+                          'start':            50,
 
 :py:`int`
 
-default: 49
+default: 50
 
 reset? P
 
@@ -2925,15 +2959,17 @@ should start.
 .. code-block:: python
 
                           #ending timestep
-                          'end':            99,
+                          'end':            100,
 
 :py:`int`
 
-default: 99
+default: 100
 
 reset? P
 
-This indicates the timestep at which the demographic change event should end.
+This indicates the timestep __after__ the last timestep of the
+change event (because, Pythonically, the time interval
+stipulated is start-inclusive, stop-exclusive).
 
 
 ------------------------------------------------------------------------------
