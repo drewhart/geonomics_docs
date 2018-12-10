@@ -1243,6 +1243,30 @@ defined
 
 ------------------------------------------------------------------------------
 
+**rast**
+
+.. code-block:: python
+   
+                      #parameters for a 'defined'-type Layer 
+                      'defined': {
+                          #raster to use for the Layer
+                          'rast':                    np.ones((100,100)),
+
+nx2 :py:`np.ndarray`
+
+default: :py:`np.ones((100,100))`
+
+reset? Y
+
+This defines the raster that will be used for this :py:`Layer`. Can be set to
+:py:`None` if an array for the raster should instead be interpolated from a
+set of valued points using the **pts**, **vals**, and **interp_method**
+parameters. Dimensions of this array must match the dimensions of the
+:py:`Landscape`.
+
+
+------------------------------------------------------------------------------
+
 **pts**
 
 .. code-block:: python
@@ -1258,8 +1282,9 @@ default: :py:`None`
 
 reset? Y
 
-This defines the coordinates of the points that will be used to 
-interpolate this :py:`Layer`. 
+This defines the coordinates of the points to use to
+interpolate this :py:`Layer`. Can be left as :py:`None` if the **rast**
+parameter is given a :py:`numpy.ndarray`.
 
 
 ------------------------------------------------------------------------------
@@ -1277,8 +1302,10 @@ default: :py:`None`
 
 reset? Y
 
-This defines the values of the points that will be used to 
-interpolate this :py:`Layer`. 
+This defines the values of the points to use to 
+interpolate this :py:`Layer`. Can be left as :py:`None` if the **rast**
+parameter is given a :py:`numpy.ndarray`.
+
 
 
 ------------------------------------------------------------------------------
@@ -1287,22 +1314,25 @@ interpolate this :py:`Layer`.
 
 .. code-block:: python
 
-                          #interpolation method {'linear', 'cubic', 'nearest'}
-                          'interp_method':                'cubic',
+                          #interpolation method {None, 'linear', 'cubic',
+                          #'nearest'}
+                          'interp_method':                None,
                           },
 
 {:py:`'linear'`, :py:`'cubic'`, :py:`'nearest'`}
 
-default: :py:`'cubic'`
+default: :py:`None`
 
 reset? N
 
 This defines the method to use to interpolate random points to the array that
-will serve as the :py:`Layer`'s raster. Whichever of the three valid values
+will serve as the :py:`Layer`'s raster. Whichever of the valid string values
 is chosen (:py:`'linear'`, :py:`'cubic'`, or :py:`'nearest'`) will be passed
 on as an argument to :py:`scipy.interpolate.griddata`. Note that the
 :py:`'nearest'` method will generate a random categorical array, such as
-might be used for modeling habitat types.
+might be used for modeling habitat types. Can be left as :py:`None` if
+the **rast** parameter is given a :py:`numpy.ndarray`.
+
 
 
 """"
@@ -1572,7 +1602,10 @@ default: 50
 reset? P
 
 This indicates the first timestep of the :py:`Landscape`-change event. 
-Defaults to 50, but should be set to suit your specific scenario.
+Defaults to 50, but should be set to suit your specific scenario. 
+If a directory of files is provided for the **change_rast** parameter,
+then this must match the earliest timestep in that series of files
+(as indicated by the integers at the beginning of the file names).
 
 
 ------------------------------------------------------------------------------
@@ -1590,10 +1623,12 @@ default: 100
 
 reset? P
 
-This indicates the timestep __after__ the last timestep of the
-:py:`Landscape`-change event (because, Pythonically, the time interval
-stipulated is start-inclusive, stop-exclusive).
+This indicates the last timestep of the
+:py:`Landscape`-change event.
 Defaults to 100, but should be set to suit your specific scenario.
+If a directory of files is provided for the **change_rast** parameter,
+then this must match the final timestep in that series of files
+(as indicated by the integers at the beginning of the file names).
 
 
 ------------------------------------------------------------------------------
@@ -1612,22 +1647,28 @@ default: 5
 reset? P
 
 This indicates the number of stepwise changes to use to model a
-:py:`Landscape`-change event. The changes during a :py:`Landscape`-change event
+:py:`Landscape`-change event.
+If the the **change_rast** parameter is a directory of files, 
+then the value of this parameter must be the number of files in that directory. 
+If the **change_rast** parameter is either an :py:`np.ndarray` or a file name,
+then the changes during the :py:`Landscape`-change event
 are linearly interpolated (cellwise for the whole :py:`Layer`) to this
 number of discrete, instantaneous :py:`Landscape` changes between
 the starting and ending rasters. Thus, the fewer the number of 
-steps, the larger, magnitudinally, each change will be. So generally, more
-steps is 'better', as it will better approximate change that is continuous
+steps, the larger, magnitudinally, each change will be. So more
+steps may be 'better', as it will better approximate change that is continuous
 in time. However, there is a potenitally significant memory trade-off here:
 The whole series of stepwise-changed arrays is computed when the
 :py:`Model` is created, then saved and used at the appropriate timestep
 during each :py:`Model` run (and if the :py:`Layer` that is changing is used
 by any :py:`Species` as a :py:`_ConductanceSurface` then each 
 intermediate :py:`_ConductanceSurface` is also calculated
-when the :py:`Model` is first built. 
+when the :py:`Model` is first built, which can be much more memory-intensive
+because these are 3-dimensional arrays).
 These objects take up memory, which may be limiting for larger
-:py:`Model`\s and/or :py:`Landscape` objects. This will probably not be a
-major issue, but is worth considering.
+:py:`Model`\s and/or :py:`Landscape` objects. This often will not be a
+major issue, but depending on your use case it could pose a problem, so
+is worth considering.
 
 
 ====================
@@ -1950,11 +1991,11 @@ age is enforced).
 .. code-block:: python
         
                       #min P(death) (MUST BE 0<=d_min<=1)
-                      'd_min':                     0.01,
+                      'd_min':                     0,
 
 :py:`float` in interval [0, 1]
 
-default: 0.01
+default: 0
 
 reset? N
 
@@ -1971,11 +2012,11 @@ inclusive interval [0, 1].
 .. code-block:: python
 
                       #max P(death) (MUST BE 0<=d_max<=1)
-                      'd_max':                    0.99,
+                      'd_max':                    1,
 
 :py:`float` in interval [0, 1]
 
-default: 0.99
+default: 1
 
 reset? N
 
@@ -2390,11 +2431,11 @@ This defines the total number of loci in the genomes in a
 .. code-block:: python
                         
                       #num of chromosomes
-                      'l_c':                      [750, 250],
+                      'l_c':                      [100],
 
 :py:`list` of :py:`int`\s
 
-default: :py:`[750, 250]`
+default: :py:`[100]`
 
 reset? P
 
@@ -2406,6 +2447,25 @@ arrays, where separate chromosomes are delineated by points along
 the genome where the recombination rate is 0.5;
 thus, for a model where recombination rates are often at or near 0.5, this
 parameter will have little meaning.
+
+
+------------------------------------------------------------------------------
+
+**start_p_fixed**
+
+.. code-block:: python
+                        
+                    #whether starting allele frequencies should be fixed at 0.5
+                    'start_p_fixed':                      True,
+
+:py:`bool`
+
+default: True
+
+reset? P
+
+This indicates whether the starting 1-allele frequencies at all loci
+should be set fixed at 0.5. Defaults to True.
 
 
 ------------------------------------------------------------------------------
@@ -2498,17 +2558,18 @@ truncated to the interval [0,1].)
 .. code-block:: python
 
                       #alpha of distr of recomb rates
-                      'r_distr_alpha':            0.5,
+                      'r_distr_alpha':            None,
 
-:py:`float`
+{:py:`float`, :py:`None`}
 
-default: 0.5
+default: None
 
 reset? P
 
 This defines the alpha parameter of the beta distribution from which
 interlocus recombination rates are drawn. (Values drawn will be truncated to
-the interval [0, 0.5].)
+the interval [0, 0.5].) Defaults to None, which will coerce all recombination
+rates to 0.5 (i.e. will make all loci independent).
 
 
 ------------------------------------------------------------------------------
@@ -2518,17 +2579,18 @@ the interval [0, 0.5].)
 .. code-block:: python
 
                       #beta of distr of recomb rates
-                      'r_distr_beta':            15e9,
+                      'r_distr_beta':            None,
 
-:py:`float`
+{:py:`float`, :py:`None`}
 
-default: 15e9
+default: None,
 
 reset? P
 
 This defines the beta parameter of the beta distribution from which
 interlocus recombination rates are drawn. (Values drawn will be truncated to
-the interval [0, 0.5].)
+the interval [0, 0.5].) Defaults to None, which will coerce all recombination
+rates to 0.5 (i.e. will make all loci independent).
 
 
 ------------------------------------------------------------------------------
@@ -2799,20 +2861,31 @@ mutations that affect the phenotypes of this :py:`Trait` will arise). Set to
 .. code-block:: python
 
                               #mean of distr of effect sizes
-                              'alpha_distr_mu' :      0,
+                              'alpha_distr_mu' :      0.1,
 :py:`float`
 
-default: 0
+default: 0.1
 
 reset? N
 
 This defines the mean of the normal distribution from which a :py:`Trait`'s
-new mutations' effect sizes are drawn. The user will likely want to keep this
-value set at 0 and adjust **alpha_distr_sigma**, because for multigenic 
-:py:`Trait`\s the baseline phenotypic value is 0.5 (the central value on a
-Geonomics :py:`Landscape`), so new mutations in a :py:`Trait` would then
-be equally likely to decrease or increase :py:`Individual`\s' phenotypes from
-that baseline.
+new mutations' effect sizes are drawn. For effect sizes drawn from a
+distribution, it is recommended to set this value set to 0 and adjust
+**alpha_distr_sigma**. For fixed effect sizes, set this value to the fixed
+effect size and set **alpha_distr_sigma** to 0; effects will alternate
+between positive and negative when they are assigned to loci.
+In either case, new mutations in a :py:`Trait`
+will then be equally likely to decrease or increase :py:`Individual`\s'
+phenotypes from the multigenic baseline phenotype of 0.5 (which is also
+the central value on a Geonomics :py:`Landscape`).
+It is also recmmended that the user consider the number of loci for a trait
+when setting the fixed or distributed effect sizes; for example, for a trait
+with 10 underlying loci, an average or fixed absolute effect size of 0.1
+will enable phenotypes that cover the range of values on a
+Geonomics :py:`Landscape` (i.e. phenotypes 0 <= z <= 1), whereas
+0.05 will likely not enable that full range of phenotypes, and 0.5 will
+generate many phenotypes that fall outside that range and will be selected
+against at all locations on the :py:`Landscape`.
 
 
 ------------------------------------------------------------------------------
@@ -2822,21 +2895,25 @@ that baseline.
 .. code-block:: python
 
                               #variance of distr of effect size
-                              'alpha_distr_sigma':    0.5,
+                              'alpha_distr_sigma':    0,
 
 :py:`float`
 
-default: 0.5
+default: 0
 
 reset? P
 
 This defines the standard deviation of the normal distribution from which
-a :py:`Trait`'s new mutations' effect sizes are drawn. The user will likely
-want to adjust this value and keep **alpha_distr_mu** set at 0, because 
-for multigenic :py:`Trait`\s the baseline phenotypic value is 0.5 
-(the central value on a Geonomics :py:`Landscape`), so new 
-mutations in a :py:`Trait` would then be equally likely to decrease 
-or increase :py:`Individual`\s' phenotypes from that baseline.
+a :py:`Trait`'s new mutations' effect sizes are drawn. 
+For effect sizes drawn from a distribution, it is recommended
+to set this value set to some nonzero number
+and set **alpha_distr_mu** to 0. For fixed effect sizes,
+set this value to 0 and set **alpha_distr_mu** to the fixed effect size;
+effects will alternate between positive and negative when they are
+assigned to loci. In either case, new mutations in a :py:`Trait`
+will then be equally likely to decrease or increase :py:`Individual`\s'
+phenotypes from the multigenic baseline phenotype of 0.5 (which is also
+the central value on a Geonomics :py:`Landscape`).
 
 
 ------------------------------------------------------------------------------
@@ -2935,12 +3012,12 @@ timesteps (defined by **timesteps**).
 
 ------------------------------------------------------------------------------
 
-**start**
+**start_t**
 
 .. code-block:: python
 
                           #starting timestep
-                          'start':            50,
+                          'start_t':            50,
 
 :py:`int`
 
@@ -2954,12 +3031,12 @@ should start.
 
 ------------------------------------------------------------------------------
 
-**end**
+**end_t**
 
 .. code-block:: python
 
                           #ending timestep
-                          'end':            100,
+                          'end_t':            100,
 
 :py:`int`
 
@@ -2967,9 +3044,7 @@ default: 100
 
 reset? P
 
-This indicates the timestep __after__ the last timestep of the
-change event (because, Pythonically, the time interval
-stipulated is start-inclusive, stop-exclusive).
+This indicates the last timestep of the change event.
 
 
 ------------------------------------------------------------------------------
@@ -3258,11 +3333,11 @@ Iterations
 .. code-block:: python
 
               #num iterations
-              'n_its': 3,
+              'n_its': 2,
 
 :py:`int`
 
-default: 3
+default: 2
 
 reset? Y
 
