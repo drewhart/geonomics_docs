@@ -7,23 +7,24 @@
 
 .. code-block:: python
 
-                ## :: ::    :::            ##
-          ##:::   :::::    :::   ::    :: :: :::##
-       ## ::::     ::           ::   ::::::::::::::##
-     ##::::::                       ::::::::: :::::: :##
-   ## :    :::                    :::    ::    :::::::::##
-  ##ggggg eeee ooo   n   n   ooo   m   m iiiii  cccc ssss##
- ##g     e    o   o  nn  n  o   o  m   m   i   c     s    ##
- ##g     eee o     o n n n o     o mm mm   i   c     sssss##
- ##g ggg eee o     o n  nn o     o m m m   i   c         s##
- ##g   g e    o   o  n   n  o   o  m   m   i   c        ss##
-  ##gggg  eeee ooo   n   n   ooo   m   m iiiii  cccc ssss##
-   ##  ::::::::        ::::::::::::  :       ::  ::   : ##
-     ##  ::::              :::::::  ::     ::::::::  :##
-       ## :::               :::::: ::       ::::::  ##
-          ##:                ::::                ##
-                ##                         ##
-  
+                   ##  ::::::          :::    :: ::::::::::##
+             ##:::::    ::::   :::      ::    :: :: ::::::::::: :##
+          ##::::::::     ::            ::   ::::::::::::::::::::::::##
+        ##:::::::::                      :::::::::: :::::: ::::::::  :##
+      ## : ::::  ::                    ::::  : ::    :::::::: : ::  :   ##
+     ##ggggg  eeeee ooooo   nn   nn   ooooo   mm   mm iiiiii  ccccc sssss##
+    ##gg     ee    oo   oo  nnn  nn  oo   oo  mm   mm   ii   cc     ss    ##
+    ##gg     eeee oo     oo nn n nn oo     oo mmm mmm   ii   cc     ssssss##
+    ##gg ggg eeee oo     oo nn  nnn oo     oo mm m mm   ii   cc         ss##
+    ##gg   g ee    oo   oo  nn   nn  oo   oo  mm   mm   ii   cc        sss##
+     ##ggggg  eeeee ooooo   nn   nn   ooooo   mm   mm iiiiii  ccccc sssss##
+      ##    :::::::::             :::::::::::: ::              ::  :   :##
+        ##:   :::::                   ::::::: :::             ::::::: ##
+          ##   :::                     ::::::  ::              :::::##
+             ## ::                      ::::                     ##
+                   ##                                      ##
+
+ 
 
 .. image:: ./yosemite_header_img.png
    :align: center
@@ -78,8 +79,8 @@ high-quality theoretical, methodological, empirical, and
 applied research.
 
 Geonomics is written in Python, a full-fledged scripting language 
-that is relatively easy to learn (and fun!). So it can be pretty quick for a
-new user to get up to speed and start doing useful work. For work with
+that is relatively easy to learn (and fun!). In Python, it can be pretty quick
+for a new user to get up to speed and start doing useful work. For work with
 Geonomics, this turnaround time should be even quicker. Geonomics aims to
 require minimal Python knowledge (yet maintain high extensibility for
 interested, expert users). Essentially, anyone should be able to build their
@@ -362,7 +363,7 @@ The :py:`Species` class is an :py:`OrderedDict`
 package) containing all :py:`Individaul`\s, (with 
 their 'idx' attributes as keys). If a :py:`Species`
 has a :py:`GenomicArchitecture` then the :py:`Individual`\s
-in the :py:`Species` will also each have genomes (attribute 'genome'),
+in the :py:`Species` will also each have genomes (attribute 'g'),
 and the :py:`GenomicArchitecture` includes :py:`Trait`\s
 then each individual will also have a :py:`list` of 
 phenotype values (one per :py:`Trait`; attribute 'z') and a 
@@ -1220,12 +1221,12 @@ each axis. Values drawn from a uniform distribution between 0 and 1.)
 .. code-block:: python
 
                           #interpolation method ('linear', 'cubic', or 'nearest')
-                          'interp_method':                'cubic',
+                          'interp_method':                'linear',
                           },
 
 {:py:`'linear'`, :py:`'cubic'`, :py:`'nearest'`}
 
-default: :py:`'cubic'`
+default: :py:`'linear'`
 
 reset? N
 
@@ -1934,9 +1935,31 @@ default: 1
 reset? P
 
 This defines the lambda parameter for the Poisson distribution from 
-which a mating pair's number of offspring is drawn. Hence it is the
-expected value for the number of offspring born in a
-successful mating event.
+which a mating pair's number of offspring is drawn (unless **n_births_fixed**
+is set to True, in which case it defines the number of offspring 
+produced by each successful mating event). Hence, this is either the
+expected  or exact value for the number of offspring born in a
+successful mating event (depending on how **n_births_fixed** is set).
+
+
+------------------------------------------------------------------------------
+
+**n_births_fixed**
+
+.. code-block:: python
+
+                      #whether n births should be fixed at n_births_dist_lambda
+                      'n_births_fixed':           True,
+
+:py:`bool`
+
+default: True
+
+reset? P
+
+This determines whether or not the number of births for each mating event will
+be fixed. If set to true, each successful mating event will produce
+**n_births_distr_lambda** new offspring.
 
 
 ------------------------------------------------------------------------------
@@ -2672,7 +2695,7 @@ reset? P
 This defines the maximum number of recombination paths for Genomics to hold in
 memory at one time. Geonomics models recombination by using the interlocus
 recombination rates to draw a large number of recombination 'paths'
-along the 2xL genome array (when the :py:`Model` is first built), and
+along the Lx2 genome array (when the :py:`Model` is first built), and
 then shuffling and cycling through those recombination paths as 
 needed during :py:`Model` runs. Of the total number of paths created, some
 subset will be held in memory (the number of these is defined by
@@ -2697,13 +2720,43 @@ to the :py:`Species` during one timestep).
 This defines the total number of recombination paths that Geonomics will
 generate. Geonomics models recombination by using the interlocus
 recombination rates to draw a large number of recombination 'paths'
-along the 2xL genome array (when the :py:`Model` is first built), and
+along the Lx2 genome array (when the :py:`Model` is first built), and
 then shuffling and cycling through those recombination paths as 
 needed during :py:`Model` runs. The larger the total number of these paths
 that is created, the more closely Geonomics will model truly
 free recombination and the more prceisely it will model the exact
 interlocus recombination rates defined in a :py:`Species`'
 :py:`GenomicArchitecture`.
+
+
+------------------------------------------------------------------------------
+
+**allow_ad_hoc_recomb**
+
+.. code-block:: python
+
+                      #whether to generate recombination paths at each timestep
+                      'allow_ad_hoc_recomb': False,
+
+:py:`bool`
+
+default: False
+
+reset? P
+
+This determines whether or not recombinants should be drawn each timestep
+(rather than recombination paths being drawn and stored when a model is first
+built, then used randomly throught the model run).
+This is advantageous because it models recombination exactly (rather than
+approximating recombination by drawing some number of fixed recombination paths
+that get repeatedly used), and for combinations of larger genome sizes (L) and
+larger mean population sizes (N) it avoids the memory used by storing so many
+recombination paths drawn at model creation, thus making these
+parameterizations feasible on computers with memory limitations).
+It is disadvantageous, however, because it runs somewhat slower than the
+default approach (recombinants drawn at model creation) for a range of
+L and N values, and also because it is only available for parameterizations
+with homogeneous recombination across the genome.
 
 
 ------------------------------------------------------------------------------
@@ -2869,9 +2922,12 @@ default: 0.1
 reset? N
 
 This defines the mean of the normal distribution from which a :py:`Trait`'s
-new mutations' effect sizes are drawn. For effect sizes drawn from a
-distribution, it is recommended to set this value set to 0 and adjust
-**alpha_distr_sigma**. For fixed effect sizes, set this value to the fixed
+initially parameterized loci and new mutations' effect sizes are drawn (with
+the exception of monogenic traits, whose starting locus always has an alpha
+value of 0.5, but whose later mutations are influenced by this parameter).
+For effect sizes drawn from a distribution, it is recommended
+to set this value set to 0 and adjust **alpha_distr_sigma**.
+For fixed effect sizes, set this value to the fixed
 effect size and set **alpha_distr_sigma** to 0; effects will alternate
 between positive and negative when they are assigned to loci.
 In either case, new mutations in a :py:`Trait`
@@ -2914,6 +2970,26 @@ assigned to loci. In either case, new mutations in a :py:`Trait`
 will then be equally likely to decrease or increase :py:`Individual`\s'
 phenotypes from the multigenic baseline phenotype of 0.5 (which is also
 the central value on a Geonomics :py:`Landscape`).
+
+
+------------------------------------------------------------------------------
+
+**max_alpha_mag**
+
+.. code-block:: python
+
+                              #max allowed magnitude for an alpha value
+                              'max_alpha':            None,
+
+{:py:`float`}
+
+default: None
+
+reset? P
+
+This defines the maximum value that can be drawn for a locus' effect size
+(i.e. alpha). Defaults to None, but the user may want to set this to some
+reasonable value, to prevent chance creation of loci with extreme effects.
 
 
 ------------------------------------------------------------------------------
@@ -4133,4 +4209,5 @@ Number of main timesteps:                       1000
 Geo-data collected:                             {csv, geotiff}
 Gen-data collected:                             {vcf, fasta}
 Stats collected:                                {maf, ld, mean_fit, het, Nt}
+
 
