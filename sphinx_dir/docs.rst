@@ -1428,6 +1428,54 @@ this value to the maximum real-world value that will occur for this
 :py:`Layer` during your :py:`Model` scenario, so that high values that 
 later arise on this `Layer` don't get truncated at 1.
 
+
+------------------------------------------------------------------------------
+
+**coord_prec**
+
+.. code-block:: python
+
+                          #decimal-precision to use for coord-units (ulc & res)
+                          'coord_prec':                5,
+
+:py:`int`
+
+default: 5
+
+reset? P
+
+This defines number of decimals to which to round upper-left corner
+coordinates and resolution values read in from a raster file.
+Because Geonomics requires equality of these values amongst all
+input raster files, this allows the user to stipulate
+the level of precision of their coordinate system, avoiding
+false coordinate-system mismatch errors because of
+arbitrary float imprecision.
+(Note that for :py:`Layer`\s for which change rasters will be read in,
+the same coordinate precision value will be used for all input rasters.)
+
+
+------------------------------------------------------------------------------
+
+**units**
+
+.. code-block:: python
+
+                          #units of this file's variable
+                          'units':                       None,
+
+{:py:`str`, :py:`None`}
+
+default: None
+
+reset? P
+
+This is an optional parameter providing a string-representation
+of the units in which a raster file's variable is expressed.
+If provided, it will be used to label the colorbar on plots
+of the raster's :py:`Layer`.
+
+
 """""
 nlmpy
 """""
@@ -2190,8 +2238,11 @@ default: 0.5
 reset? Y
 
 This is the :math:`\mu` parameter of the Wald distribution used to draw
-movement distances, expressed in units of raster-cells. This parameter and
-**distance_distr_sigma** (the Wald distribution's :math:`sigma`) should be
+movement distances, expressed in units of raster cell widths
+(or the wider of the two dimensions of a cell, in the case of a
+non-square-resolution raster). 
+This parameter and **distance_distr_sigma**
+(the Wald distribution's :math:`sigma`) should be
 set to reflect a distribution of movement distances that is appropriate
 for your scenario.
 
@@ -2212,8 +2263,11 @@ default: 0.5
 reset? Y
 
 This is the :math:`\sigma` parameter of the Wald distribution used to draw
-movement distances, expressed in units of raster-cells. This parameter and
-**distance_distr_mu** (the Wald distribution's :math:`mu`) should be
+movement distances, expressed in units of raster-cell widths
+(or the wider of the two dimensions of a cell, in the case of a
+non-square-resolution raster). 
+This parameter and **distance_distr_mu**
+(the Wald distribution's :math:`mu`) should be
 set to reflect a distribution of movement distances that is appropriate
 for your scenario.
 
@@ -2234,8 +2288,11 @@ default: 0.5
 reset? Y
 
 This is the :math:`\mu` parameter of the Wald distribution used to draw
-dispersal distances, expressed in units of raster-cells. This parameter and
-**distance_distr_sigma** (the Wald distribution's :math:`sigma`) should be
+dispersal distances, expressed in units of raster-cell widths
+(or the wider of the two dimensions of a cell, in the case of a
+non-square-resolution raster). 
+This paramter and **distance_distr_sigma**
+(the Wald distribution's :math:`sigma`) should be
 set to reflect a distribution of dispersal distances that is appropriate
 for your scenario.
 
@@ -2256,8 +2313,11 @@ default: 0.5
 reset? Y
 
 This is the :math:`\sigma` parameter of the Wald distribution used to draw
-dispersal distances, expressed in units of raster-cells. This parameter and
-**distance_distr_mu** (the Wald distribution's :math:`mu`) should be
+dispersal distances, expressed in units of raster-cell widths
+(or the wider of the two dimensions of a cell, in the case of a
+non-square-resolution raster). 
+This paramter and **distance_distr_mu**
+(the Wald distribution's :math:`mu`) should be
 set to reflect a distribution of dispersal distances that is appropriate
 for your scenario.
 
